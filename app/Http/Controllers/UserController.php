@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
+use App\Imports\UserImport;
 use App\Models\Civility;
 use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -19,6 +23,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         return Inertia::render('Users/Index', [
             'users' => 
                 User::when($request->input('search'), fn ($query, $search) =>
@@ -37,7 +43,9 @@ class UserController extends Controller
                 ]),
             'filters' => $request->only('search'),
             'can' => [
-                'createUsers' => $request->user()->permissions->contains('name', 'createUsers')
+                'createUsers' => $request->user()->permissions->contains('name', 'createUsers'),
+                'updateUsers' => $request->user()->permissions->contains('name', 'updateUsers'),
+                'deleteUsers' => $request->user()->permissions->contains('name', 'deleteUsers')
             ]
         ]);
     }
@@ -64,9 +72,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function prestore(Request $request)
     {
-        if ($request->formStep === 1) {
         $request->validate([
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
@@ -79,10 +86,18 @@ class UserController extends Controller
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
         
-        return to_route('users.create', [
-            'permissions' => $permissions
-        ]);
+        return to_route('users.create')->with('permissions', $permissions);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->authorize('create', User::class);
 
         $user = User::create([
             'last_name' => $request->last_name,
@@ -97,7 +112,7 @@ class UserController extends Controller
 
         $user->permissions()->attach($request->permissions);
 
-        return redirect()->back()->with('message', 'Created successfully!');
+        return to_route('users.index')->with('message', "L'utilisateur $user->first_name $user->last_name a été créé avec succès");
     }
 
     /**
@@ -108,7 +123,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $this->authorize('view', $user);
     }
 
     /**
@@ -119,7 +134,13 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $this->authorize('update', $user);
+
+        return Inertia::render('Users/Edit', [
+            'civilities' => Civility::all(),
+            'roles' => Role::all(),
+            'groups' => Group::all(),
+        ]);
     }
 
     /**
@@ -131,7 +152,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->authorize('update', $user);
     }
 
     /**
@@ -142,6 +163,37 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
+
+        $user->groups()->detach($user->groups()->pluck('id')->toArray());
+        $user->permissions()->detach($user->permissions()->pluck('id')->toArray());
+        $user->delete();
+    }
+
+    /**
+     * Import a resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new UserImport, $request->file);
+        } catch (Exception $error) {
+            return redirect()->back()->with('message', "Erreur lors de l'import");
+        }
+
+        return redirect()->back()->with('message', 'Les utilisateurs ont été importés avec succès');
+    }
+
+    /**
+     * Export a resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()
+    {
+        return Excel::download(new UserExport, 'users.xlsx');
     }
 }
