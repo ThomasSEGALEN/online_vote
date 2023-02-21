@@ -2,10 +2,10 @@
 import { ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import Dropdown from "../Components/Dropdown.vue";
-import DropdownLink from "../Components/DropdownLink.vue";
-import NavLink from "../Components/NavLink.vue";
-import ResponsiveNavLink from "../Components/ResponsiveNavLink.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import NavLink from "@/Components/NavLink.vue";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
 const { user } = usePage().props?.auth as any;
 
