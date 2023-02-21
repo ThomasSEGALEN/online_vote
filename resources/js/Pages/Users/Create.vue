@@ -16,6 +16,9 @@ import TextInput from "@/Components/TextInput.vue";
 defineProps(["civilities", "roles", "groups"]);
 
 const lastNameInput = ref<HTMLInputElement>();
+const firstNameInput = ref<HTMLInputElement>();
+const emailInput = ref<HTMLInputElement>();
+const passwordInput = ref<HTMLInputElement>();
 const formStep = ref<number>(1);
 
 const form = userForm();
@@ -27,6 +30,24 @@ const nextStep = () => {
         onSuccess: () => {
             formStep.value++;
             form.permissions = (usePage().props?.data as any).permissions;
+        },
+        onError: () => {
+            if (form.errors.password) {
+                form.reset("password");
+                passwordInput.value?.focus();
+            }
+            if (form.errors.email) {
+                form.reset("email");
+                emailInput.value?.focus();
+            }
+            if (form.errors.first_name) {
+                form.reset("first_name");
+                firstNameInput.value?.focus();
+            }
+            if (form.errors.last_name) {
+                form.reset("last_name");
+                lastNameInput.value?.focus();
+            }
         },
     });
 };
