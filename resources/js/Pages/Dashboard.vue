@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from "@inertiajs/vue3";
-import AuthenticatedLayout from "../Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const auth = usePage().props?.auth as any;
 </script>

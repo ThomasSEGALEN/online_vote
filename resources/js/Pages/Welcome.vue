@@ -1,5 +1,6 @@
-<script setup>
-import { Head, Link } from "@inertiajs/vue3";
+<script setup lang="ts">
+import { Head, Link, usePage } from "@inertiajs/vue3";
+import route from "ziggy-js";
 
 defineProps({
     canLogin: Boolean,
@@ -7,6 +8,8 @@ defineProps({
     laravelVersion: String,
     phpVersion: String,
 });
+
+const { user } = usePage().props?.auth as any;
 </script>
 
 <template>
@@ -20,7 +23,7 @@ defineProps({
             class="hidden fixed top-0 right-0 px-6 py-4 sm:block"
         >
             <Link
-                v-if="$page.props.auth.user"
+                v-if="user"
                 :href="route('dashboard')"
                 class="text-sm text-gray-700 dark:text-gray-500 underline"
             >
