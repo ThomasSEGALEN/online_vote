@@ -2,15 +2,15 @@
 import { nextTick, ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import DangerButton from "../../../Components/DangerButton.vue";
-import InputError from "../../../Components/InputError.vue";
-import InputLabel from "../../../Components/InputLabel.vue";
-import Modal from "../../../Components/Modal.vue";
-import SecondaryButton from "../../../Components/SecondaryButton.vue";
-import TextInput from "../../../Components/TextInput.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import Modal from "@/Components/Modal.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 const confirmingUserDeletion = ref<boolean>(false);
-const passwordInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<HTMLInputElement>();
 
 const form = useForm({
     password: "",
@@ -18,7 +18,6 @@ const form = useForm({
 
 const confirmUserDeletion = () => {
     confirmingUserDeletion.value = true;
-
     nextTick(() => passwordInput.value?.focus());
 };
 
@@ -33,7 +32,6 @@ const deleteUser = () => {
 
 const closeModal = () => {
     confirmingUserDeletion.value = false;
-
     form.reset();
 };
 </script>
@@ -55,7 +53,7 @@ const closeModal = () => {
             <DangerButton @click="confirmUserDeletion">Désactiver</DangerButton>
 
             <Modal :show="confirmingUserDeletion" @close="closeModal">
-                <div class="p-6">
+                <form class="p-6">
                     <h2 class="text-lg font-medium text-gray-800">
                         Êtes-vous sûr de vouloir supprimer votre compte ?
                     </h2>
@@ -66,6 +64,8 @@ const closeModal = () => {
                     </p>
 
                     <div class="mt-6">
+                        <input hidden type="text" autocomplete="username" />
+
                         <InputLabel
                             for="password"
                             value="Mot de passe"
@@ -79,6 +79,7 @@ const closeModal = () => {
                             type="password"
                             class="mt-1 block w-3/4"
                             placeholder="Mot de passe"
+                            autocomplete="current-password"
                             @keyup.enter="deleteUser"
                         />
 
@@ -102,7 +103,7 @@ const closeModal = () => {
                             Supprimer
                         </DangerButton>
                     </div>
-                </div>
+                </form>
             </Modal>
         </section>
     </div>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import route from "ziggy-js";
-import InputError from "../../../Components/InputError.vue";
-import InputLabel from "../../../Components/InputLabel.vue";
-import PrimaryButton from "../../../Components/PrimaryButton.vue";
-import TextInput from "../../../Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     mustVerifyEmail: Boolean,
@@ -14,7 +14,7 @@ const props = defineProps({
 
 const { user } = usePage().props?.auth as any;
 
-const lastNameInput = ref<HTMLInputElement | null>(null);
+const lastNameInput = ref<HTMLInputElement>();
 
 const form = useForm({
     last_name: user.last_name,
@@ -96,8 +96,7 @@ onMounted(() => lastNameInput.value?.focus());
 
                 <div
                     v-if="
-                        props.mustVerifyEmail
-                        // && auth.user.email_verified_at === null
+                        props.mustVerifyEmail && user.email_verified_at === null
                     "
                 >
                     <p class="text-sm mt-2 text-gray-800">

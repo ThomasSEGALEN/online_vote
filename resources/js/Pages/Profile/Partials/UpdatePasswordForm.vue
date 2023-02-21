@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import InputError from "../../../Components/InputError.vue";
-import InputLabel from "../../../Components/InputLabel.vue";
-import PrimaryButton from "../../../Components/PrimaryButton.vue";
-import TextInput from "../../../Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
-const passwordInput = ref<HTMLInputElement | null>(null);
-const currentPasswordInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<HTMLInputElement>();
+const currentPasswordInput = ref<HTMLInputElement>();
 
 const form = useForm({
     current_password: "",
@@ -16,18 +16,20 @@ const form = useForm({
     password_confirmation: "",
 });
 
+onMounted(() => currentPasswordInput.value?.focus());
+
 const updatePassword = () => {
     form.put(route("password.update"), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => {
-            if (form.errors.current_password) {
-                form.reset("current_password");
-                currentPasswordInput.value?.focus();
-            }
             if (form.errors.password) {
                 form.reset("password", "password_confirmation");
                 passwordInput.value?.focus();
+            }
+            if (form.errors.current_password) {
+                form.reset("current_password");
+                currentPasswordInput.value?.focus();
             }
         },
     });
@@ -50,6 +52,8 @@ const updatePassword = () => {
 
             <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
                 <div>
+                    <input hidden type="text" autocomplete="username" />
+
                     <InputLabel
                         for="current_password"
                         value="Mot de passe actuel"
@@ -61,6 +65,7 @@ const updatePassword = () => {
                         v-model="form.current_password"
                         type="password"
                         class="mt-1 block w-full"
+                        autocomplete="current-password"
                     />
 
                     <InputError
@@ -78,6 +83,7 @@ const updatePassword = () => {
                         v-model="form.password"
                         type="password"
                         class="mt-1 block w-full"
+                        autocomplete="new-password"
                     />
 
                     <InputError :message="form.errors.password" class="mt-2" />
@@ -94,6 +100,7 @@ const updatePassword = () => {
                         v-model="form.password_confirmation"
                         type="password"
                         class="mt-1 block w-full"
+                        autocomplete="new-password"
                     />
 
                     <InputError
