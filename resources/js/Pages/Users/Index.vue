@@ -93,12 +93,7 @@ const importFile = (event: Event) => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div
-                            class="flex flex-wrap flex-row items-center"
-                            :class="
-                                can?.createUsers
-                                    ? 'justify-between'
-                                    : 'justify-end'
-                            "
+                            class="flex flex-wrap flex-row items-center justify-between"
                         >
                             <div class="flex items-center space-x-2 mb-2">
                                 <Link
