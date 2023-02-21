@@ -112,7 +112,7 @@ class UserController extends Controller
 
         $user->permissions()->attach($request->permissions);
 
-        return to_route('users.index')->with('message', "L'utilisateur $user->first_name $user->last_name a été créé avec succès");
+        return to_route('users.index')->with('success', "L'utilisateur $user->first_name $user->last_name a été créé avec succès");
     }
 
     /**
@@ -181,10 +181,10 @@ class UserController extends Controller
         try {
             Excel::import(new UserImport, $request->file);
         } catch (Exception $error) {
-            return redirect()->back()->with('message', "Erreur lors de l'import");
+            return redirect()->back()->with('error', "Erreur lors de l'import");
         }
 
-        return redirect()->back()->with('message', 'Les utilisateurs ont été importés avec succès');
+        return redirect()->back()->with('success', 'Les utilisateurs ont été importés avec succès');
     }
 
     /**

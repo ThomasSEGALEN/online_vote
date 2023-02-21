@@ -29,7 +29,8 @@ const userId = ref<number>();
 const showMessage = ref<boolean>(false);
 const fileInput = ref<HTMLInputElement>();
 
-const message = computed(() => (usePage().props?.flash as any).message);
+const successMessage = computed(() => (usePage().props?.flash as any).success);
+const errorMessage = computed(() => (usePage().props?.flash as any).error);
 
 onMounted(() => {
     showMessage.value = true;
@@ -143,10 +144,16 @@ const importFile = (event: Event) => {
                             class="transition ease-in-out"
                         >
                             <p
-                                v-if="showMessage && message"
+                                v-if="showMessage && successMessage"
                                 class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
                             >
-                                {{ message }}
+                                {{ successMessage }}
+                            </p>
+                            <p
+                                v-else-if="showMessage && errorMessage"
+                                class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
+                            >
+                                {{ errorMessage }}
                             </p>
                         </Transition>
 
