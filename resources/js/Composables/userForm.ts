@@ -10,7 +10,6 @@ export default function userForm() {
         role: 2 as number,
         groups: [] as Array<number>,
         permissions: [] as Array<number>,
-        // formStep: 1,
     });
 
     return form;
