@@ -36,21 +36,18 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // TODO: Test with 1 GET/POST or 2
-    // Create/edit forms
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users/prestore', [UserController::class, 'prestore'])->name('users.prestore');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/users/{user}/preupdate', [UserController::class, 'preupdate'])->name('users.preupdate');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
-    //TODO: CSV Import/Export
     Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
 
-    // TODO: CRUD Role/Group 
+    // TODO: CRUD Role/Group
 });
 
 require __DIR__.'/auth.php';

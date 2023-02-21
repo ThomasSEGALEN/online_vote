@@ -60,9 +60,18 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Users/Create', [
-            'civilities' => Civility::all(),
-            'roles' => Role::all(),
-            'groups' => Group::all(),
+            'civilities' => Civility::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ]),
+            'roles' => Role::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ]),
+            'groups' => Group::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ])
         ]);
     }
 
@@ -137,10 +146,52 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Users/Edit', [
-            'civilities' => Civility::all(),
-            'roles' => Role::all(),
-            'groups' => Group::all(),
+            'user' => [
+                'id' => $user->id,
+                'last_name' => $user->last_name,
+                'first_name' => $user->first_name,
+                'email' => $user->email,
+                'civility_id' => $user->civility_id,
+                'role_id' => $user->role_id,
+                'groups' => $user->groups()->pluck('id')->toArray(),
+                'permissions' => $user->permissions()->pluck('id')->toArray()
+            ],
+            'civilities' => Civility::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ]),
+            'roles' => Role::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ]),
+            'groups' => Group::all()->map(fn ($civility) => [
+                'id' => $civility->id,
+                'name' => $civility->name
+            ])
         ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function preupdate(Request $request, User $user)
+    {
+        $this->authorize('update', $user);
+
+        if (($request->email !== $user->email) && User::where('email', $request->email)->first()) $request->validate(['email' => ['required', 'email', 'unique:users']]);
+
+        $request->validate([
+            'last_name' => ['required', 'string'],
+            'first_name' => ['required', 'string'],
+            'civility' => ['required', 'integer', 'in:1,2'],
+            'role' => ['required', 'integer'],
+        ]);
+        
+        return to_route('users.edit', $user->id);
     }
 
     /**
@@ -153,6 +204,21 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user);
+
+        $user->update([
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'email' => $request->email,
+            'civility_id' => $request->civility,
+            'role_id' => $request->role
+        ]);
+
+        if ($request->password) $user->update(['password' => Hash::make($request->password)]);
+
+        $user->groups()->sync($request->groups);
+        $user->permissions()->sync($request->permissions);
+
+        return to_route('users.index')->with('success', "L'utilisateur $user->first_name $user->last_name a été modifié avec succès");
     }
 
     /**
