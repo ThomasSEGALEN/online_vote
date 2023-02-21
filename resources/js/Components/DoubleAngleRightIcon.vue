@@ -2,7 +2,6 @@
     <svg
         fill="#6B7280"
         viewBox="-9.5 0 32 32"
-        version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         width="20"
         height="20"
