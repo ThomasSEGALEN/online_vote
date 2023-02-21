@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { computed, onMounted, ref, watch } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { throttle } from "lodash";
-import AuthenticatedLayout from "../../Layouts/AuthenticatedLayout.vue";
-import Pagination from "../../Components/Pagination.vue";
-import TextInput from "../../Components/TextInput.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import DeleteIcon from "@/Components/DeleteIcon.vue";
+import FileExportIcon from "@/Components/FileExportIcon.vue";
+import FileImportIcon from "@/Components/FileImportIcon.vue";
+import Modal from "@/Components/Modal.vue";
+import Pagination from "@/Components/Pagination.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import UpdateIcon from "@/Components/UpdateIcon.vue";
 
 const props = defineProps({
     showCreateModal: Boolean,
@@ -17,6 +24,19 @@ const props = defineProps({
 });
 
 const search = ref<string>(props.filters?.search);
+const confirmingUserDeletion = ref<boolean>(false);
+const userId = ref<number>();
+const showMessage = ref<boolean>(false);
+const fileInput = ref<HTMLInputElement>();
+
+const message = computed(() => (usePage().props?.flash as any).message);
+
+onMounted(() => {
+    showMessage.value = true;
+    setTimeout(() => {
+        showMessage.value = false;
+    }, 3000);
+});
 
 watch(
     search,
@@ -28,6 +48,33 @@ watch(
         );
     }, 500)
 );
+
+const confirmUserDeletion = (id: number) => {
+    confirmingUserDeletion.value = true;
+    userId.value = id;
+};
+
+const deleteUser = () => {
+    router.delete(`users/${userId.value}`, {
+        preserveScroll: true,
+        onSuccess: () => closeModal(),
+    });
+};
+
+const closeModal = () => (confirmingUserDeletion.value = false);
+
+const clickFile = () => {
+    fileInput.value?.click();
+};
+
+const importFile = (event: Event) => {
+    const file = (<HTMLInputElement>event.target).files![0];
+
+    router.visit(route("users.import"), {
+        data: { file: file },
+        method: "post" as Method,
+    });
+};
 </script>
 
 <template>
@@ -52,20 +99,56 @@ watch(
                                     : 'justify-end'
                             "
                         >
-                            <Link
-                                v-if="can?.createUsers"
-                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
-                                :href="route('users.create1')"
-                            >
-                                Nouvel utilisateur
-                            </Link>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <Link
+                                    v-if="can?.createUsers"
+                                    class="inline-flex items-center px-4 py-3 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
+                                    :href="route('users.create')"
+                                >
+                                    Nouvel utilisateur
+                                </Link>
+
+                                <button
+                                    class="inline-flex items-center px-2 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                                    @click="clickFile"
+                                >
+                                    <FileImportIcon />
+                                    <input
+                                        type="file"
+                                        ref="fileInput"
+                                        hidden
+                                        @change="importFile"
+                                    />
+                                </button>
+
+                                <a
+                                    :href="route('users.export')"
+                                    class="inline-flex items-center px-2 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                                >
+                                    <FileExportIcon />
+                                </a>
+                            </div>
+
                             <TextInput
-                                class="block"
+                                class="block mb-2"
                                 type="text"
                                 placeholder="Recherche"
                                 v-model="search"
                             />
                         </div>
+
+                        <Transition
+                            enter-from-class="opacity-0"
+                            leave-to-class="opacity-0"
+                            class="transition ease-in-out"
+                        >
+                            <p
+                                v-if="showMessage && message"
+                                class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
+                            >
+                                {{ message }}
+                            </p>
+                        </Transition>
 
                         <div class="flex flex-col">
                             <div class="overflow-x-auto">
@@ -135,30 +218,32 @@ watch(
                                                     <td
                                                         class="flex space-x-5 px-6 py-4"
                                                     >
-                                                        <button>
-                                                            <svg
-                                                                class="w-5 h-5"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 576 512"
-                                                                fill="#111827"
-                                                            >
-                                                                <path
-                                                                    d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"
-                                                                />
-                                                            </svg>
-                                                        </button>
-                                                        <button>
-                                                            <svg
-                                                                class="w-5 h-5"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 448 512"
-                                                                fill="#111827"
-                                                            >
-                                                                <path
-                                                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
-                                                                />
-                                                            </svg>
-                                                        </button>
+                                                        <Link
+                                                            v-if="
+                                                                can?.updateUsers
+                                                            "
+                                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
+                                                            :href="
+                                                                route(
+                                                                    'users.edit',
+                                                                    user.id
+                                                                )
+                                                            "
+                                                        >
+                                                            <UpdateIcon />
+                                                        </Link>
+                                                        <DangerButton
+                                                            v-if="
+                                                                can?.deleteUsers
+                                                            "
+                                                            @click="
+                                                                confirmUserDeletion(
+                                                                    user.id
+                                                                )
+                                                            "
+                                                        >
+                                                            <DeleteIcon />
+                                                        </DangerButton>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -175,6 +260,31 @@ watch(
                             :total="users?.total"
                             :links="users?.links"
                         />
+
+                        <Modal
+                            :show="confirmingUserDeletion"
+                            @close="closeModal"
+                        >
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-800">
+                                    Êtes-vous sûr de vouloir supprimer cet
+                                    utilisateur ?
+                                </h2>
+
+                                <div class="mt-6 flex justify-end">
+                                    <SecondaryButton @click="closeModal">
+                                        Annuler
+                                    </SecondaryButton>
+
+                                    <DangerButton
+                                        class="ml-4"
+                                        @click="deleteUser"
+                                    >
+                                        Supprimer
+                                    </DangerButton>
+                                </div>
+                            </div>
+                        </Modal>
                     </div>
                 </div>
             </div>
