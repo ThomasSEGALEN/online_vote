@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import GuestLayout from "../../Layouts/GuestLayout.vue";
-import PrimaryButton from "../../Components/PrimaryButton.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
     status: String,

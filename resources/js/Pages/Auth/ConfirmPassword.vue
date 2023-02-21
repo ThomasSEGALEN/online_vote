@@ -2,13 +2,13 @@
 import { Head, useForm } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
 import route from "ziggy-js";
-import GuestLayout from "../../Layouts/GuestLayout.vue";
-import InputError from "../../Components/InputError.vue";
-import InputLabel from "../../Components/InputLabel.vue";
-import PrimaryButton from "../../Components/PrimaryButton.vue";
-import TextInput from "../../Components/TextInput.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
-const passwordInput = ref<HTMLInputElement | null>(null);
+const passwordInput = ref<HTMLInputElement>();
 
 const form = useForm({
     password: "",
@@ -44,6 +44,7 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
+                    autocomplete="current-password"
                     required
                 />
                 <InputError class="mt-2" :message="form.errors.password" />

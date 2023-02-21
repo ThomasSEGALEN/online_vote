@@ -2,13 +2,13 @@
 import { onMounted, ref } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import GuestLayout from "../../Layouts/GuestLayout.vue";
-import InputError from "../../Components/InputError.vue";
-import InputLabel from "../../Components/InputLabel.vue";
-import PrimaryButton from "../../Components/PrimaryButton.vue";
-import TextInput from "../../Components/TextInput.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
-const emailInput = ref<HTMLInputElement | null>(null);
+const emailInput = ref<HTMLInputElement>();
 
 defineProps({
     status: String,
@@ -53,6 +53,7 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
+                    autocomplete="email"
                     required
                 />
 
