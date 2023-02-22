@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Exports\UserExport;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
