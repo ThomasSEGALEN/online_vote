@@ -19,7 +19,7 @@ class EmailVerificationTest extends TestCase
         $user = User::factory()->create([
             'email_verified_at' => null,
         ]);
-
+        
         $response = $this->actingAs($user)->get('/verify-email');
 
         $response->assertStatus(200);

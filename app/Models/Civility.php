@@ -11,6 +11,8 @@ class Civility extends Model
 
     protected $fillable = ['short_name', 'long_name'];
 
+    public $timestamps = false;
+
     public const MAN = 1;
     public const WOMAN = 2;
 
