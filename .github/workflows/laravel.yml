@@ -20,7 +20,11 @@ jobs:
       - name: Update Composer
         run: composer update
       - name: Install Dependencies
+        run: npm install
+      - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Vite Environment
+        run: npm run dev
       - name: Generate key
         run: php artisan key:generate
       - name: Directory Permissions
