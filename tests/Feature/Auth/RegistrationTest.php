@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Civility;
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,6 +21,9 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        Civility::factory()->create();
+        Role::factory()->count(2)->create();
+
         $response = $this->post('/register', [
             'civility' => 1,
             'last_name' => 'Test',
