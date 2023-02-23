@@ -17,8 +17,8 @@ class CivilityFactory extends Factory
     public function definition()
     {
         return [
-            'label' => fake()->name(),
-            'name' => fake()->name()
+            'label' => fake()->title(),
+            'name' => fake()->title()
         ];
     }
 }

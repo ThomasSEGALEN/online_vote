@@ -11,7 +11,6 @@ declare interface User {
     last_name?: string;
     first_name?: string;
     email?: string;
-    email_verified_at?: Date;
     password?: string;
     remember_token?: string;
     civility_id?: number;
