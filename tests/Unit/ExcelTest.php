@@ -9,11 +9,6 @@ use Tests\TestCase;
 
 class ExcelTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
     public function test_excel_download()
     {
         $user = User::factory()->create();
@@ -27,11 +22,6 @@ class ExcelTest extends TestCase
         Excel::assertDownloaded('users.xlsx');
     }
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
     public function test_excel_upload()
     {
         $user = User::factory()->create();
