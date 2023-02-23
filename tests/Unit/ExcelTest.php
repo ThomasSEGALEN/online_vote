@@ -3,15 +3,12 @@
 namespace Tests\Unit;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
 class ExcelTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * A basic unit test example.
      *
