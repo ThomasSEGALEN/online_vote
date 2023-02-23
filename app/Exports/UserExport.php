@@ -18,7 +18,6 @@ class UserExport implements FromCollection, WithHeadings
             'last_name',
             'first_name',
             'email',
-            'email_verified_at',
             'civility_id',
             'role_id',
             'created_at',
