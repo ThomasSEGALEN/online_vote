@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +29,6 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -47,6 +45,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('users/export', [UserController::class, 'export'])->name('users.export');
 
     // TODO: CRUD Role/Group
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+
+    Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
+
+    Route::get('/sessions', fn () => to_route('users.index'))->name('sessions.index');
 });
 
 require __DIR__.'/auth.php';

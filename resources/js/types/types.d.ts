@@ -1,11 +1,3 @@
-declare enum Method {
-    GET = "get",
-    POST = "post",
-    PUT = "put",
-    PATCH = "patch",
-    DELETE = "delete",
-}
-
 declare interface User {
     id?: number;
     last_name?: string;
@@ -17,6 +9,11 @@ declare interface User {
     role_id?: number;
     created_at?: Date;
     updated_at?: Date;
+}
+
+declare interface Permission {
+    id: number;
+    name: string;
 }
 
 declare interface Link {
