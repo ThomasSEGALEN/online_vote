@@ -7,20 +7,19 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import Navbar from "@/Components/Navbar.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-
-const { user } = usePage().props?.auth as any;
-
-const showingNavigationDropdown = ref<Boolean>(false);
 </script>
 
 <template>
     <div>
-        <div class="flex">
-            <div class="w-64">
-                <Navbar />
-            </div>
+        <div class="flex flex-col md:flex-row">
+            <Navbar />
 
-            <main class="flex-1">
+            <main class="flex-1 md:ml-64">
+                <header class="" v-if="$slots.header">
+                    <div class="py-4 px-4 h-14 border-b">
+                        <slot name="header" />
+                    </div>
+                </header>
                 <slot />
             </main>
         </div>

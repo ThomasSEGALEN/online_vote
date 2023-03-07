@@ -103,7 +103,7 @@ onMounted(() => lastNameInput.value?.focus());
                         Votre adresse e-mail n'est pas vérifiée.
                         <Link
                             :href="route('verification.send')"
-                            :method="('post' as Method)"
+                            method="post"
                             as="button"
                             class="underline text-sm text-gray-600 hover:text-gray-800 focus:text-gray-800 focus:outline-none"
                         >
