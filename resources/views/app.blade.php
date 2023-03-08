@@ -19,7 +19,6 @@
     </body>
 </html>
 <style>
-
 ::selection {
     color: white;
     background-color: rgb(99 102 241);
