@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { Method } from "@inertiajs/core";
 import { onMounted, ref } from "vue";
 import route from "ziggy-js";
 import InputError from "@/Components/InputError.vue";
@@ -103,7 +104,7 @@ onMounted(() => lastNameInput.value?.focus());
                         Votre adresse e-mail n'est pas vérifiée.
                         <Link
                             :href="route('verification.send')"
-                            method="post"
+                            :method="'post' as Method"
                             as="button"
                             class="underline text-sm text-gray-600 hover:text-gray-800 focus:text-gray-800 focus:outline-none"
                         >
