@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import userForm from "@/Composables/userForm";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -26,7 +26,7 @@ const form = userForm(
     user.first_name,
     user.email,
     user.role_id,
-    props.groups.filter((group: any) => user.groups.includes(group.id))
+    props.groups.filter((group: Group) => user.groups.includes(group.id))
 );
 
 onMounted(() => lastNameInput.value?.focus());

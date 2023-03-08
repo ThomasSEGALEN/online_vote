@@ -16,6 +16,11 @@ declare interface Permission {
     name: string;
 }
 
+declare interface Group {
+    id: number;
+    name: string;
+}
+
 declare interface Link {
     active: boolean;
     label: string;
