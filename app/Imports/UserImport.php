@@ -12,9 +12,9 @@ class UserImport implements ToModel, WithHeadingRow
     /**
     * @param array $row
     *
-    * @return \Illuminate\Database\Eloquent\Model|null
+    * @return \App\Models\User|null
     */
-    public function model(array $row)
+    public function model(array $row): User
     {
         return new User([
             "last_name" => $row["last_name"],

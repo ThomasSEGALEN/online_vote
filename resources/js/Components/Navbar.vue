@@ -271,17 +271,19 @@ const showingNavigationDropdown = ref<Boolean>(false);
                             {{ user.first_name }}
                             {{ user.last_name }}
                         </div>
-                        <div class="font-medium text-sm text-gray-500">
+                        <div
+                            class="font-medium text-sm text-gray-500 pb-2 border-b"
+                        >
                             {{ user.email }}
                         </div>
                     </li>
-                    <li>
+                    <li class="pt-2">
                         <ResponsiveNavLink
                             :href="route('profile.edit')"
                             :active="route().current('profile.*')"
                             edit
                         >
-                            <div class="flex items-center border-t pt-4">
+                            <div class="flex items-center">
                                 <svg
                                     class="w-5 h-5"
                                     fill="#4B5563"
