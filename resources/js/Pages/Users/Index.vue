@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
 import { throttle } from "lodash";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -74,7 +75,7 @@ const importFile = (event: Event) => {
 
     router.visit(route("users.import"), {
         data: { file: file },
-        method: "post",
+        method: "post" as Method,
     });
 };
 </script>
