@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -52,7 +53,7 @@ const verificationLinkSent = computed(
 
                 <Link
                     :href="route('logout')"
-                    method="post"
+                    :method="'post' as Method"
                     as="button"
                     class="underline text-sm text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none"
                 >

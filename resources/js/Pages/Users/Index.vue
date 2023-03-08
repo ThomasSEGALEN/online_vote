@@ -58,6 +58,7 @@ const confirmUserDeletion = (id: number) => {
 const deleteUser = () => {
     router.delete(`users/${userId.value}`, {
         preserveScroll: true,
+        preserveState: false,
         onSuccess: () => closeModal(),
     });
 };

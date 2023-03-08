@@ -6,8 +6,7 @@ export default function userForm(
     first_name = "",
     email = "",
     role = 2,
-    groups = [],
-    permissions = []
+    groups = []
 ) {
     const form = useForm({
         civility: civility as number,
@@ -17,7 +16,6 @@ export default function userForm(
         password: "" as string,
         role: role as number,
         groups: groups as Array<number>,
-        permissions: permissions as Array<number>,
     });
 
     return form;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Head, useForm } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/InputError.vue";
