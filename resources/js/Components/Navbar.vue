@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { Link, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
