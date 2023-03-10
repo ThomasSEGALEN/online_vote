@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
 import { throttle } from "lodash";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -73,8 +74,8 @@ const importFile = (event: Event) => {
     const file = (<HTMLInputElement>event.target).files![0];
 
     router.visit(route("users.import"), {
-        data: { file: file },
-        method: "post",
+        data: { usersFile: file },
+        method: "post" as Method,
     });
 };
 </script>
@@ -94,7 +95,7 @@ const importFile = (event: Event) => {
                 <div class="flex items-center space-x-2 mb-2">
                     <Link
                         v-if="can?.createUsers"
-                        class="inline-flex items-center px-4 py-3 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                         :href="route('users.create')"
                     >
                         Nouvel utilisateur
