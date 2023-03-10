@@ -39,10 +39,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
-    Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+    Route::get('/users/export', [UserController::class, 'export'])->name('users.export');
 
     // TODO: CRUD Role/Group
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::post('/roles/import', [RoleController::class, 'import'])->name('roles.import');
+    Route::get('/roles/export', [RoleController::class, 'export'])->name('roles.export');
 
     Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
 
