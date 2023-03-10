@@ -9,12 +9,17 @@ class Civility extends Model
 {
     use HasFactory;
 
+    public const MAN = 1;
+    public const WOMAN = 2;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = ['short_name', 'long_name'];
 
     public $timestamps = false;
-
-    public const MAN = 1;
-    public const WOMAN = 2;
 
     public function users()
     {
