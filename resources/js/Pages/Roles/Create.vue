@@ -38,7 +38,7 @@ const submit = () => {
             <div class="inline-flex items-center">
                 <Link
                     :href="route('users.index')"
-                    class="text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
                 </Link>

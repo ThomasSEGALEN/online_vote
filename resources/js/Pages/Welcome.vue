@@ -16,7 +16,7 @@ const { user } = usePage().props?.auth as any;
     <Head title="Welcome" />
 
     <div
-        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0"
+        class="relative flex items-top justify-center min-h-screen bg-gray-100 sm:items-center sm:pt-0"
     >
         <div
             v-if="canLogin"
@@ -25,7 +25,7 @@ const { user } = usePage().props?.auth as any;
             <Link
                 v-if="user"
                 :href="route('users.index')"
-                class="text-sm text-gray-700 dark:text-gray-500 underline"
+                class="text-sm text-gray-700 underline"
             >
                 Redirection
             </Link>
@@ -33,7 +33,7 @@ const { user } = usePage().props?.auth as any;
             <template v-else>
                 <Link
                     :href="route('login')"
-                    class="text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="text-sm text-gray-700 underline"
                 >
                     Connexion
                 </Link>
@@ -41,7 +41,7 @@ const { user } = usePage().props?.auth as any;
                 <Link
                     v-if="canRegister"
                     :href="route('register')"
-                    class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="ml-4 text-sm text-gray-700underline"
                 >
                     Inscription
                 </Link>
@@ -54,7 +54,7 @@ const { user } = usePage().props?.auth as any;
             </div>
 
             <div
-                class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg"
+                class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg"
             >
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="p-6">
@@ -75,7 +75,7 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel.com/docs"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Documentation</a
                                 >
                             </div>
@@ -83,7 +83,7 @@ const { user } = usePage().props?.auth as any;
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-700 text-sm"
                             >
                                 Laravel has wonderful, thorough documentation
                                 covering every aspect of the framework. Whether
@@ -95,7 +95,7 @@ const { user } = usePage().props?.auth as any;
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l"
+                        class="p-6 border-t border-gray-200 md:border-t-0 md:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -117,7 +117,7 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laracasts.com"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Laracasts</a
                                 >
                             </div>
@@ -125,7 +125,7 @@ const { user } = usePage().props?.auth as any;
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-700 text-sm"
                             >
                                 Laracasts offers thousands of video tutorials on
                                 Laravel, PHP, and JavaScript development. Check
@@ -136,7 +136,7 @@ const { user } = usePage().props?.auth as any;
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700"
+                        class="p-6 border-t border-gray-200"
                     >
                         <div class="flex items-center">
                             <svg
@@ -155,7 +155,7 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel-news.com/"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Laravel News</a
                                 >
                             </div>
@@ -163,7 +163,7 @@ const { user } = usePage().props?.auth as any;
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-700text-sm"
                             >
                                 Laravel News is a community driven portal and
                                 newsletter aggregating all of the latest and
@@ -174,7 +174,7 @@ const { user } = usePage().props?.auth as any;
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l"
+                        class="p-6 border-t border-gray-200 md:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -191,7 +191,7 @@ const { user } = usePage().props?.auth as any;
                                 ></path>
                             </svg>
                             <div
-                                class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"
+                                class="ml-4 text-lg leading-7 font-semibold text-gray-900"
                             >
                                 Vibrant Ecosystem
                             </div>
@@ -199,7 +199,7 @@ const { user } = usePage().props?.auth as any;
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-700 text-sm"
                             >
                                 Laravel's robust library of first-party tools
                                 and libraries, such as
