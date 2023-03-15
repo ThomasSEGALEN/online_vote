@@ -65,8 +65,8 @@ const submit = () => {
 
         <div class="p-12">
             <form @submit.prevent="submit">
-                <div class="w-full flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full">
+                <div class="w-full flex flex-col lg:flex-row">
+                    <div class="flex flex-col w-full max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -178,7 +178,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 md:w-2/3 md:ml-8 md:mt-0">
+                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -223,7 +223,7 @@ const submit = () => {
                                 Groupes
                             </span>
 
-                            <div class="mt-1 max-w-xs">
+                            <div class="mt-1 max-w-md">
                                 <Multiselect
                                     v-model="form.groups"
                                     mode="tags"

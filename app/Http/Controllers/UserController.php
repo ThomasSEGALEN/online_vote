@@ -27,13 +27,15 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         return Inertia::render('Users/Index', [
-            'users' => 
-                User::when($request->input('search'), fn ($query, $search) =>
-                    $query
-                        ->where('email', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
-                        ->orWhere('first_name', 'like', "%{$search}%")
-                )
+            'users' =>
+            User::when(
+                $request->input('search'),
+                fn ($query, $search) =>
+                $query
+                    ->where('email', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+            )
                 ->paginate(20)
                 ->appends($request->only('search'))
                 ->through(fn ($user) => [
@@ -189,7 +191,9 @@ class UserController extends Controller
         if ($request->password) $user->update(['password' => Hash::make($request->password)]);
 
         $user->groups()->attach(array_column($request->groups, 'id'));
-        $user->permissions()->sync($request->permissions);
+        $role = Role::where('id', $request->role)->first();
+        $permissions = $role->permissions()->pluck('id')->toArray();
+        $user->permissions()->attach($permissions);
 
         return to_route('users.index')->with('success', "L'utilisateur $user->first_name $user->last_name a été modifié avec succès");
     }
