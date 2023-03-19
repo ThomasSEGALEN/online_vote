@@ -41,7 +41,7 @@ const { user } = usePage().props?.auth as any;
                 <Link
                     v-if="canRegister"
                     :href="route('register')"
-                    class="ml-4 text-sm text-gray-700underline"
+                    class="ml-4 text-sm text-gray-700 underline"
                 >
                     Inscription
                 </Link>

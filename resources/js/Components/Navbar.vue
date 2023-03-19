@@ -134,7 +134,7 @@ const showingNavigationDropdown = ref<Boolean>(false);
         class="hidden min-h-screen md:flex flex-col flex-shrink-0 antialiased bg-gray-50 text-gray-800"
     >
         <div
-            class="flex flex-col top-0 left-0 w-64 bg-white h-full border-r"
+            class="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r"
         >
             <div class="flex items-center justify-start px-5 h-14">
                 <h1 class="text-lg font-bold">Vote électronique</h1>

@@ -13,7 +13,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
     <div class="flex flex-col md:flex-row">
         <Navbar />
 
-        <main class="flex flex-col w-full">
+        <main class="flex flex-col w-full md:ml-64">
             <header v-if="$slots.header">
                 <div class="py-4 px-4 h-14 border-b">
                     <slot name="header" />
