@@ -91,7 +91,7 @@ class UserController extends Controller
         $request->validate([
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users'],
+            'email' => ['required', 'email', 'string', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'civility' => ['required', 'integer', 'in:1,2'],
             'role' => ['required', 'integer']
@@ -149,13 +149,13 @@ class UserController extends Controller
                 'id' => $civility->id,
                 'name' => $civility->name
             ]),
-            'roles' => Role::all()->map(fn ($civility) => [
-                'id' => $civility->id,
-                'name' => $civility->name
+            'roles' => Role::all()->map(fn ($role) => [
+                'id' => $role->id,
+                'name' => $role->name
             ]),
-            'groups' => Group::all()->map(fn ($civility) => [
-                'id' => $civility->id,
-                'name' => $civility->name
+            'groups' => Group::all()->map(fn ($permission) => [
+                'id' => $permission->id,
+                'name' => $permission->name
             ])
         ]);
     }
@@ -171,7 +171,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        if (($request->email !== $user->email) && User::where('email', $request->email)->first()) $request->validate(['email' => ['required', 'email', 'unique:users']]);
+        if (($request->email !== $user->email) && User::where('email', $request->email)->first()) $request->validate(['email' => ['required', 'email', 'string', 'unique:users']]);
 
         $request->validate([
             'last_name' => ['required', 'string'],
