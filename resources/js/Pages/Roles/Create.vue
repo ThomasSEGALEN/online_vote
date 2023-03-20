@@ -83,61 +83,121 @@ const submit = () => {
                                 Permissions
                             </span>
 
-                            <div class="">
+                            <div
+                                class="flex flex-col overflow-x-auto min-w-full mt-4 mb-6"
+                            >
                                 <table class="min-w-full">
                                     <thead class="bg-white border-b">
                                         <tr class="border-b bg-gray-100">
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Nom
                                             </th>
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Lister
                                             </th>
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Consulter
                                             </th>
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Créer
                                             </th>
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Modifier
                                             </th>
-                                            <th scope="col" class="text-md font-bold text-gray-900 px-6 py-4 text-left">
+                                            <th
+                                                scope="col"
+                                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                                            >
                                                 Supprimer
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="bg-white border-b">
-                                            <td class="text-md text-gray-900 font-bold px-6 py-4">
+                                            <td
+                                                class="text-md text-gray-900 font-bold px-6 py-4"
+                                            >
                                                 Utilisateurs
                                             </td>
-                                            <td v-for="index in 5" :key="index" class="text-md text-gray-900 font-semibold px-6 py-4">
-                                                <Checkbox v-model="form.permissions" id="permissionInput-{{ index }}" :value="index"/>
+                                            <td
+                                                v-for="index in 5"
+                                                :key="index"
+                                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                                            >
+                                                <Checkbox
+                                                    v-model="form.permissions"
+                                                    id="permissionInput-{{ index }}"
+                                                    :value="index"
+                                                />
                                             </td>
                                         </tr>
                                         <tr class="border-b bg-gray-100">
-                                            <td class="text-md text-gray-900 font-bold px-6 py-4">
+                                            <td
+                                                class="text-md text-gray-900 font-bold px-6 py-4"
+                                            >
                                                 Rôles
                                             </td>
-                                            <td v-for="index in 5" :key="index" class="text-md text-gray-900 font-semibold px-6 py-4">
-                                                <Checkbox v-model="form.permissions" id="permissionInput-{{ index+5 }}" :value="index+5"/>
+                                            <td
+                                                v-for="index in 5"
+                                                :key="index"
+                                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                                            >
+                                                <Checkbox
+                                                    v-model="form.permissions"
+                                                    id="permissionInput-{{ index+5 }}"
+                                                    :value="index + 5"
+                                                />
                                             </td>
                                         </tr>
                                         <tr class="border-b bg-white">
-                                            <td class="text-md text-gray-900 font-bold px-6 py-4">
+                                            <td
+                                                class="text-md text-gray-900 font-bold px-6 py-4"
+                                            >
                                                 Groupes
                                             </td>
-                                            <td v-for="index in 5" :key="index" class="text-md text-gray-900 font-semibold px-6 py-4">
-                                                <Checkbox v-model="form.permissions" id="permissionInput-{{ index+10 }}" :value="index+10"/>
+                                            <td
+                                                v-for="index in 5"
+                                                :key="index"
+                                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                                            >
+                                                <Checkbox
+                                                    v-model="form.permissions"
+                                                    id="permissionInput-{{ index+10 }}"
+                                                    :value="index + 10"
+                                                />
                                             </td>
                                         </tr>
                                         <tr class="border-b bg-gray-100">
-                                            <td class="text-md text-gray-900 font-bold px-6 py-4">
+                                            <td
+                                                class="text-md text-gray-900 font-bold px-6 py-4"
+                                            >
                                                 Séances
                                             </td>
-                                            <td v-for="index in 5" :key="index" class="text-md text-gray-900 font-semibold px-6 py-4">
-                                                <Checkbox v-model="form.permissions" id="permissionInput-{{ index+15 }}" :value="index+15"/>
+                                            <td
+                                                v-for="index in 5"
+                                                :key="index"
+                                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                                            >
+                                                <Checkbox
+                                                    v-model="form.permissions"
+                                                    id="permissionInput-{{ index+15 }}"
+                                                    :value="index + 15"
+                                                />
                                             </td>
                                         </tr>
                                     </tbody>

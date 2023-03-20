@@ -70,8 +70,6 @@ class RoleController extends Controller
     {
         $this->authorize('create', Role::class);
 
-        dd($request->permissions);
-
         $request->validate([
             'name' => ['required', 'string', 'unique:roles']
         ]);
@@ -81,12 +79,6 @@ class RoleController extends Controller
         ]);
 
         $role->permissions()->attach($request->permissions);
-        
-        // if ($request->users) {
-        //     foreach ($request->users as $user) {
-        //         $user->permissions()->attach($role->permissions()->pluck('id')->toArray());
-        //     }
-        // }
 
         return to_route('roles.index')->with('success', "Le rôle $role->name a été créé avec succès");
     }
@@ -95,22 +87,34 @@ class RoleController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Role $role)
     {
-        //
+        $this->authorize('view', $role);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function edit(Role $role)
+    public function edit(Role $role): Response
     {
-        //
+        $this->authorize('update', $role);
+
+        return Inertia::render('Roles/Edit', [
+            'role' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions()->pluck('id')->toArray()
+            ],
+            'permissions' => Permission::all()->map(fn ($permission) => [
+                'id' => $permission->id,
+                'name' => $permission->name
+            ])
+        ]);
     }
 
     /**
@@ -118,22 +122,37 @@ class RoleController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Role $role): RedirectResponse
     {
-        //
+        $this->authorize('update', $role);
+
+        if (($request->name !== $role->name) && Role::where('name', $request->name)->first()) $request->validate(['name' => ['required', 'string', 'unique:roles']]);
+    
+        $role->update([
+            'name' => $request->name
+        ]);
+
+        $role->permissions()->sync($request->permissions);
+
+        return to_route('roles.index')->with('success', "Le rôle $role->name a été modifié avec succès");
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): RedirectResponse
     {
-        //
+        $this->authorize('delete', $role);
+
+        $role->permissions()->detach($role->permissions()->pluck('id')->toArray());
+        $role->delete();
+
+        return to_route('roles.index')->with('success', "Le rôle $role->name a été supprimé avec succès");
     }
 
     /**
