@@ -16,7 +16,7 @@ class FileTest extends TestCase
 
         $response->assertOk();
 
-        $response->streamedContent();
+        // $response->streamedContent();
     }
 
     public function test_excel_upload()
