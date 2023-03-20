@@ -19,14 +19,15 @@ const firstNameInput = ref<HTMLInputElement>();
 const emailInput = ref<HTMLInputElement>();
 const passwordInput = ref<HTMLInputElement>();
 
-const { user } = props;
+const { user, groups } = props;
+
 const form = userForm(
     user.civility_id,
     user.last_name,
     user.first_name,
     user.email,
     user.role_id,
-    props.groups.filter((group: Group) => user.groups.includes(group.id))
+    groups.filter((group: Group) => user.groups.includes(group.id))
 );
 
 onMounted(() => lastNameInput.value?.focus());
@@ -51,7 +52,7 @@ const submit = () => {
             <div class="inline-flex items-center">
                 <Link
                     :href="route('users.index')"
-                    class="text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
                 </Link>
@@ -65,8 +66,8 @@ const submit = () => {
 
         <div class="p-12">
             <form @submit.prevent="submit">
-                <div class="w-full flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full">
+                <div class="w-full flex flex-col lg:flex-row">
+                    <div class="flex flex-col w-full max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -178,7 +179,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 md:w-2/3 md:ml-8 md:mt-0">
+                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -223,7 +224,7 @@ const submit = () => {
                                 Groupes
                             </span>
 
-                            <div class="mt-1 max-w-xs">
+                            <div class="mt-1 max-w-md">
                                 <Multiselect
                                     v-model="form.groups"
                                     mode="tags"

@@ -19,14 +19,14 @@ const props = defineProps({
     showCreateModal: Boolean,
     showViewModal: Boolean,
     showDeleteModal: Boolean,
-    users: Object,
+    roles: Object,
     filters: Object,
     can: Object,
 });
 
 const search = ref<string>(props.filters?.search);
-const confirmingUserDeletion = ref<boolean>(false);
-const userId = ref<number>();
+const confirmingRoleDeletion = ref<boolean>(false);
+const roleId = ref<number>();
 const showMessage = ref<boolean>(false);
 const fileInput = ref<HTMLInputElement>();
 
@@ -44,27 +44,27 @@ watch(
     search,
     throttle((value) => {
         router.get(
-            route("users.index"),
+            route("roles.index"),
             { search: value },
             { preserveState: true, replace: true }
         );
     }, 500)
 );
 
-const confirmUserDeletion = (id: number) => {
-    confirmingUserDeletion.value = true;
-    userId.value = id;
+const confirmRoleDeletion = (id: number) => {
+    confirmingRoleDeletion.value = true;
+    roleId.value = id;
 };
 
-const deleteUser = () => {
-    router.delete(`users/${userId.value}`, {
+const deleteRole = () => {
+    router.delete(`roles/${roleId.value}`, {
         preserveScroll: true,
         preserveState: false,
         onSuccess: () => closeModal(),
     });
 };
 
-const closeModal = () => (confirmingUserDeletion.value = false);
+const closeModal = () => (confirmingRoleDeletion.value = false);
 
 const clickFile = () => {
     fileInput.value?.click();
@@ -73,20 +73,20 @@ const clickFile = () => {
 const importFile = (event: Event) => {
     const file = (<HTMLInputElement>event.target).files![0];
 
-    router.visit(route("users.import"), {
-        data: { usersFile: file },
+    router.visit(route("roles.import"), {
+        data: { rolesFile: file },
         method: "post" as Method,
     });
 };
 </script>
 
 <template>
-    <Head title="Utilisateurs" />
+    <Head title="Rôles" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Utilisateurs
+                Rôles
             </h2>
         </template>
 
@@ -94,11 +94,11 @@ const importFile = (event: Event) => {
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div class="flex items-center space-x-2 mb-2">
                     <Link
-                        v-if="can?.createUsers"
+                        v-if="can?.createRoles"
                         class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
-                        :href="route('users.create')"
+                        :href="route('roles.create')"
                     >
-                        Nouvel utilisateur
+                        Nouveau rôle
                     </Link>
 
                     <button
@@ -115,7 +115,7 @@ const importFile = (event: Event) => {
                     </button>
 
                     <a
-                        :href="route('users.export')"
+                        :href="route('roles.export')"
                         class="inline-flex items-center px-2 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
                     >
                         <FileExportIcon />
@@ -163,19 +163,7 @@ const importFile = (event: Event) => {
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
-                                Adresse e-mail
-                            </th>
-                            <th
-                                scope="col"
-                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                            >
                                 Nom
-                            </th>
-                            <th
-                                scope="col"
-                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                            >
-                                Prénom
                             </th>
                             <th
                                 scope="col"
@@ -188,40 +176,30 @@ const importFile = (event: Event) => {
                     <tbody>
                         <tr
                             class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
-                            v-for="user in users?.data"
-                            :key="user.id"
+                            v-for="role in roles?.data"
+                            :key="role.id"
                         >
                             <td
                                 class="text-md text-gray-900 font-bold px-6 py-4"
                             >
-                                {{ user.id }}
+                                {{ role.id }}
                             </td>
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
-                                {{ user.email }}
-                            </td>
-                            <td
-                                class="text-md text-gray-900 font-semibold px-6 py-4"
-                            >
-                                {{ user.last_name }}
-                            </td>
-                            <td
-                                class="text-md text-gray-900 font-semibold px-6 py-4"
-                            >
-                                {{ user.first_name }}
+                                {{ role.name }}
                             </td>
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
-                                    v-if="can?.updateUsers"
+                                    v-if="can?.updateRoles"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
-                                    :href="route('users.edit', user.id)"
+                                    :href="route('roles.edit', role.id)"
                                 >
                                     <UpdateIcon />
                                 </Link>
                                 <DangerButton
-                                    v-if="can?.deleteUsers"
-                                    @click="confirmUserDeletion(user.id)"
+                                    v-if="can?.deleteRoles"
+                                    @click="confirmRoleDeletion(role.id)"
                                 >
                                     <DeleteIcon />
                                 </DangerButton>
@@ -232,17 +210,17 @@ const importFile = (event: Event) => {
             </div>
 
             <Pagination
-                v-if="users?.total > users?.per_page"
-                :to="users?.to"
-                :from="users?.from"
-                :total="users?.total"
-                :links="users?.links"
+                v-if="roles?.total > roles?.per_page"
+                :to="roles?.to"
+                :from="roles?.from"
+                :total="roles?.total"
+                :links="roles?.links"
             />
 
-            <Modal :show="confirmingUserDeletion" @close="closeModal">
+            <Modal :show="confirmingRoleDeletion" @close="closeModal">
                 <div class="p-6">
                     <h2 class="text-lg font-medium text-gray-800">
-                        Êtes-vous sûr de vouloir supprimer cet utilisateur ?
+                        Êtes-vous sûr de vouloir supprimer ce rôle ?
                     </h2>
 
                     <div class="mt-6 flex justify-end">
@@ -250,7 +228,7 @@ const importFile = (event: Event) => {
                             Annuler
                         </SecondaryButton>
 
-                        <DangerButton class="ml-4" @click="deleteUser">
+                        <DangerButton class="ml-4" @click="deleteRole">
                             Supprimer
                         </DangerButton>
                     </div>

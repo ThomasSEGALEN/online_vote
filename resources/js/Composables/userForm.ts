@@ -15,7 +15,7 @@ export default function userForm(
         email: email as string,
         password: "" as string,
         role: role as number,
-        groups: groups as Array<number>,
+        groups: groups as Array<number | string>,
     });
 
     return form;

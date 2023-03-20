@@ -9,10 +9,15 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillabled = ['name'];
-
     public const ADMIN = 1;
     public const USER = 2;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['name'];
 
     public function permissions()
     {

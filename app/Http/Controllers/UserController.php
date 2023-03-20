@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UserExport;
-use App\Imports\UserImport;
 use App\Models\Civility;
 use App\Models\Group;
 use App\Models\Role;
@@ -14,8 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserController extends Controller
 {
@@ -30,13 +27,15 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
 
         return Inertia::render('Users/Index', [
-            'users' => 
-                User::when($request->input('search'), fn ($query, $search) =>
-                    $query
-                        ->where('email', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
-                        ->orWhere('first_name', 'like', "%{$search}%")
-                )
+            'users' =>
+            User::when(
+                $request->input('search'),
+                fn ($query, $search) =>
+                $query
+                    ->where('email', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+            )
                 ->paginate(20)
                 ->appends($request->only('search'))
                 ->through(fn ($user) => [
@@ -92,10 +91,10 @@ class UserController extends Controller
         $request->validate([
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users'],
+            'email' => ['required', 'email', 'string', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'civility' => ['required', 'integer', 'in:1,2'],
-            'role' => ['required', 'integer'],
+            'role' => ['required', 'integer']
         ]);
 
         $user = User::create([
@@ -104,7 +103,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make('password'),
             'civility_id' => $request->civility,
-            'role_id' => $request->role,
+            'role_id' => $request->role
         ]);
 
         $user->groups()->attach(array_column($request->groups, 'id'));
@@ -144,19 +143,19 @@ class UserController extends Controller
                 'email' => $user->email,
                 'civility_id' => $user->civility_id,
                 'role_id' => $user->role_id,
-                'groups' => $user->groups()->pluck('id')->toArray(),
+                'groups' => $user->groups()->pluck('id')->toArray()
             ],
             'civilities' => Civility::all()->map(fn ($civility) => [
                 'id' => $civility->id,
                 'name' => $civility->name
             ]),
-            'roles' => Role::all()->map(fn ($civility) => [
-                'id' => $civility->id,
-                'name' => $civility->name
+            'roles' => Role::all()->map(fn ($role) => [
+                'id' => $role->id,
+                'name' => $role->name
             ]),
-            'groups' => Group::all()->map(fn ($civility) => [
-                'id' => $civility->id,
-                'name' => $civility->name
+            'groups' => Group::all()->map(fn ($permission) => [
+                'id' => $permission->id,
+                'name' => $permission->name
             ])
         ]);
     }
@@ -172,13 +171,13 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        if (($request->email !== $user->email) && User::where('email', $request->email)->first()) $request->validate(['email' => ['required', 'email', 'unique:users']]);
+        if (($request->email !== $user->email) && User::where('email', $request->email)->first()) $request->validate(['email' => ['required', 'email', 'string', 'unique:users']]);
 
         $request->validate([
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
             'civility' => ['required', 'integer', 'in:1,2'],
-            'role' => ['required', 'integer'],
+            'role' => ['required', 'integer']
         ]);
 
         $user->update([
@@ -192,7 +191,9 @@ class UserController extends Controller
         if ($request->password) $user->update(['password' => Hash::make($request->password)]);
 
         $user->groups()->attach(array_column($request->groups, 'id'));
-        $user->permissions()->sync($request->permissions);
+        $role = Role::where('id', $request->role)->first();
+        $permissions = $role->permissions()->pluck('id')->toArray();
+        $user->permissions()->attach($permissions);
 
         return to_route('users.index')->with('success', "L'utilisateur $user->first_name $user->last_name a été modifié avec succès");
     }
@@ -223,9 +224,35 @@ class UserController extends Controller
     public function import(Request $request): RedirectResponse
     {
         try {
-            Excel::import(new UserImport, $request->file);
-        } catch (Exception $error) {
-            return redirect()->back()->with('error', "Erreur lors de l'import");
+            fastexcel()->import($request->file('usersFile'), function ($row) {
+                $user = User::create([
+                    'last_name' => $row['last_name'],
+                    'first_name' => $row['first_name'],
+                    'email' => $row['email'],
+                    'password' => Hash::make($row['password']),
+                    'civility_id' => $row['civility_id'],
+                    'role_id' => $row['role_id'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+
+                $role = Role::where('id', $row['role_id'])->first();
+                $user->permissions()->attach($role->permissions->pluck('id')->toArray());
+
+                return $user;
+            });
+        } catch (Exception $exception) {
+            switch ($exception->getCode()) {
+                case '0':
+                    return redirect()->back()->with('error', "Erreur lors de l'import : fichier invalide");
+                    break;
+                case '23000':
+                    return redirect()->back()->with('error', "Erreur lors de l'import : champ duppliqué");
+                    break;
+                default:
+                    return redirect()->back()->with('error', "Erreur lors de l'import");
+                    break;
+            }
         }
 
         return to_route('users.index')->with('success', 'Les utilisateurs ont été importés avec succès');
@@ -234,10 +261,10 @@ class UserController extends Controller
     /**
      * Export a resource from storage.
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse|string
      */
-    public function export(): BinaryFileResponse
+    public function export(): StreamedResponse|string
     {
-        return Excel::download(new UserExport, 'users.xlsx');
+        return fastexcel(User::select('last_name', 'first_name', 'email', 'civility_id', 'role_id', 'created_at', 'updated_at')->get())->download('users.xlsx');
     }
 }
