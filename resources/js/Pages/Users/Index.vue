@@ -149,96 +149,86 @@ const importFile = (event: Event) => {
                 </p>
             </Transition>
 
-            <div class="flex flex-col">
-                <div class="overflow-x-auto">
-                    <div class="inline-block min-w-full mt-4 mb-6">
-                        <div class="overflow-hidden">
-                            <table class="min-w-full">
-                                <thead class="border-b">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                                        >
-                                            #
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                                        >
-                                            Adresse e-mail
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                                        >
-                                            Nom
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                                        >
-                                            Prénom
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="text-md font-bold text-gray-900 px-6 py-4 text-left"
-                                        >
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
-                                        v-for="user in users?.data"
-                                        :key="user.id"
-                                    >
-                                        <td
-                                            class="text-md text-gray-900 font-bold px-6 py-4"
-                                        >
-                                            {{ user.id }}
-                                        </td>
-                                        <td
-                                            class="text-md text-gray-900 font-semibold px-6 py-4"
-                                        >
-                                            {{ user.email }}
-                                        </td>
-                                        <td
-                                            class="text-md text-gray-900 font-semibold px-6 py-4"
-                                        >
-                                            {{ user.last_name }}
-                                        </td>
-                                        <td
-                                            class="text-md text-gray-900 font-semibold px-6 py-4"
-                                        >
-                                            {{ user.first_name }}
-                                        </td>
-                                        <td class="flex space-x-5 px-6 py-4">
-                                            <Link
-                                                v-if="can?.updateUsers"
-                                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
-                                                :href="
-                                                    route('users.edit', user.id)
-                                                "
-                                            >
-                                                <UpdateIcon />
-                                            </Link>
-                                            <DangerButton
-                                                v-if="can?.deleteUsers"
-                                                @click="
-                                                    confirmUserDeletion(user.id)
-                                                "
-                                            >
-                                                <DeleteIcon />
-                                            </DangerButton>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-col overflow-x-auto min-w-full mt-4 mb-6">
+                <table class="min-w-full">
+                    <thead class="border-b">
+                        <tr>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
+                                #
+                            </th>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
+                                Adresse e-mail
+                            </th>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
+                                Nom
+                            </th>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
+                                Prénom
+                            </th>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
+                            v-for="user in users?.data"
+                            :key="user.id"
+                        >
+                            <td
+                                class="text-md text-gray-900 font-bold px-6 py-4"
+                            >
+                                {{ user.id }}
+                            </td>
+                            <td
+                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                            >
+                                {{ user.email }}
+                            </td>
+                            <td
+                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                            >
+                                {{ user.last_name }}
+                            </td>
+                            <td
+                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                            >
+                                {{ user.first_name }}
+                            </td>
+                            <td class="flex space-x-5 px-6 py-4">
+                                <Link
+                                    v-if="can?.updateUsers"
+                                    class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
+                                    :href="route('users.edit', user.id)"
+                                >
+                                    <UpdateIcon />
+                                </Link>
+                                <DangerButton
+                                    v-if="can?.deleteUsers"
+                                    @click="confirmUserDeletion(user.id)"
+                                >
+                                    <DeleteIcon />
+                                </DangerButton>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <Pagination

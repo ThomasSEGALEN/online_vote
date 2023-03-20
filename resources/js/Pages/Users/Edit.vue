@@ -19,14 +19,15 @@ const firstNameInput = ref<HTMLInputElement>();
 const emailInput = ref<HTMLInputElement>();
 const passwordInput = ref<HTMLInputElement>();
 
-const { user } = props;
+const { user, groups } = props;
+
 const form = userForm(
     user.civility_id,
     user.last_name,
     user.first_name,
     user.email,
     user.role_id,
-    props.groups.filter((group: Group) => user.groups.includes(group.id))
+    groups.filter((group: Group) => user.groups.includes(group.id))
 );
 
 onMounted(() => lastNameInput.value?.focus());
