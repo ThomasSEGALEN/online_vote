@@ -16,6 +16,7 @@ const props = defineProps(["role", "permissions"]);
 const nameInput = ref<HTMLInputElement>();
 
 const { role, permissions } = props;
+
 const form = roleForm(
     role.name,
     permissions
