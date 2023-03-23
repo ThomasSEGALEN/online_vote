@@ -11,7 +11,7 @@ const props = defineProps({
         default: () => "48",
     },
     contentClasses: {
-        type: Array,
+        type: Array<string>,
         default: () => ["py-1", "bg-white"],
     },
 });
