@@ -78,7 +78,7 @@ class GroupService
             'name' => $request->name
         ]);
 
-        $group->users()->attach(array_column($request->users, 'id'));
+        $group->users()->attach($request->users);
 
         return $group;
     }
@@ -118,7 +118,7 @@ class GroupService
             'name' => $request->name
         ]);
 
-        $group->users()->sync(array_column($request->users, 'id'));
+        $group->users()->sync($request->users);
 
         return $group;
     }

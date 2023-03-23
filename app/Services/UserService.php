@@ -122,7 +122,7 @@ class UserService
             'role_id' => $request->role
         ]);
 
-        $user->groups()->attach(array_column($request->groups, 'id'));
+        $user->groups()->attach($request->groups);
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
         $user->permissions()->attach($permissions);
@@ -179,7 +179,7 @@ class UserService
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        $user->groups()->attach(array_column($request->groups, 'id'));
+        $user->groups()->attach($request->groups);
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
         $user->permissions()->attach($permissions);
