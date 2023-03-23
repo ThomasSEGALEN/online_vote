@@ -56,8 +56,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])->name('groups.edit');
     Route::put('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
     Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
-    Route::post('/groups/import', [GroupController::class, 'import'])->name('groups.import');
-    Route::get('/groups/export', [GroupController::class, 'export'])->name('groups.export');
+    Route::post('/groups/import', [ExportImportController::class, 'importGroups'])->name('groups.import');
+    Route::get('/groups/export', [ExportImportController::class, 'exportGroups'])->name('groups.export');
 
     Route::get('/sessions', fn () => to_route('users.index'))->name('sessions.index');
 });
