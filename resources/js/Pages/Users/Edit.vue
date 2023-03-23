@@ -14,15 +14,15 @@ import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     civilities: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Civility>,
         default: () => [],
     },
     groups: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Group>,
         default: () => [],
     },
     roles: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Role>,
         default: () => [],
     },
     user: {
@@ -50,8 +50,6 @@ const form = userForm(
         .filter((group) => user.value.groups.includes(group.id))
         .map((g) => g.id)
 );
-
-console.log(form.groups);
 
 const submit = () => {
     form.put(route("users.update", user.value.id), {

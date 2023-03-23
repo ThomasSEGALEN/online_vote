@@ -13,7 +13,7 @@ import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     users: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<User>,
         default: () => [],
     },
 });

@@ -14,15 +14,15 @@ import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     civilities: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Civility>,
         default: () => [],
     },
     groups: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Group>,
         default: () => [],
     },
     roles: {
-        type: Array<{ id: number; name: string }>,
+        type: Array<Role>,
         default: () => [],
     },
 });
