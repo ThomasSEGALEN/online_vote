@@ -12,15 +12,17 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
-    role: {
+    permissions: {
         type: Object,
         default: () => {
             return {};
         },
     },
-    permissions: {
-        type: Array,
-        default: () => [],
+    role: {
+        type: Object,
+        default: () => {
+            return {};
+        },
     },
 });
 
@@ -28,13 +30,14 @@ const nameInput = ref<HTMLInputElement>();
 
 const { role, permissions } = toRefs(props);
 
-const filteredPermissions: Array<number | string> = permissions.value
-    .filter((permission) =>
-        role.value.permissions.includes((permission as Permission).id)
-    )
-    .map((p) => (p as Permission).id);
-
-const form = roleForm(role.value.name, filteredPermissions);
+const form = roleForm(
+    role.value.name,
+    permissions.value
+        .filter((permission: Permission) =>
+            role.value.permissions.includes(permission.id)
+        )
+        .map((p: Permission) => p.id)
+);
 
 const submit = () => {
     form.put(route("roles.update", role.value.id), {
@@ -81,7 +84,7 @@ const submit = () => {
                                 v-model="form.name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                autocomplete="familiy-name"
+                                autocomplete="name"
                                 autofocus
                                 required
                             />

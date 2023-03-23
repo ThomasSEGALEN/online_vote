@@ -6,7 +6,7 @@ export default function userForm(
     first_name = "",
     email = "",
     role = 2,
-    groups: Array<number | string> = []
+    groups: object = {}
 ) {
     const form = useForm({
         civility: civility,

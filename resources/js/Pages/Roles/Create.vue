@@ -13,8 +13,10 @@ import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     permissions: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {
+            return {};
+        },
     },
 });
 
@@ -67,7 +69,7 @@ const submit = () => {
                                 v-model="form.name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                autocomplete="familiy-name"
+                                autocomplete="name"
                                 autofocus
                                 required
                             />

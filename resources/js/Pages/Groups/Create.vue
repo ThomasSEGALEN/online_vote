@@ -69,7 +69,7 @@ const submit = () => {
                                 v-model="form.name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                autocomplete="familiy-name"
+                                autocomplete="name"
                                 autofocus
                                 required
                             />
