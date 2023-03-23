@@ -4,17 +4,22 @@ import { ref } from "vue";
 import route from "ziggy-js";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
-const { user, permissions } = usePage().props?.auth as any;
+const { user, permissions } = usePage().props.auth as any;
 
-const showingNavigationDropdown = ref<Boolean>(false);
+const showingNavigationDropdown = ref<boolean>(false);
+
+const hasAccess = (permissionName: string): boolean =>
+    permissions.find(
+        (permission: Permission) => permission.name === permissionName
+    );
 </script>
 
 <template>
     <div class="flex justify-between h-16">
         <div class="flex items-center border-b px-2 w-full md:hidden">
             <button
-                @click="showingNavigationDropdown = !showingNavigationDropdown"
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                @click="showingNavigationDropdown = !showingNavigationDropdown"
             >
                 <svg
                     class="h-6 w-6"
@@ -44,8 +49,9 @@ const showingNavigationDropdown = ref<Boolean>(false);
                     />
                 </svg>
             </button>
-            <div class="flex items-center justify-start px-5 h-14">
-                <h1 class="text-xl font-bold">Vote électronique</h1>
+            <div class="flex flex-row items-center justify-start px-5 h-14">
+                <img src="/favicon.png" alt="Icon" width="32" height="32" />
+                <h1 class="text-xl font-bold ml-2">iVotes</h1>
             </div>
         </div>
     </div>
@@ -59,44 +65,28 @@ const showingNavigationDropdown = ref<Boolean>(false);
     >
         <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink
-                v-if="permissions
-                        .find(
-                            (permission: Permission) =>
-                                permission.name === 'viewAnyUsers'
-                        )"
+                v-if="hasAccess('viewAnyUsers')"
                 :href="route('users.index')"
                 :active="route().current('users.*')"
             >
                 Utilisateurs
             </ResponsiveNavLink>
             <ResponsiveNavLink
-                v-if="permissions
-                        .find(
-                            (permission: Permission) =>
-                                permission.name === 'viewAnyRoles'
-                        )"
+                v-if="hasAccess('viewAnyRoles')"
                 :href="route('roles.index')"
                 :active="route().current('roles.*')"
             >
                 Rôles
             </ResponsiveNavLink>
             <ResponsiveNavLink
-                v-if="permissions
-                        .find(
-                            (permission: Permission) =>
-                                permission.name === 'viewAnyGroups'
-                        )"
+                v-if="hasAccess('viewAnyGroups')"
                 :href="route('groups.index')"
                 :active="route().current('groups.*')"
             >
                 Groupes
             </ResponsiveNavLink>
             <ResponsiveNavLink
-                v-if="permissions
-                        .find(
-                            (permission: Permission) =>
-                                permission.name === 'viewAnySessions'
-                        )"
+                v-if="hasAccess('viewAnySessions')"
                 :href="route('sessions.index')"
                 :active="route().current('sessions.*')"
             >
@@ -133,21 +123,16 @@ const showingNavigationDropdown = ref<Boolean>(false);
     <div
         class="hidden md:flex flex-col fixed top-0 left-0 w-56 h-full bg-white border-r"
     >
-        <div class="flex items-center justify-start px-5 h-14">
-            <h1 class="text-xl font-bold">Vote électronique</h1>
+        <div class="flex flex-row items-center justify-start px-5 h-14">
+            <img src="/favicon.png" alt="Icon" width="32" height="32" />
+            <h1 class="text-xl font-bold ml-2">iVotes</h1>
         </div>
 
         <div
             class="flex flex-grow flex-col justify-between overflow-y-auto overflow-x-hidden"
         >
             <ul class="flex flex-col py-4 space-y-1">
-                <li
-                    v-if="permissions
-                                .find(
-                                    (permission: Permission) =>
-                                        permission.name === 'viewAnyUsers'
-                                )"
-                >
+                <li v-if="hasAccess('viewAnyUsers')">
                     <ResponsiveNavLink
                         :href="route('users.index')"
                         :active="route().current('users.*')"
@@ -170,13 +155,7 @@ const showingNavigationDropdown = ref<Boolean>(false);
                         </div>
                     </ResponsiveNavLink>
                 </li>
-                <li
-                    v-if="permissions
-                                .find(
-                                    (permission: Permission) =>
-                                        permission.name === 'viewAnyRoles'
-                                )"
-                >
+                <li v-if="hasAccess('viewAnyRoles')">
                     <ResponsiveNavLink
                         :href="route('roles.index')"
                         :active="route().current('roles.*')"
@@ -199,13 +178,7 @@ const showingNavigationDropdown = ref<Boolean>(false);
                         </div>
                     </ResponsiveNavLink>
                 </li>
-                <li
-                    v-if="permissions
-                                .find(
-                                    (permission: Permission) =>
-                                        permission.name === 'viewAnyGroups'
-                                )"
-                >
+                <li v-if="hasAccess('viewAnyGroups')">
                     <ResponsiveNavLink
                         :href="route('groups.index')"
                         :active="route().current('groups.*')"
@@ -228,13 +201,7 @@ const showingNavigationDropdown = ref<Boolean>(false);
                         </div>
                     </ResponsiveNavLink>
                 </li>
-                <li
-                    v-if="permissions
-                                .find(
-                                    (permission: Permission) =>
-                                        permission.name === 'viewAnySessions'
-                                )"
-                >
+                <li v-if="hasAccess('viewAnySessions')">
                     <ResponsiveNavLink
                         :href="route('sessions.index')"
                         :active="route().current('sessions.*')"

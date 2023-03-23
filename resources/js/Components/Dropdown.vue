@@ -3,18 +3,21 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const props = defineProps({
     align: {
-        default: "right",
+        type: String,
+        default: () => "right",
     },
     width: {
-        default: "48",
+        type: String,
+        default: () => "48",
     },
     contentClasses: {
+        type: Array,
         default: () => ["py-1", "bg-white"],
     },
 });
 
-const closeOnEscape = (e: KeyboardEvent) => {
-    if (open.value && e.key === "Escape") {
+const closeOnEscape = (event: KeyboardEvent) => {
+    if (open.value && event.key === "Escape") {
         open.value = false;
     }
 };
@@ -48,11 +51,7 @@ const open = ref(false);
         </div>
 
         <!-- Full Screen Dropdown Overlay -->
-        <div
-            v-show="open"
-            class="fixed inset-0 z-40"
-            @click="open = false"
-        ></div>
+        <div v-show="open" class="fixed inset-0 z-40" @click="open = false" />
 
         <transition
             enter-active-class="transition ease-out duration-200"

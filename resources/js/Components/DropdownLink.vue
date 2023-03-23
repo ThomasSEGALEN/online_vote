@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-defineProps(["href"]);
+defineProps({
+    href: {
+        type: String,
+        default: () => "",
+    },
+});
 </script>
 
 <template>
