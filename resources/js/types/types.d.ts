@@ -30,6 +30,11 @@ declare interface Group {
     updated_at: Date;
 }
 
+declare interface Civility {
+    id: number;
+    name: string;
+}
+
 declare interface Link {
     active: boolean;
     label: string;
