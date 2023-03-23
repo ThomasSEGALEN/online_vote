@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Permission extends Model
 {
@@ -16,12 +17,22 @@ class Permission extends Model
      */
     protected $fillable = ['name'];
 
-    public function roles()
+    /**
+     * Role relationship.
+     *
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
 
-    public function users()
+    /**
+     * User relationship.
+     *
+     * @return BelongsToMany
+     */
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }

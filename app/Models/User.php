@@ -4,8 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,22 +49,42 @@ class User extends Authenticatable // implements MustVerifyEmail
         // 'email_verified_at' => 'datetime',
     ];
 
-    public function civility()
+    /**
+     * Civility relationship.
+     *
+     * @return BelongsTo
+     */
+    public function civility(): BelongsTo
     {
         return $this->belongsTo(Civility::class);
     }
 
-    public function groups()
+    /**
+     * Group relationship.
+     *
+     * @return BelongsToMany
+     */
+    public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class);
     }
 
-    public function permissions()
+    /**
+     * Permission relationship.
+     *
+     * @return BelongsToMany
+     */
+    public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
     }
 
-    public function role()
+    /**
+     * Role relationship.
+     *
+     * @return BelongsTo
+     */
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
