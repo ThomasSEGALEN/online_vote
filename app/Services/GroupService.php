@@ -94,7 +94,8 @@ class GroupService
         return [
             'group' => [
                 'id' => $group->id,
-                'name' => $group->name
+                'name' => $group->name,
+                'users' => $group->users()->pluck('id')->toArray()
             ],
             'users' => $this->mapUsers()
         ];
