@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class GroupPolicy
 {
     use HandlesAuthorization;
 
@@ -17,19 +18,19 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->permissions->contains('name', 'viewAnyUsers');
+        return $user->permissions->contains('name', 'viewAnyGroups');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model)
+    public function view(User $user, Group $group)
     {
-        return $user->permissions->contains('name', 'viewUsers');
+        return $user->permissions->contains('name', 'viewGroups');
     }
 
     /**
@@ -40,30 +41,30 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return $user->permissions->contains('name', 'createUsers');
+        return $user->permissions->contains('name', 'createGroups');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
+    public function update(User $user, Group $group)
     {
-        return $user->permissions->contains('name', 'updateUsers');
+        return $user->permissions->contains('name', 'updateGroups');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, Group $group)
     {
-        return $user->permissions->contains('name', 'deleteUsers');
+        return $user->permissions->contains('name', 'deleteGroups');
     }
 }
