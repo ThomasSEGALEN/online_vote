@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleStoreRequest;
-use App\Models\Permission;
 use App\Models\Role;
 use App\Services\RoleService;
 use Illuminate\Http\RedirectResponse;
