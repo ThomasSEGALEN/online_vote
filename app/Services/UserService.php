@@ -34,9 +34,9 @@ class UserService
      */
     public function mapGroups(): Collection
     {
-        return Group::orderBy('name')->get()->map(fn ($civility) => [
-            'id' => $civility->id,
-            'name' => $civility->name
+        return Group::orderBy('name')->get()->map(fn ($group) => [
+            'id' => $group->id,
+            'name' => $group->name
         ]);
     }
 
@@ -47,9 +47,9 @@ class UserService
      */
     public function mapRoles(): Collection
     {
-        return Role::orderBy('id')->get()->map(fn ($civility) => [
-            'id' => $civility->id,
-            'name' => $civility->name
+        return Role::orderBy('id')->get()->map(fn ($role) => [
+            'id' => $role->id,
+            'name' => $role->name
         ]);
     }
 
