@@ -17,7 +17,7 @@ class RoleService
      */
     public function mapPermissions(): Collection
     {
-        return Permission::all()->map(fn ($permission) => [
+        return Permission::orderBy('id')->get()->map(fn ($permission) => [
             'id' => $permission->id,
             'name' => $permission->name
         ]);
