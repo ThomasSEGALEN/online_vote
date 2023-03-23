@@ -17,7 +17,7 @@ class UserService
     /**
      * List civilities data.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function mapCivilities(): Collection
     {
@@ -30,7 +30,7 @@ class UserService
     /**
      * List groups data.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function mapGroups(): Collection
     {
@@ -43,7 +43,7 @@ class UserService
     /**
      * List roles data.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function mapRoles(): Collection
     {
@@ -157,6 +157,7 @@ class UserService
     /**
      * Update the specified resource in storage.
      *
+     * @param \App\Http\Requests\UserUpdateRequest $request
      * @param \App\Models\User $user
      * @return \App\Models\User
      */
