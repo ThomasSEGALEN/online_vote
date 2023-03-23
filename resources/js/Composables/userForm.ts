@@ -6,16 +6,16 @@ export default function userForm(
     first_name = "",
     email = "",
     role = 2,
-    groups = []
+    groups: Array<number | string> = []
 ) {
     const form = useForm({
-        civility: civility as number,
-        last_name: last_name as string,
-        first_name: first_name as string,
-        email: email as string,
-        password: "" as string,
-        role: role as number,
-        groups: groups as Array<number | string>,
+        civility: civility,
+        last_name: last_name,
+        first_name: first_name,
+        email: email,
+        password: "",
+        role: role,
+        groups: groups,
     });
 
     return form;

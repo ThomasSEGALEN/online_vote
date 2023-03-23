@@ -1,9 +1,12 @@
 import { useForm } from "@inertiajs/vue3";
 
-export default function roleForm(name = "", permissions = []) {
+export default function roleForm(
+    name = "",
+    permissions: Array<number | string> = []
+) {
     const form = useForm({
-        name: name as string,
-        permissions: permissions as Array<number>,
+        name: name,
+        permissions: permissions,
     });
 
     return form;
