@@ -19,10 +19,8 @@ const props = defineProps({
         },
     },
     users: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
 });
 
@@ -32,10 +30,10 @@ const { group, users } = toRefs(props);
 
 const form = groupForm(
     group.value.name,
-    users.value.filter((user: User) => group.value.users.includes(user.id))
+    users.value
+        .filter((user) => group.value.users.includes(user.id))
+        .map((u) => u.id)
 );
-
-console.log(typeof form.users);
 
 const submit = () => {
     form.put(route("groups.update", group.value.id), {
@@ -112,7 +110,6 @@ const submit = () => {
                                     :searchable="true"
                                     no-results-text="Aucun résultat"
                                     no-options-text="Aucune option"
-                                    :object="true"
                                     :options="users"
                                     :classes="{
                                         container:

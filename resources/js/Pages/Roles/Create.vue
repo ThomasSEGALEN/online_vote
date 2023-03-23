@@ -13,10 +13,8 @@ import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     permissions: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
 });
 

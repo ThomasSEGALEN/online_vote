@@ -14,22 +14,16 @@ import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     civilities: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     groups: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     roles: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     user: {
         type: Object,
@@ -52,8 +46,12 @@ const form = userForm(
     user.value.first_name,
     user.value.email,
     user.value.role_id,
-    groups.value.filter((group: Group) => user.value.groups.includes(group.id))
+    groups.value
+        .filter((group) => user.value.groups.includes(group.id))
+        .map((g) => g.id)
 );
+
+console.log(form.groups);
 
 const submit = () => {
     form.put(route("users.update", user.value.id), {
@@ -258,7 +256,6 @@ const submit = () => {
                                     :searchable="true"
                                     no-results-text="Aucun résultat"
                                     no-options-text="Aucune option"
-                                    :object="true"
                                     :options="groups"
                                     :classes="{
                                         container:

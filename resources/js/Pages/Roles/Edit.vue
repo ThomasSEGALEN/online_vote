@@ -13,10 +13,8 @@ import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     permissions: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     role: {
         type: Object,
@@ -33,10 +31,8 @@ const { role, permissions } = toRefs(props);
 const form = roleForm(
     role.value.name,
     permissions.value
-        .filter((permission: Permission) =>
-            role.value.permissions.includes(permission.id)
-        )
-        .map((p: Permission) => p.id)
+        .filter((permission) => role.value.permissions.includes(permission.id))
+        .map((p) => p.id)
 );
 
 const submit = () => {

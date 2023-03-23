@@ -14,22 +14,16 @@ import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
     civilities: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     groups: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
     roles: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+        type: Array<{ id: number; name: string }>,
+        default: () => [],
     },
 });
 
@@ -256,7 +250,6 @@ const submit = () => {
                                     :searchable="true"
                                     no-results-text="Aucun résultat"
                                     no-options-text="Aucune option"
-                                    :object="true"
                                     :options="groups"
                                     :classes="{
                                         container:
