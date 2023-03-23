@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleStoreRequest;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Services\RoleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 
 class RoleController extends Controller
 {
+    public function __construct(private RoleService $roleService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,27 +26,7 @@ class RoleController extends Controller
     {
         $this->authorize('viewAny', Role::class);
 
-        return inertia('Roles/Index', [
-            'roles' =>
-            Role::when(
-                $request->input('search'),
-                fn ($query, $search) =>
-                $query->where('name', 'like', '%' . $search . '%')
-            )
-                ->orderBy('id')
-                ->paginate(20)
-                ->appends($request->only('search'))
-                ->through(fn ($role) => [
-                    'id' => $role->id,
-                    'name' => $role->name
-                ]),
-            'filters' => $request->only('search'),
-            'can' => [
-                'createRoles' => $request->user()->permissions->contains('name', 'createRoles'),
-                'updateRoles' => $request->user()->permissions->contains('name', 'updateRoles'),
-                'deleteRoles' => $request->user()->permissions->contains('name', 'deleteRoles')
-            ]
-        ]);
+        return inertia('Roles/Index', $this->roleService->index($request));
     }
 
     /**
@@ -52,33 +38,20 @@ class RoleController extends Controller
     {
         $this->authorize('create', Role::class);
 
-        return inertia('Roles/Create', [
-            'permissions' => Permission::all()->map(fn ($permission) => [
-                'id' => $permission->id,
-                'name' => $permission->name
-            ])
-        ]);
+        return inertia('Roles/Create', $this->roleService->create());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\RoleStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RoleStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', Role::class);
 
-        $request->validate([
-            'name' => ['required', 'string', 'unique:roles']
-        ]);
-
-        $role = Role::create([
-            'name' => $request->name
-        ]);
-
-        $role->permissions()->attach($request->permissions);
+        $role = $this->roleService->store($request);
 
         return to_route('roles.index')->with('success', "Le rôle $role->name a été créé avec succès");
     }
@@ -93,17 +66,7 @@ class RoleController extends Controller
     {
         $this->authorize('update', $role);
 
-        return inertia('Roles/Edit', [
-            'role' => [
-                'id' => $role->id,
-                'name' => $role->name,
-                'permissions' => $role->permissions()->pluck('id')->toArray()
-            ],
-            'permissions' => Permission::all()->map(fn ($permission) => [
-                'id' => $permission->id,
-                'name' => $permission->name
-            ])
-        ]);
+        return inertia('Roles/Edit', $this->roleService->edit($role));
     }
 
     /**
@@ -117,15 +80,7 @@ class RoleController extends Controller
     {
         $this->authorize('update', $role);
 
-        if (($request->name !== $role->name) && Role::where('name', $request->name)->first()) {
-            $request->validate(['name' => ['required', 'string', 'unique:roles']]);
-        }
-
-        $role->update([
-            'name' => $request->name
-        ]);
-
-        $role->permissions()->sync($request->permissions);
+        $role = $this->roleService->update($request, $role);
 
         return to_route('roles.index')->with('success', "Le rôle $role->name a été modifié avec succès");
     }
@@ -140,8 +95,7 @@ class RoleController extends Controller
     {
         $this->authorize('delete', $role);
 
-        $role->permissions()->detach($role->permissions()->pluck('id')->toArray());
-        $role->delete();
+        $this->roleService->destroy($role);
 
         return to_route('roles.index')->with('success', "Le rôle $role->name a été supprimé avec succès");
     }
