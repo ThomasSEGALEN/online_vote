@@ -6,7 +6,7 @@ import Navbar from "@/Components/Navbar.vue";
     <div class="flex flex-col md:flex-row">
         <Navbar />
 
-        <main class="flex flex-col w-full md:ml-56">
+        <main class="flex flex-col flex-1 md:ml-56">
             <header v-if="$slots.header">
                 <div class="py-4 px-4 h-14 border-b">
                     <slot name="header" />
