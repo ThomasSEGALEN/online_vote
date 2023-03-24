@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
 import route from "ziggy-js";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -9,20 +8,19 @@ import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     mustVerifyEmail: Boolean,
-    status: String,
+    status: {
+        type: String,
+        default: () => "",
+    },
 });
 
-const { user } = usePage().props?.auth as any;
-
-const lastNameInput = ref<HTMLInputElement>();
+const { user } = usePage().props.auth as any;
 
 const form = useForm({
     last_name: user.last_name,
     first_name: user.first_name,
     email: user.email,
 });
-
-onMounted(() => lastNameInput.value?.focus());
 </script>
 
 <template>
@@ -40,8 +38,8 @@ onMounted(() => lastNameInput.value?.focus());
             </header>
 
             <form
-                @submit.prevent="form.patch(route('profile.update'))"
                 class="mt-6 space-y-6"
+                @submit.prevent="form.patch(route('profile.update'))"
             >
                 <div class="mt-4 flex flex-col sm:flex-row sm:space-x-8">
                     <div class="w-full sm:w-1/2">
@@ -49,10 +47,10 @@ onMounted(() => lastNameInput.value?.focus());
 
                         <TextInput
                             id="last_name"
-                            ref="lastNameInput"
+                            v-model="form.last_name"
                             type="text"
                             class="mt-1 block w-full"
-                            v-model="form.last_name"
+                            autofocus
                             required
                         />
 
@@ -67,9 +65,9 @@ onMounted(() => lastNameInput.value?.focus());
 
                         <TextInput
                             id="first_name"
+                            v-model="form.first_name"
                             type="text"
                             class="mt-1 block w-full"
-                            v-model="form.first_name"
                             required
                         />
 
@@ -85,9 +83,9 @@ onMounted(() => lastNameInput.value?.focus());
 
                     <TextInput
                         id="email"
+                        v-model="form.email"
                         type="email"
                         class="mt-1 block w-full"
-                        v-model="form.email"
                         required
                     />
 

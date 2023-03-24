@@ -50,7 +50,9 @@ const closeModal = () => {
                 </p>
             </header>
 
-            <DangerButton @click="confirmUserDeletion">Désactiver</DangerButton>
+            <DangerButton @click="confirmUserDeletion">
+                Désactiver
+            </DangerButton>
 
             <Modal :show="confirmingUserDeletion" @close="closeModal">
                 <form class="p-6">
@@ -80,6 +82,7 @@ const closeModal = () => {
                             class="mt-1 block w-3/4"
                             placeholder="Mot de passe"
                             autocomplete="current-password"
+                            autofocus
                             @keyup.enter="deleteUser"
                         />
 

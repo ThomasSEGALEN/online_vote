@@ -3,11 +3,13 @@ import { Head } from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
-// import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 
 defineProps({
     mustVerifyEmail: Boolean,
-    status: String,
+    status: {
+        type: String,
+        default: () => "",
+    },
 });
 </script>
 
@@ -21,7 +23,7 @@ defineProps({
             </h2>
         </template>
 
-        <div class="p-12">
+        <div class="p-4 md:p-6">
             <UpdatePasswordForm class="max-w-xl mb-12" />
 
             <DeleteUserForm class="max-w-xl" />

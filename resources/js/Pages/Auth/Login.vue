@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import Checkbox from "@/Components/Checkbox.vue";
@@ -9,11 +8,12 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const emailInput = ref<HTMLInputElement>();
-
 defineProps({
     canResetPassword: Boolean,
-    status: String,
+    status: {
+        type: String,
+        default: () => "",
+    },
 });
 
 const form = useForm({
@@ -21,8 +21,6 @@ const form = useForm({
     password: "",
     remember: false,
 });
-
-onMounted(() => emailInput.value?.focus());
 
 const submit = () => {
     form.post(route("login"), {
@@ -49,11 +47,11 @@ const submit = () => {
 
                 <TextInput
                     id="email"
-                    ref="emailInput"
+                    v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
-                    v-model="form.email"
                     autocomplete="email"
+                    autofocus
                     required
                 />
 
@@ -65,9 +63,9 @@ const submit = () => {
 
                 <TextInput
                     id="password"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
                     autocomplete="current-password"
                     required
                 />
@@ -77,9 +75,9 @@ const submit = () => {
 
             <div class="inline-flex items-center mt-4 space-x-1">
                 <Checkbox
-                    name="remember"
                     id="remember"
                     v-model="form.remember"
+                    name="remember"
                 />
 
                 <InputLabel for="remember" value="Se souvenir de moi" />

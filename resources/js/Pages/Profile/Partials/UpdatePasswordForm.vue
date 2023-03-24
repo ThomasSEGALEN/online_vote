@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import InputError from "@/Components/InputError.vue";
@@ -15,8 +15,6 @@ const form = useForm({
     password: "",
     password_confirmation: "",
 });
-
-onMounted(() => currentPasswordInput.value?.focus());
 
 const updatePassword = () => {
     form.put(route("password.update"), {
@@ -50,7 +48,7 @@ const updatePassword = () => {
                 </p>
             </header>
 
-            <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+            <form class="mt-6 space-y-6" @submit.prevent="updatePassword">
                 <div>
                     <input hidden type="text" autocomplete="username" />
 

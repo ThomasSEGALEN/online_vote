@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import roleForm from "@/Composables/roleForm";
@@ -11,25 +11,32 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const props = defineProps(["role", "permissions"]);
+const props = defineProps({
+    permissions: {
+        type: Array<Permission>,
+        default: () => [],
+    },
+    role: {
+        type: Object,
+        default: () => {
+            return {};
+        },
+    },
+});
 
 const nameInput = ref<HTMLInputElement>();
 
-const { role, permissions } = props;
+const { role, permissions } = toRefs(props);
 
 const form = roleForm(
-    role.name,
-    permissions
-        .filter((permission: Permission) =>
-            role.permissions.includes(permission.id)
-        )
-        .map((p: Permission) => p.id)
+    role.value.name,
+    permissions.value
+        .filter((permission) => role.value.permissions.includes(permission.id))
+        .map((p) => p.id)
 );
 
-onMounted(() => nameInput.value?.focus());
-
 const submit = () => {
-    form.put(route("roles.update", role.id), {
+    form.put(route("roles.update", role.value.id), {
         onError: () => {
             if (form.errors.name) {
                 form.reset("name");
@@ -60,7 +67,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-12">
+        <div class="p-4 md:p-6">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">
@@ -70,10 +77,11 @@ const submit = () => {
                             <TextInput
                                 id="name"
                                 ref="nameInput"
+                                v-model="form.name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.name"
-                                autocomplete="familiy-name"
+                                autocomplete="name"
+                                autofocus
                                 required
                             />
 
@@ -150,8 +158,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index }}"
+                                                    v-model="form.permissions"
                                                     :value="index"
                                                     :checked="
                                                         form.permissions.includes(
@@ -173,8 +181,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+5 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 5"
                                                     :checked="
                                                         form.permissions.includes(
@@ -196,8 +204,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+10 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 10"
                                                     :checked="
                                                         form.permissions.includes(
@@ -219,8 +227,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+15 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 15"
                                                     :checked="
                                                         form.permissions.includes(

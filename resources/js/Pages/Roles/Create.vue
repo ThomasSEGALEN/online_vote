@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import roleForm from "@/Composables/roleForm";
@@ -11,13 +11,16 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-defineProps(["permissions"]);
+defineProps({
+    permissions: {
+        type: Array<Permission>,
+        default: () => [],
+    },
+});
 
 const nameInput = ref<HTMLInputElement>();
 
 const form = roleForm();
-
-onMounted(() => nameInput.value?.focus());
 
 const submit = () => {
     form.post(route("roles.store"), {
@@ -51,7 +54,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-12">
+        <div class="p-4 md:p-6">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">
@@ -61,10 +64,11 @@ const submit = () => {
                             <TextInput
                                 id="name"
                                 ref="nameInput"
+                                v-model="form.name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.name"
-                                autocomplete="familiy-name"
+                                autocomplete="name"
+                                autofocus
                                 required
                             />
 
@@ -140,8 +144,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index }}"
+                                                    v-model="form.permissions"
                                                     :value="index"
                                                 />
                                             </td>
@@ -158,8 +162,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+5 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 5"
                                                 />
                                             </td>
@@ -176,8 +180,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+10 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 10"
                                                 />
                                             </td>
@@ -194,8 +198,8 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    v-model="form.permissions"
                                                     id="permissionInput-{{ index+15 }}"
+                                                    v-model="form.permissions"
                                                     :value="index + 15"
                                                 />
                                             </td>

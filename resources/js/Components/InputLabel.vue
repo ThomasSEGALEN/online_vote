@@ -1,5 +1,10 @@
 <script setup lang="ts">
-defineProps(["value"]);
+defineProps({
+    value: {
+        type: String,
+        default: () => "",
+    },
+});
 </script>
 
 <template>
