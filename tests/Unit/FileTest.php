@@ -4,14 +4,11 @@ namespace Tests\Unit;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-    use HandlesAuthorization;
-
     public function test_excel_download()
     {
         $user = User::factory()->state(['role_id' => 1])->create();
