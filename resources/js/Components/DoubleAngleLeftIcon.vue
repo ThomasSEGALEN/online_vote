@@ -6,7 +6,7 @@
         width="20"
         height="20"
     >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_bgCarrier" stroke-width="0" />
         <g
             id="SVGRepo_tracerCarrier"
             stroke-linecap="round"

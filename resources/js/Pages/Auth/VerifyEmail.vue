@@ -7,7 +7,10 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
-    status: String,
+    status: {
+        type: String,
+        default: () => "",
+    },
 });
 
 const form = useForm({});
@@ -36,8 +39,8 @@ const verificationLinkSent = computed(
         </div>
 
         <div
-            class="mb-4 font-medium text-sm text-green-600"
             v-if="verificationLinkSent"
+            class="mb-4 font-medium text-sm text-green-600"
         >
             Un nouveau lien de vérification vous a été envoyé
         </div>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
@@ -8,13 +7,9 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const passwordInput = ref<HTMLInputElement>();
-
 const form = useForm({
     password: "",
 });
-
-onMounted(() => passwordInput.value?.focus());
 
 const submit = () => {
     form.post(route("password.confirm"), {
@@ -40,10 +35,9 @@ const submit = () => {
                 <InputLabel for="password" value="Mot de passe" />
                 <TextInput
                     id="password"
-                    ref="passwordInput"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
                     autocomplete="current-password"
                     required
                 />

@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\Group;
 use App\Models\Permission;
 use App\Models\Role;
@@ -19,13 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
         $this->call([
             CivilitySeeder::class,
             RoleSeeder::class,
@@ -40,7 +31,7 @@ class DatabaseSeeder extends Seeder
         $roles = Role::all();
         $groups = Group::all();
         $permissions = Permission::all();
-        
+
         $roles->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
         );

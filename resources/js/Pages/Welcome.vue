@@ -3,20 +3,32 @@ import { Head, Link, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 
 defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
+    canLogin: {
+        type: Boolean,
+        default: () => true,
+    },
+    canRegister: {
+        type: Boolean,
+        default: () => true,
+    },
+    laravelVersion: {
+        type: String,
+        default: () => "",
+    },
+    phpVersion: {
+        type: String,
+        default: () => "",
+    },
 });
 
-const { user } = usePage().props?.auth as any;
+const { user } = usePage().props.auth as any;
 </script>
 
 <template>
     <Head title="Welcome" />
 
     <div
-        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0"
+        class="relative flex items-top justify-center min-h-screen bg-gray-100 sm:items-center sm:pt-0"
     >
         <div
             v-if="canLogin"
@@ -25,7 +37,7 @@ const { user } = usePage().props?.auth as any;
             <Link
                 v-if="user"
                 :href="route('users.index')"
-                class="text-sm text-gray-700 dark:text-gray-500 underline"
+                class="text-sm text-gray-700 underline"
             >
                 Redirection
             </Link>
@@ -33,7 +45,7 @@ const { user } = usePage().props?.auth as any;
             <template v-else>
                 <Link
                     :href="route('login')"
-                    class="text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="text-sm text-gray-700 underline"
                 >
                     Connexion
                 </Link>
@@ -41,7 +53,7 @@ const { user } = usePage().props?.auth as any;
                 <Link
                     v-if="canRegister"
                     :href="route('register')"
-                    class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="ml-4 text-sm text-gray-700 underline"
                 >
                     Inscription
                 </Link>
@@ -50,12 +62,10 @@ const { user } = usePage().props?.auth as any;
 
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                <h1 class="text-4xl font-bold">Vote électronique</h1>
+                <h1 class="text-4xl font-bold">iVotes</h1>
             </div>
 
-            <div
-                class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg"
-            >
+            <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="p-6">
                         <div class="flex items-center">
@@ -75,16 +85,14 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel.com/docs"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Documentation</a
                                 >
                             </div>
                         </div>
 
                         <div class="ml-12">
-                            <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
-                            >
+                            <div class="mt-2 text-gray-700 text-sm">
                                 Laravel has wonderful, thorough documentation
                                 covering every aspect of the framework. Whether
                                 you are new to the framework or have previous
@@ -95,7 +103,7 @@ const { user } = usePage().props?.auth as any;
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l"
+                        class="p-6 border-t border-gray-200 md:border-t-0 md:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -117,16 +125,14 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laracasts.com"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Laracasts</a
                                 >
                             </div>
                         </div>
 
                         <div class="ml-12">
-                            <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
-                            >
+                            <div class="mt-2 text-gray-700 text-sm">
                                 Laracasts offers thousands of video tutorials on
                                 Laravel, PHP, and JavaScript development. Check
                                 them out, see for yourself, and massively level
@@ -135,9 +141,7 @@ const { user } = usePage().props?.auth as any;
                         </div>
                     </div>
 
-                    <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700"
-                    >
+                    <div class="p-6 border-t border-gray-200">
                         <div class="flex items-center">
                             <svg
                                 fill="none"
@@ -155,16 +159,14 @@ const { user } = usePage().props?.auth as any;
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel-news.com/"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900"
                                     >Laravel News</a
                                 >
                             </div>
                         </div>
 
                         <div class="ml-12">
-                            <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
-                            >
+                            <div class="mt-2 text-gray-700text-sm">
                                 Laravel News is a community driven portal and
                                 newsletter aggregating all of the latest and
                                 most important news in the Laravel ecosystem,
@@ -173,9 +175,7 @@ const { user } = usePage().props?.auth as any;
                         </div>
                     </div>
 
-                    <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l"
-                    >
+                    <div class="p-6 border-t border-gray-200 md:border-l">
                         <div class="flex items-center">
                             <svg
                                 fill="none"
@@ -191,16 +191,14 @@ const { user } = usePage().props?.auth as any;
                                 ></path>
                             </svg>
                             <div
-                                class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"
+                                class="ml-4 text-lg leading-7 font-semibold text-gray-900"
                             >
                                 Vibrant Ecosystem
                             </div>
                         </div>
 
                         <div class="ml-12">
-                            <div
-                                class="mt-2 text-gray-700 dark:text-gray-400 text-sm"
-                            >
+                            <div class="mt-2 text-gray-700 text-sm">
                                 Laravel's robust library of first-party tools
                                 and libraries, such as
                                 <a

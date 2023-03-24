@@ -4,15 +4,15 @@ import { computed, onMounted, onUnmounted, watch } from "vue";
 const props = defineProps({
     show: {
         type: Boolean,
-        default: false,
+        default: () => false,
     },
     maxWidth: {
         type: String,
-        default: "2xl",
+        default: () => "2xl",
     },
     closeable: {
         type: Boolean,
-        default: true,
+        default: () => true,
     },
 });
 
@@ -35,8 +35,8 @@ const close = () => {
     }
 };
 
-const closeOnEscape = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && props.show) {
+const closeOnEscape = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && props.show) {
         close();
     }
 };

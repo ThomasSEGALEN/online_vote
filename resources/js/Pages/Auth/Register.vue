@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
@@ -9,8 +8,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const lastNameInput = ref<HTMLInputElement>();
-
 const form = useForm({
     civility: 1,
     last_name: "",
@@ -19,8 +16,6 @@ const form = useForm({
     password: "",
     password_confirmation: "",
 });
-
-onMounted(() => lastNameInput.value?.focus());
 
 const submit = () => {
     form.post(route("register"), {
@@ -46,10 +41,10 @@ const submit = () => {
                 <div class="mt-1 space-x-4">
                     <div class="inline-flex items-center space-x-1">
                         <RadioInput
-                            type="radio"
-                            name="civility"
                             id="civility-man"
                             v-model="form.civility"
+                            type="radio"
+                            name="civility"
                             :value="1"
                             checked
                         />
@@ -59,10 +54,10 @@ const submit = () => {
 
                     <div class="inline-flex items-center space-x-1">
                         <RadioInput
-                            type="radio"
-                            name="civility"
                             id="civility-woman"
                             v-model="form.civility"
+                            type="radio"
+                            name="civility"
                             :value="2"
                         />
 
@@ -79,10 +74,9 @@ const submit = () => {
 
                     <TextInput
                         id="last_name"
-                        ref="lastNameInput"
+                        v-model="form.last_name"
                         type="text"
                         class="mt-1 block w-full"
-                        v-model="form.last_name"
                         autocomplete="family-name"
                         required
                     />
@@ -95,9 +89,9 @@ const submit = () => {
 
                     <TextInput
                         id="first_name"
+                        v-model="form.first_name"
                         type="text"
                         class="mt-1 block w-full"
-                        v-model="form.first_name"
                         autocomplete="given-name"
                         required
                     />
@@ -114,9 +108,9 @@ const submit = () => {
 
                 <TextInput
                     id="email"
+                    v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
-                    v-model="form.email"
                     autocomplete="email"
                     required
                 />
@@ -129,9 +123,9 @@ const submit = () => {
 
                 <TextInput
                     id="password"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
                     autocomplete="new-password"
                     required
                 />
@@ -147,9 +141,9 @@ const submit = () => {
 
                 <TextInput
                     id="password_confirmation"
+                    v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
                     autocomplete="new-password"
                     required
                 />

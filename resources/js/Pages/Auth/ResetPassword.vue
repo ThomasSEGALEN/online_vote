@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
@@ -8,11 +7,15 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const emailInput = ref<HTMLInputElement>();
-
 const props = defineProps({
-    email: String,
-    token: String,
+    email: {
+        type: String,
+        default: () => "",
+    },
+    token: {
+        type: String,
+        default: () => "",
+    },
 });
 
 const form = useForm({
@@ -21,8 +24,6 @@ const form = useForm({
     password: "",
     password_confirmation: "",
 });
-
-onMounted(() => emailInput.value?.focus());
 
 const submit = () => {
     form.post(route("password.store"), {
@@ -45,10 +46,9 @@ const submit = () => {
 
                 <TextInput
                     id="email"
-                    ref="emailInput"
+                    v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
-                    v-model="form.email"
                     autocomplete="email"
                     required
                 />
@@ -61,9 +61,9 @@ const submit = () => {
 
                 <TextInput
                     id="password"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
                     autocomplete="new-password"
                     required
                 />
@@ -79,9 +79,9 @@ const submit = () => {
 
                 <TextInput
                     id="password_confirmation"
+                    v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
                     autocomplete="new-password"
                     required
                 />

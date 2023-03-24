@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class ProfileController extends Controller
@@ -17,12 +16,12 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      * 
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Inertia\Response
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        return inertia('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);
@@ -31,7 +30,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      * 
-     * @param  \App\Http\Requests\ProfileUpdateRequest  $request
+     * @param  \App\Http\Requests\ProfileUpdateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
@@ -50,13 +49,13 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      * 
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
-            'password' => ['required', 'current-password'],
+            'password' => ['required', 'current-password', 'string'],
         ]);
 
         $user = $request->user();

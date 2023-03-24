@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import userForm from "@/Composables/userForm";
@@ -12,27 +12,47 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 
-const props = defineProps(["user", "civilities", "roles", "groups"]);
+const props = defineProps({
+    civilities: {
+        type: Array<Civility>,
+        default: () => [],
+    },
+    groups: {
+        type: Array<Group>,
+        default: () => [],
+    },
+    roles: {
+        type: Array<Role>,
+        default: () => [],
+    },
+    user: {
+        type: Object,
+        default: () => {
+            return {};
+        },
+    },
+});
 
 const lastNameInput = ref<HTMLInputElement>();
 const firstNameInput = ref<HTMLInputElement>();
 const emailInput = ref<HTMLInputElement>();
 const passwordInput = ref<HTMLInputElement>();
 
-const { user } = props;
+const { user, groups } = toRefs(props);
+
 const form = userForm(
-    user.civility_id,
-    user.last_name,
-    user.first_name,
-    user.email,
-    user.role_id,
-    props.groups.filter((group: Group) => user.groups.includes(group.id))
+    user.value.civility_id,
+    user.value.last_name,
+    user.value.first_name,
+    user.value.email,
+    user.value.role_id,
+    groups.value
+        .filter((group) => user.value.groups.includes(group.id))
+        .map((g) => g.id)
 );
 
-onMounted(() => lastNameInput.value?.focus());
-
 const submit = () => {
-    form.put(route("users.update", user.id), {
+    form.put(route("users.update", user.value.id), {
         onError: () => {
             if (form.errors.password) passwordInput.value?.focus();
             if (form.errors.email) emailInput.value?.focus();
@@ -51,7 +71,7 @@ const submit = () => {
             <div class="inline-flex items-center">
                 <Link
                     :href="route('users.index')"
-                    class="text-sm text-gray-700 dark:text-gray-500 underline"
+                    class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
                 </Link>
@@ -63,10 +83,10 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-12">
+        <div class="p-4 md:p-6">
             <form @submit.prevent="submit">
-                <div class="w-full flex flex-col md:flex-row">
-                    <div class="flex flex-col w-full">
+                <div class="w-full flex flex-col lg:flex-row">
+                    <div class="flex flex-col w-full max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -76,15 +96,15 @@ const submit = () => {
 
                             <div class="mt-1 space-x-4">
                                 <div
-                                    class="inline-flex items-center space-x-1 ml-0.5"
                                     v-for="civility in civilities"
                                     :key="civility.id"
+                                    class="inline-flex items-center space-x-1 ml-0.5"
                                 >
                                     <RadioInput
-                                        type="radio"
-                                        name="civility"
                                         :id="`civility-${civility.id}`"
                                         v-model="form.civility"
+                                        type="radio"
+                                        name="civility"
                                         :value="civility.id"
                                         :checked="civility.id === form.civility"
                                     />
@@ -108,10 +128,11 @@ const submit = () => {
                             <TextInput
                                 id="last_name"
                                 ref="lastNameInput"
+                                v-model="form.last_name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.last_name"
                                 autocomplete="familiy-name"
+                                autofocus
                                 required
                             />
 
@@ -127,9 +148,9 @@ const submit = () => {
                             <TextInput
                                 id="first_name"
                                 ref="firstNameInput"
+                                v-model="form.first_name"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.first_name"
                                 autocomplete="given-name"
                                 required
                             />
@@ -146,9 +167,9 @@ const submit = () => {
                             <TextInput
                                 id="email"
                                 ref="emailInput"
+                                v-model="form.email"
                                 type="email"
                                 class="mt-1 block w-full"
-                                v-model="form.email"
                                 autocomplete="email"
                                 required
                             />
@@ -165,9 +186,9 @@ const submit = () => {
                             <TextInput
                                 id="password"
                                 ref="passwordInput"
+                                v-model="form.password"
                                 type="password"
                                 class="mt-1 block w-full"
-                                v-model="form.password"
                                 autocomplete="new-password"
                             />
 
@@ -178,7 +199,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 md:w-2/3 md:ml-8 md:mt-0">
+                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -190,15 +211,15 @@ const submit = () => {
                                 class="mt-1 max-h-48 overflow-y-auto overflow-x-hidden"
                             >
                                 <div
-                                    class="flex items-center space-x-1 ml-0.5"
                                     v-for="role in roles"
                                     :key="role.id"
+                                    class="flex items-center space-x-1 ml-0.5"
                                 >
                                     <RadioInput
-                                        type="radio"
-                                        name="role"
                                         :id="`role-${role.id}`"
                                         v-model="form.role"
+                                        type="radio"
+                                        name="role"
                                         :value="role.id"
                                         :checked="role.id === form.role"
                                     />
@@ -223,7 +244,7 @@ const submit = () => {
                                 Groupes
                             </span>
 
-                            <div class="mt-1 max-w-xs">
+                            <div class="mt-1 max-w-md">
                                 <Multiselect
                                     v-model="form.groups"
                                     mode="tags"
@@ -233,7 +254,6 @@ const submit = () => {
                                     :searchable="true"
                                     no-results-text="Aucun résultat"
                                     no-options-text="Aucune option"
-                                    :object="true"
                                     :options="groups"
                                     :classes="{
                                         container:
