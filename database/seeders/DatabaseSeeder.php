@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Group;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Session;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -22,7 +23,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             GroupSeeder::class,
             UserSeeder::class,
-            PermissionSeeder::class
+            PermissionSeeder::class,
+            SessionSeeder::class
         ]);
 
         User::factory()->count(150)->create();
@@ -31,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $roles = Role::all();
         $groups = Group::all();
         $permissions = Permission::all();
+        $sessions = Session::all();
 
         $roles->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
@@ -51,6 +54,10 @@ class DatabaseSeeder extends Seeder
             $user->permissions()->attach(
                 $permissions->random(rand(1, 20))->pluck('id')->toArray()
             );
+        });
+
+        $sessions->each(function ($session) use ($groups) {
+            $session->users()->attach($groups->find(rand(1, 2))->users()->pluck('id')->toArray());
         });
     }
 }
