@@ -60,7 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/groups/import', [ExportImportController::class, 'importGroups'])->name('groups.import');
     Route::get('/groups/export', [ExportImportController::class, 'exportGroups'])->name('groups.export');
 
-    Route::get('/sessions', fn () => to_route('users.index'))->name('sessions.index');
+    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
     Route::get('/sessions/create', [SessionController::class, 'create'])->name('sessions.create');
     Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
     Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
