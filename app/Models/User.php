@@ -52,7 +52,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Civility relationship.
      *
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function civility(): BelongsTo
     {
@@ -62,7 +62,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Group relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function groups(): BelongsToMany
     {
@@ -72,7 +72,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Permission relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function permissions(): BelongsToMany
     {
@@ -82,7 +82,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Role relationship.
      *
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function role(): BelongsTo
     {
