@@ -12,10 +12,10 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @return boolean
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         return $user->permissions->contains('name', 'viewAnyUsers');
     }
@@ -23,11 +23,11 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\User $model
+     * @return boolean
      */
-    public function view(User $user, User $model)
+    public function view(User $user, User $model): bool
     {
         return $user->permissions->contains('name', 'viewUsers');
     }
@@ -35,10 +35,10 @@ class UserPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @return boolean
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->permissions->contains('name', 'createUsers');
     }
@@ -46,11 +46,11 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\User $model
+     * @return boolean
      */
-    public function update(User $user, User $model)
+    public function update(User $user, User $model): bool
     {
         return $user->permissions->contains('name', 'updateUsers');
     }
@@ -58,11 +58,11 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\User $model
+     * @return boolean
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, User $model): bool
     {
         return $user->permissions->contains('name', 'deleteUsers');
     }

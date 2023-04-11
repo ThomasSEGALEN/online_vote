@@ -13,10 +13,10 @@ class GroupPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @return boolean
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         return $user->permissions->contains('name', 'viewAnyGroups');
     }
@@ -24,11 +24,11 @@ class GroupPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\Group $group
+     * @return boolean
      */
-    public function view(User $user, Group $group)
+    public function view(User $user, Group $group): bool
     {
         return $user->permissions->contains('name', 'viewGroups');
     }
@@ -36,10 +36,10 @@ class GroupPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @return boolean
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->permissions->contains('name', 'createGroups');
     }
@@ -47,11 +47,11 @@ class GroupPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\Group $group
+     * @return boolean
      */
-    public function update(User $user, Group $group)
+    public function update(User $user, Group $group): bool
     {
         return $user->permissions->contains('name', 'updateGroups');
     }
@@ -59,11 +59,11 @@ class GroupPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param \App\Models\User $user
+     * @param \App\Models\Group $group
+     * @return boolean
      */
-    public function delete(User $user, Group $group)
+    public function delete(User $user, Group $group): bool
     {
         return $user->permissions->contains('name', 'deleteGroups');
     }
