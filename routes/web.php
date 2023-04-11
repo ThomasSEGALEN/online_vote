@@ -4,6 +4,7 @@ use App\Http\Controllers\ExportImportController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/groups/export', [ExportImportController::class, 'exportGroups'])->name('groups.export');
 
     Route::get('/sessions', fn () => to_route('users.index'))->name('sessions.index');
+    Route::get('/sessions/create', [SessionController::class, 'create'])->name('sessions.create');
+    Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
+    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
+    Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
+    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
 });
 
 require __DIR__ . '/auth.php';
