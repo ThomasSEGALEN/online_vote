@@ -19,7 +19,7 @@ class GroupService
     {
         return User::orderBy('last_name')->orderBy('first_name')->get()->map(fn ($user) => [
             'id' => $user->id,
-            'name' => $user->last_name . ' ' . $user->first_name,
+            'name' => $user->last_name . ' ' . $user->first_name
         ]);
     }
 
