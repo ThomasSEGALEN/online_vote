@@ -264,6 +264,13 @@ const submit = () => {
                                         tagsSearch:
                                             'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
                                         clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                        option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                        optionPointed:
+                                            'text-gray-800 bg-gray-100',
+                                        optionSelected:
+                                            'text-white bg-indigo-500',
+                                        optionSelectedPointed:
+                                            'text-white bg-indigo-500 opacity-90',
                                     }"
                                 />
                             </div>
