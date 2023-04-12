@@ -19,6 +19,7 @@ class SessionSeeder extends Seeder
                 'description' => 'Description de la séance 1',
                 'start_date' => '2023-01-01 12:00:00',
                 'end_date' => '2023-01-01 18:00:00',
+                'status' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -27,6 +28,7 @@ class SessionSeeder extends Seeder
                 'description' => 'Description de la séance 2',
                 'start_date' => '2023-01-01 12:00:00',
                 'end_date' => '2023-12-01 18:00:00',
+                'status' => true,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -35,6 +37,7 @@ class SessionSeeder extends Seeder
                 'description' => 'Description de la séance 3',
                 'start_date' => '2023-02-16 12:00:00',
                 'end_date' => '2023-05-03 18:00:00',
+                'status' => false,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]
