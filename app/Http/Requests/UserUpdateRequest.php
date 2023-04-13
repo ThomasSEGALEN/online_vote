@@ -25,7 +25,8 @@ class UserUpdateRequest extends FormRequest
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
             'civility' => ['required', 'integer', 'in:1,2'],
-            'role' => ['required', 'integer']
+            'role' => ['required', 'integer'],
+            'groups' => ['nullable', 'integer']
         ];
     }
 }

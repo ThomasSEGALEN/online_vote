@@ -22,7 +22,8 @@ class GroupStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'unique:groups']
+            'name' => ['required', 'string', 'unique:groups'],
+            'users' => ['nullable', 'integer']
         ];
     }
 }
