@@ -175,9 +175,17 @@ return [
     */
 
     'attributes' => [
+        'first_name' => 'Le prénom',
+        'last_name' => 'Le nom de famille',
         'email' => "L'adresse e-mail",
         'password' => 'Le mot de passe',
+        'role' => 'Le rôle',
+        'groups' => 'Les groupes',
         'name' => 'Le nom',
+        'permissions' => 'Les permissions',
+        'users' => 'Les utilisateurs',
+        'title' => 'Le titre',
+        'description' => 'La description'
     ],
 
 ];
