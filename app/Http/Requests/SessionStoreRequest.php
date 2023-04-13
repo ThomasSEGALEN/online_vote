@@ -23,7 +23,8 @@ class SessionStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'unique:sessions'],
-            'users' => ['required', 'integer']
+            'users' => ['required', 'array'],
+            'users.*' => ['integer']
         ];
     }
 }

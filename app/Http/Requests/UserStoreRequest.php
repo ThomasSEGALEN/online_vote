@@ -28,7 +28,8 @@ class UserStoreRequest extends FormRequest
             'password' => ['required', 'string', 'min:8'],
             'civility' => ['required', 'integer', 'in:1,2'],
             'role' => ['required', 'integer'],
-            'groups' => ['nullable', 'integer']
+            'groups' => ['nullable', 'array'],
+            'groups.*' => ['integer']
         ];
     }
 }

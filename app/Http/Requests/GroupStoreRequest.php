@@ -23,7 +23,8 @@ class GroupStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:groups'],
-            'users' => ['nullable', 'integer']
+            'users' => ['nullable', 'array'],
+            'users.*' => ['integer']
         ];
     }
 }
