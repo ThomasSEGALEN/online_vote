@@ -9,6 +9,9 @@ declare interface User {
     role_id: number;
     created_at: Date;
     updated_at: Date;
+    label: string;
+    name: string;
+    options: Array<{ id: number; name: string }>;
 }
 
 declare interface Role {
