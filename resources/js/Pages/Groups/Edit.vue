@@ -48,7 +48,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Rôles" />
+    <Head title="Groupes" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -62,7 +62,7 @@ const submit = () => {
                 <h2
                     class="ml-2 font-semibold text-xl text-gray-800 leading-tight"
                 >
-                    Modification d'un rôle
+                    Modification d'un groupe
                 </h2>
             </div>
         </template>

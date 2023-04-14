@@ -13,23 +13,23 @@ import RadioInput from "@/Components/RadioInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
+    user: {
+        type: Object,
+        default: () => {
+            return {};
+        },
+    },
     civilities: {
         type: Array<Civility>,
-        default: () => [],
-    },
-    groups: {
-        type: Array<Group>,
         default: () => [],
     },
     roles: {
         type: Array<Role>,
         default: () => [],
     },
-    user: {
-        type: Object,
-        default: () => {
-            return {};
-        },
+    groups: {
+        type: Array<Group>,
+        default: () => [],
     },
 });
 

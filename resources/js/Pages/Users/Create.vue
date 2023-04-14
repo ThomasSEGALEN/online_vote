@@ -17,12 +17,12 @@ defineProps({
         type: Array<Civility>,
         default: () => [],
     },
-    groups: {
-        type: Array<Group>,
-        default: () => [],
-    },
     roles: {
         type: Array<Role>,
+        default: () => [],
+    },
+    groups: {
+        type: Array<Group>,
         default: () => [],
     },
 });

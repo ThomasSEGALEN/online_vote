@@ -12,15 +12,15 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
-    permissions: {
-        type: Array<Permission>,
-        default: () => [],
-    },
     role: {
         type: Object,
         default: () => {
             return {};
         },
+    },
+    permissions: {
+        type: Array<Permission>,
+        default: () => [],
     },
 });
 
