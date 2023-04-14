@@ -140,7 +140,7 @@ const hasAccess = (permissionName: string): boolean =>
                         <div class="flex items-center">
                             <svg
                                 class="w-5 h-5"
-                                fill="#4B5563"
+                                fill="#374151"
                                 stroke="currentColor"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 448 512"
@@ -163,7 +163,7 @@ const hasAccess = (permissionName: string): boolean =>
                         <div class="flex items-center">
                             <svg
                                 class="w-5 h-5"
-                                fill="#4B5563"
+                                fill="#374151"
                                 stroke="currentColor"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 384 512"
@@ -186,7 +186,7 @@ const hasAccess = (permissionName: string): boolean =>
                         <div class="flex items-center">
                             <svg
                                 class="w-5 h-5"
-                                fill="#4B5563"
+                                fill="#374151"
                                 stroke="currentColor"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 448 512"
@@ -209,7 +209,7 @@ const hasAccess = (permissionName: string): boolean =>
                         <div class="flex items-center">
                             <svg
                                 class="w-5 h-5"
-                                fill="#4B5563"
+                                fill="#374151"
                                 stroke="currentColor"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512"
@@ -246,7 +246,7 @@ const hasAccess = (permissionName: string): boolean =>
                         <div class="flex items-center">
                             <svg
                                 class="w-5 h-5"
-                                fill="#4B5563"
+                                fill="#374151"
                                 stroke="currentColor"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 576 512"
