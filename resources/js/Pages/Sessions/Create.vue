@@ -206,7 +206,7 @@ const submit = () => {
                 <div class="w-full mt-4">
                     <div class="flex">
                         <span class="block font-medium text-md text-gray-700">
-                            Liste des participants
+                            Liste des participants ({{ form.users.length }})
                         </span>
 
                         <button
@@ -242,7 +242,11 @@ const submit = () => {
                             v-show="showParticipants"
                             :key="index"
                         >
-                            {{ user }}
+                            <span
+                                class="block font-medium text-sm text-gray-700"
+                            >
+                                {{ user }}
+                            </span>
                         </li>
                     </ul>
                 </div>
