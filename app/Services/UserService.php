@@ -85,8 +85,8 @@ class UserService
             'filters' => $request->only('search'),
             'can' => [
                 'createUsers' => $request->user()->permissions->contains('name', 'createUsers'),
-                'deleteUsers' => $request->user()->permissions->contains('name', 'deleteUsers'),
-                'updateUsers' => $request->user()->permissions->contains('name', 'updateUsers')
+                'updateUsers' => $request->user()->permissions->contains('name', 'updateUsers'),
+                'deleteUsers' => $request->user()->permissions->contains('name', 'deleteUsers')
             ]
         ];
     }

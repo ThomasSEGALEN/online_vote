@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -48,8 +49,8 @@ class RoleService
             'filters' => $request->only('search'),
             'can' => [
                 'createRoles' => $request->user()->permissions->contains('name', 'createRoles'),
-                'deleteRoles' => $request->user()->permissions->contains('name', 'deleteRoles'),
-                'updateRoles' => $request->user()->permissions->contains('name', 'updateRoles')
+                'updateRoles' => $request->user()->permissions->contains('name', 'updateRoles'),
+                'deleteRoles' => $request->user()->permissions->contains('name', 'deleteRoles')
             ]
         ];
     }
@@ -104,13 +105,12 @@ class RoleService
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\RoleUpdateRequest $request
      * @param \App\Models\Role $role
      * @return \App\Models\Role
      */
-    public function update(Request $request, Role $role): Role
+    public function update(RoleUpdateRequest $request, Role $role): Role
     {
-
         if (($request->name !== $role->name) && Role::where('name', $request->name)->first()) {
             $request->validate(['name' => ['required', 'string', 'unique:roles']]);
         }

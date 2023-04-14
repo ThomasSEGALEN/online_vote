@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupStoreRequest;
+use App\Http\Requests\GroupUpdateRequest;
 use App\Models\Group;
 use App\Services\GroupService;
 use Illuminate\Http\RedirectResponse;
@@ -71,11 +72,11 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\GroupUpdateRequest $request
      * @param  \App\Models\Group $group
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Group $group): RedirectResponse
+    public function update(GroupUpdateRequest $request, Group $group): RedirectResponse
     {
         $this->authorize('update', $group);
 

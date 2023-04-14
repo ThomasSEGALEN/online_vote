@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\GroupStoreRequest;
+use App\Http\Requests\GroupUpdateRequest;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,8 +49,8 @@ class GroupService
             'filters' => $request->only('search'),
             'can' => [
                 'createGroups' => $request->user()->permissions->contains('name', 'createGroups'),
-                'deleteGroups' => $request->user()->permissions->contains('name', 'deleteGroups'),
-                'updateGroups' => $request->user()->permissions->contains('name', 'updateGroups')
+                'updateGroups' => $request->user()->permissions->contains('name', 'updateGroups'),
+                'deleteGroups' => $request->user()->permissions->contains('name', 'deleteGroups')
             ]
         ];
     }
@@ -104,11 +105,11 @@ class GroupService
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\GroupUpdateRequest $request
      * @param \App\Models\Group $group
      * @return \App\Models\Group
      */
-    public function update(Request $request, Group $group): Group
+    public function update(GroupUpdateRequest $request, Group $group): Group
     {
         if (($request->name !== $group->name) && Group::where('name', $request->name)->first()) {
             $request->validate(['name' => ['required', 'string', 'unique:groups']]);
