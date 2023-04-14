@@ -33,13 +33,13 @@ class Session extends Model
         return $this->belongsToMany(User::class);
     }
 
-    /**
-     * Vote relationship
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function votes(): HasMany
-    {
-        return $this->hasMany(Vote::class);
-    }
+    // /**
+    //  * Vote relationship
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
+    // public function votes(): HasMany
+    // {
+    //     return $this->hasMany(Vote::class);
+    // }
 }
