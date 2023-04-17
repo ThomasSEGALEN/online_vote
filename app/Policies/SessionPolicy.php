@@ -12,7 +12,7 @@ class SessionPolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
-     * @return boolean
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -24,7 +24,7 @@ class SessionPolicy
      *
      * @param User $user
      * @param Session $session
-     * @return boolean
+     * @return bool
      */
     public function view(User $user, Session $session): bool
     {
@@ -35,7 +35,7 @@ class SessionPolicy
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @return boolean
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -47,7 +47,7 @@ class SessionPolicy
      *
      * @param User $user
      * @param Session $session
-     * @return boolean
+     * @return bool
      */
     public function update(User $user, Session $session): bool
     {
@@ -59,7 +59,7 @@ class SessionPolicy
      *
      * @param User $user
      * @param Session $session
-     * @return boolean
+     * @return bool
      */
     public function delete(User $user, Session $session): bool
     {

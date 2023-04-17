@@ -13,7 +13,7 @@ class UserPolicy
      * Determine whether the user can view any models.
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -25,7 +25,7 @@ class UserPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\User $model
-     * @return boolean
+     * @return bool
      */
     public function view(User $user, User $model): bool
     {
@@ -36,7 +36,7 @@ class UserPolicy
      * Determine whether the user can create models.
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -48,7 +48,7 @@ class UserPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\User $model
-     * @return boolean
+     * @return bool
      */
     public function update(User $user, User $model): bool
     {
@@ -60,7 +60,7 @@ class UserPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\User $model
-     * @return boolean
+     * @return bool
      */
     public function delete(User $user, User $model): bool
     {

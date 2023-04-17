@@ -14,7 +14,7 @@ class GroupPolicy
      * Determine whether the user can view any models.
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return bool
      */
     public function viewAny(User $user): bool
     {
@@ -26,7 +26,7 @@ class GroupPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\Group $group
-     * @return boolean
+     * @return bool
      */
     public function view(User $user, Group $group): bool
     {
@@ -37,7 +37,7 @@ class GroupPolicy
      * Determine whether the user can create models.
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return bool
      */
     public function create(User $user): bool
     {
@@ -49,7 +49,7 @@ class GroupPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\Group $group
-     * @return boolean
+     * @return bool
      */
     public function update(User $user, Group $group): bool
     {
@@ -61,7 +61,7 @@ class GroupPolicy
      *
      * @param \App\Models\User $user
      * @param \App\Models\Group $group
-     * @return boolean
+     * @return bool
      */
     public function delete(User $user, Group $group): bool
     {
