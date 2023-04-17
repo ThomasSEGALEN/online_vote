@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
+use App\Models\Document;
 use App\Models\Group;
 use App\Models\Session;
 use Illuminate\Http\Request;
@@ -93,6 +94,16 @@ class SessionService
             'end_date' => $request->end_date
         ]);
 
+        foreach ($request->file('documents') as $file) {
+            $document = Document::create([
+                'name' => $file->getClientOriginalName(),
+                'path' => time() . '_' . $file->getClientOriginalName(),
+                'session_id' => $session->id
+            ]);
+
+            $file->move(public_path('documents'), $document->path);
+        }
+
         $session->users()->attach($request->users);
 
         return $session;
@@ -138,6 +149,24 @@ class SessionService
             'start_date' => $request->start_date,
             'end_date' => $request->end_date
         ]);
+
+        foreach ($session->documents as $document) {
+            unlink(public_path('documents') . "\\" . $document->path);
+
+            $document->delete();
+        }
+
+        if ($request->file('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $document = Document::create([
+                    'name' => $file->getClientOriginalName(),
+                    'path' => time() . '_' . $file->getClientOriginalName(),
+                    'session_id' => $session->id
+                ]);
+
+                $file->move(public_path('documents'), $document->path);
+            }
+        }
 
         $session->users()->sync($request->users);
 

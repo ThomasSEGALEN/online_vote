@@ -7,6 +7,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import CaretDownIcon from "@/Components/CaretDownIcon.vue";
 import CaretUpIcon from "@/Components/CaretUpIcon.vue";
+import FileInput from "@/Components/FileInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Multiselect from "@vueform/multiselect";
@@ -144,7 +145,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
+                    <div class="w-full mt-4 lg:ml-8 lg:mt-0 max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -200,6 +201,31 @@ const submit = () => {
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.users"
+                            />
+                        </div>
+
+                        <div class="mt-4">
+                            <span
+                                class="block font-medium text-md text-gray-700"
+                            >
+                                Documents
+                            </span>
+
+                            <FileInput
+                                class="mt-1 block w-full"
+                                type="file"
+                                name="document"
+                                multiple
+                                @input="
+                                    form.documents = (<HTMLInputElement>(
+                                        $event.target
+                                    )).files
+                                "
+                            />
+
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.documents"
                             />
                         </div>
                     </div>
