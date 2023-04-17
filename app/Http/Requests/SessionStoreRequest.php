@@ -24,7 +24,9 @@ class SessionStoreRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'unique:sessions'],
             'users' => ['required', 'array'],
-            'users.*' => ['integer']
+            'users.*' => ['integer'],
+            'documents' => ['array', 'max_size:8192'],
+            'documents.*' => ['file']
         ];
     }
 }
