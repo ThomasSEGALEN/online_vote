@@ -94,6 +94,7 @@ return [
         'string' => ':attribute ne doit pas être supérieur à :max caractères',
     ],
     'max_digits' => ':attribute ne doit pas avoir plus de :max chiffres',
+    'max_size' => ':attribute ne doivent pas excéder :max_size Mo',
     'mimes' => ':attribute doit être un fichier de type : :value',
     'mimetypes' => ':attribute doit être un fichier de type : :values',
     'min' => [
@@ -185,7 +186,8 @@ return [
         'permissions' => 'Les permissions',
         'users' => 'Les utilisateurs',
         'title' => 'Le titre',
-        'description' => 'La description'
+        'description' => 'La description',
+        'documents' => 'Les documents'
     ],
 
 ];
