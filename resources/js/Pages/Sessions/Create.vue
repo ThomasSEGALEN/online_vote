@@ -101,7 +101,9 @@ const submit = () => {
                             />
                         </div>
 
-                        <div class="mt-4 flex flex-row">
+                        <div
+                            class="mt-4 flex flex-col md:flex-row md:space-x-7"
+                        >
                             <div>
                                 <InputLabel
                                     for="start_date"
@@ -121,7 +123,7 @@ const submit = () => {
                                 />
                             </div>
 
-                            <div class="ml-7">
+                            <div class="mt-4 md:mt-0">
                                 <InputLabel
                                     for="end_date"
                                     value="Date de fin"
@@ -203,7 +205,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="w-full mt-4">
+                <div class="mt-4 w-fit">
                     <div class="flex">
                         <span class="block font-medium text-md text-gray-700">
                             Liste des participants ({{ form.users.length }})
@@ -224,7 +226,7 @@ const submit = () => {
                         </button>
                     </div>
 
-                    <ul class="mt-1">
+                    <ul class="mt-1 max-h-48 overflow-y-auto">
                         <li
                             v-for="(user, index) in [
                                 ...new Set(

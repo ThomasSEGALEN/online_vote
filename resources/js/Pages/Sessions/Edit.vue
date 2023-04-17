@@ -116,7 +116,9 @@ const submit = () => {
                             />
                         </div>
 
-                        <div class="mt-4 flex flex-row">
+                        <div
+                            class="mt-4 flex flex-col md:flex-row md:space-x-7"
+                        >
                             <div>
                                 <InputLabel
                                     for="start_date"
@@ -137,7 +139,7 @@ const submit = () => {
                                 />
                             </div>
 
-                            <div class="ml-7">
+                            <div class="mt-4 md:mt-0">
                                 <InputLabel
                                     for="end_date"
                                     value="Date de fin"
