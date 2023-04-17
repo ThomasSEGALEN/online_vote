@@ -24,6 +24,16 @@ class Session extends Model
     ];
 
     /**
+     * Document relationship.
+     *
+     * @return HasMany
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    /**
      * User relationship.
      *
      * @return BelongsToMany
