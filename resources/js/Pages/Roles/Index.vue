@@ -9,6 +9,7 @@ import DangerButton from "@/Components/DangerButton.vue";
 import DeleteIcon from "@/Components/DeleteIcon.vue";
 import FileExportIcon from "@/Components/FileExportIcon.vue";
 import FileImportIcon from "@/Components/FileImportIcon.vue";
+import FileInput from "@/Components/FileInput.vue";
 import Modal from "@/Components/Modal.vue";
 import Pagination from "@/Components/Pagination.vue";
 import ResponsivePagination from "@/Components/ResponsivePagination.vue";
@@ -51,9 +52,7 @@ const errorMessage = computed(() => (usePage().props.flash as any).error);
 
 onMounted(() => {
     showMessage.value = true;
-    setTimeout(() => {
-        showMessage.value = false;
-    }, 3000);
+    setTimeout(() => (showMessage.value = false), 3000);
 });
 
 watch(
@@ -82,9 +81,7 @@ const deleteRole = () => {
 
 const closeModal = () => (confirmingRoleDeletion.value = false);
 
-const clickFile = () => {
-    fileInput.value?.click();
-};
+const clickFile = () => fileInput.value?.click();
 
 const importFile = (event: Event) => {
     const file = (<HTMLInputElement>event.target).files?.[0];
@@ -124,7 +121,8 @@ const importFile = (event: Event) => {
                         @click="clickFile"
                     >
                         <FileImportIcon />
-                        <input
+
+                        <FileInput
                             ref="fileInput"
                             type="file"
                             hidden
@@ -154,16 +152,17 @@ const importFile = (event: Event) => {
                 class="transition ease-in-out"
             >
                 <p
-                    v-if="showMessage && successMessage"
-                    class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
-                >
-                    {{ successMessage }}
-                </p>
-                <p
-                    v-else-if="showMessage && errorMessage"
+                    v-if="showMessage && errorMessage"
                     class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
                 >
                     {{ errorMessage }}
+                </p>
+
+                <p
+                    v-else-if="showMessage && successMessage"
+                    class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
+                >
+                    {{ successMessage }}
                 </p>
             </Transition>
 

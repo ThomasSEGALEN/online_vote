@@ -27,9 +27,9 @@ class ExportImportService
      * Import a resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Models\User|\Illuminate\Http\RedirectResponse
+     * @return bool|Exception
      */
-    public function importUsers(Request $request): User|RedirectResponse
+    public function importUsers(Request $request): bool|Exception
     {
         try {
             fastexcel()->import($request->file('usersFile'), function ($row) {
@@ -46,22 +46,12 @@ class ExportImportService
 
                 $role = Role::where('id', $row['role_id'])->first();
                 $user->permissions()->attach($role->permissions->pluck('id')->toArray());
-
-                return $user;
             });
         } catch (Exception $exception) {
-            switch ($exception->getCode()) {
-                case '0':
-                    return back()->with('error', "Erreur lors de l'import : fichier invalide");
-                    break;
-                case '23000':
-                    return back()->with('error', "Erreur lors de l'import : champ duppliqué");
-                    break;
-                default:
-                    return back()->with('error', "Erreur lors de l'import");
-                    break;
-            }
+            return $exception;
         }
+
+        return false;
     }
 
     /**
@@ -78,9 +68,9 @@ class ExportImportService
      * Import a resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Models\Role|\Illuminate\Http\RedirectResponse
+     * @return bool|Exception
      */
-    public function importRoles(Request $request): Role|RedirectResponse
+    public function importRoles(Request $request): bool|Exception
     {
         try {
             fastexcel()->import($request->file('rolesFile'), function ($row) {
@@ -95,22 +85,12 @@ class ExportImportService
                 if (!in_array(0, $permissions)) {
                     $role->permissions()->attach($permissions);
                 }
-
-                return $role;
             });
         } catch (Exception $exception) {
-            switch ($exception->getCode()) {
-                case '0':
-                    return back()->with('error', "Erreur lors de l'import : fichier invalide");
-                    break;
-                case '23000':
-                    return back()->with('error', "Erreur lors de l'import : champ duppliqué");
-                    break;
-                default:
-                    return back()->with('error', "Erreur lors de l'import");
-                    break;
-            }
+            return $exception;
         }
+
+        return false;
     }
 
     /**
@@ -127,9 +107,9 @@ class ExportImportService
      * Import a resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Models\Role|\Illuminate\Http\RedirectResponse
+     * @return bool|Exception
      */
-    public function importGroups(Request $request): Group|RedirectResponse
+    public function importGroups(Request $request): bool|Exception
     {
         try {
             fastexcel()->import($request->file('groupsFile'), function ($row) {
@@ -144,21 +124,11 @@ class ExportImportService
                 if (!in_array(0, $users)) {
                     $group->users()->attach($users);
                 }
-
-                return $group;
             });
         } catch (Exception $exception) {
-            switch ($exception->getCode()) {
-                case '0':
-                    return back()->with('error', "Erreur lors de l'import : fichier invalide");
-                    break;
-                case '23000':
-                    return back()->with('error', "Erreur lors de l'import : champ duppliqué");
-                    break;
-                default:
-                    return back()->with('error', "Erreur lors de l'import");
-                    break;
-            }
+            return $exception;
         }
+
+        return false;
     }
 }

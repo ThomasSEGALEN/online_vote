@@ -17,6 +17,27 @@ class ExportImportController extends Controller
     }
 
     /**
+     * Return message from exception code.
+     *
+     * @param Exception $exception
+     * @return string
+     */
+    public function getExceptionMessage($exception): string
+    {
+        switch ($exception->getCode()) {
+            case '0':
+                return back()->with('error', "Erreur lors de l'import : fichier invalide");
+                break;
+            case '23000':
+                return back()->with('error', "Erreur lors de l'import : champ duppliqué");
+                break;
+            default:
+                return back()->with('error', "Erreur lors de l'import");
+                break;
+        }
+    }
+
+    /**
      * Export a resource from storage.
      *
      * @return \Symfony\Component\HttpFoundation\StreamedResponse|string
@@ -38,7 +59,11 @@ class ExportImportController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $this->exportImportService->importUsers($request);
+        $exception = $this->exportImportService->importUsers($request);
+
+        if ($exception) {
+            $this->getExceptionMessage($exception);
+        }
 
         return to_route('users.index')->with('success', 'Les utilisateurs ont été importés avec succès');
     }
@@ -65,7 +90,11 @@ class ExportImportController extends Controller
     {
         $this->authorize('create', Role::class);
 
-        $this->exportImportService->importRoles($request);
+        $exception = $this->exportImportService->importRoles($request);
+
+        if ($exception) {
+            $this->getExceptionMessage($exception);
+        }
 
         return to_route('roles.index')->with('success', 'Les roles ont été importés avec succès');
     }
@@ -92,7 +121,11 @@ class ExportImportController extends Controller
     {
         $this->authorize('create', Group::class);
 
-        $this->exportImportService->importGroups($request);
+        $exception = $this->exportImportService->importGroups($request);
+
+        if ($exception) {
+            $this->getExceptionMessage($exception);
+        }
 
         return to_route('groups.index')->with('success', 'Les groupes ont été importés avec succès');
     }
