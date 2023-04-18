@@ -12,6 +12,13 @@ const hasAccess = (permissionName: string): boolean =>
     permissions.find(
         (permission: Permission) => permission.name === permissionName
     );
+
+console.log(permissions);
+
+const hasSomeAccess = (): boolean =>
+    permissions.some((permission: Permission) =>
+        [1, 6, 11, 16].includes(permission.id)
+    );
 </script>
 
 <template>
@@ -103,7 +110,10 @@ const hasAccess = (permissionName: string): boolean =>
             <ResponsiveNavLink
                 v-if="hasAccess('viewAnySessions')"
                 :href="route('sessions.index')"
-                :active="route().current('sessions.*')"
+                :active="
+                    route().current('sessions.*') &&
+                    !route().current('sessions.show')
+                "
             >
                 Séances
             </ResponsiveNavLink>
@@ -172,11 +182,19 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Votes</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Votes
+                            </span>
                         </div>
                     </ResponsiveNavLink>
+                </li>
+
+                <li v-if="hasSomeAccess()" class="px-4">
+                    <div
+                        class="font-medium text-sm text-gray-500 my-2 border-b"
+                    >
+                        Tableau de bord
+                    </div>
                 </li>
 
                 <li v-if="hasAccess('viewAnyUsers')">
@@ -197,9 +215,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Utilisateurs</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Utilisateurs
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
@@ -222,9 +240,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Rôles</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Rôles
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
@@ -247,9 +265,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Groupes</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Groupes
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
@@ -257,7 +275,10 @@ const hasAccess = (permissionName: string): boolean =>
                 <li v-if="hasAccess('viewAnySessions')">
                     <ResponsiveNavLink
                         :href="route('sessions.index')"
-                        :active="route().current('sessions.*')"
+                        :active="
+                            route().current('sessions.*') &&
+                            !route().current('sessions.show')
+                        "
                     >
                         <div class="flex items-center">
                             <svg
@@ -272,9 +293,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Séances</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Séances
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
@@ -294,7 +315,7 @@ const hasAccess = (permissionName: string): boolean =>
                     </div>
                 </li>
 
-                <li class="pt-2">
+                <li>
                     <ResponsiveNavLink
                         :href="route('profile.edit')"
                         :active="route().current('profile.*')"
@@ -313,9 +334,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 />
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Profil</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Profil
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
@@ -342,9 +363,9 @@ const hasAccess = (permissionName: string): boolean =>
                                 ></path>
                             </svg>
 
-                            <span class="ml-2 text-sm tracking-wide truncate"
-                                >Déconnexion</span
-                            >
+                            <span class="ml-2 text-sm tracking-wide truncate">
+                                Déconnexion
+                            </span>
                         </div>
                     </ResponsiveNavLink>
                 </li>
