@@ -6,7 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
+use App\Models\Session;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/app', function () {
     return inertia('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -30,6 +32,28 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', function (Request $request) {
+        return inertia('Home', [
+            'sessions' =>
+            Session::when(
+                $request->input('search'),
+                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
+            )
+                ->orderBy('id')
+                ->paginate(20)
+                ->appends($request->only('search'))
+                ->through(
+                    fn ($session) =>
+                    [
+                        'id' => $session->id,
+                        'title' => $session->title,
+                        'start_date' => $session->start_date,
+                        'end_date' => $session->end_date
+                    ]
+                ),
+        ]);
+    })->name('home');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -63,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
     Route::get('/sessions/create', [SessionController::class, 'create'])->name('sessions.create');
     Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
+    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
     Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
     Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
