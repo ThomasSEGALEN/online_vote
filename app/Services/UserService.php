@@ -182,7 +182,7 @@ class UserService
         $user->groups()->attach($request->groups);
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
-        $user->permissions()->attach($permissions);
+        $user->permissions()->sync($permissions);
 
         return $user;
     }
