@@ -90,7 +90,7 @@ const submit = () => {
                             <div
                                 class="flex flex-col overflow-x-auto min-w-full mt-4 mb-6"
                             >
-                                <table class="min-w-full">
+                                <table class="max-w-md">
                                     <thead class="bg-white border-b">
                                         <tr class="border-b bg-gray-100">
                                             <th
