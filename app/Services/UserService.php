@@ -47,7 +47,7 @@ class UserService
      */
     public function mapRoles(): Collection
     {
-        return Role::orderBy('id')->get()->map(fn ($role) => [
+        return Role::orderBy('name')->get()->map(fn ($role) => [
             'id' => $role->id,
             'name' => $role->name
         ]);
