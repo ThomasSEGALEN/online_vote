@@ -44,16 +44,14 @@ class DatabaseSeeder extends Seeder
             $permissions->pluck('id')->toArray()
         );
 
-        $users->each(function ($user) use ($groups, $permissions) {
+        $users->each(function ($user) use ($groups, $roles) {
             $user->groups()->attach(
                 $groups->random(rand(1, 2))->pluck('id')->toArray()
             );
 
             if ($user->id === 1) return;
 
-            $user->permissions()->attach(
-                $permissions->random(rand(1, 20))->pluck('id')->toArray()
-            );
+            $user->permissions()->attach($roles->find('2')->permissions()->pluck('id')->toArray());
         });
 
         $sessions->each(function ($session) use ($groups) {
