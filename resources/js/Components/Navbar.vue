@@ -13,8 +13,6 @@ const hasAccess = (permissionName: string): boolean =>
         (permission: Permission) => permission.name === permissionName
     );
 
-console.log(permissions);
-
 const hasSomeAccess = (): boolean =>
     permissions.some((permission: Permission) =>
         [1, 6, 11, 16].includes(permission.id)
