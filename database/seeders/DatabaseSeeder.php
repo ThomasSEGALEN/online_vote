@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $roles->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
         );
-        $roles->find('2')->permissions()->attach([1, 6, 11, 16]);
+        $roles->find('2')->permissions()->attach([16, 17]);
 
         $users->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
