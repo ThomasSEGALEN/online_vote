@@ -139,9 +139,6 @@ class UserService
     public function edit(User $user): array
     {
         return [
-            'civilities' => $this->mapCivilities(),
-            'groups' => $this->mapGroups(),
-            'roles' => $this->mapRoles(),
             'user' => [
                 'id' => $user->id,
                 'last_name' => $user->last_name,
@@ -150,7 +147,10 @@ class UserService
                 'civility_id' => $user->civility_id,
                 'role_id' => $user->role_id,
                 'groups' => $user->groups()->pluck('id')->toArray()
-            ]
+            ],
+            'civilities' => $this->mapCivilities(),
+            'roles' => $this->mapRoles(),
+            'groups' => $this->mapGroups()
         ];
     }
 
