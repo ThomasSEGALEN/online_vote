@@ -43,7 +43,6 @@ const submit = () => {
                         <RadioInput
                             id="civility-man"
                             v-model="form.civility"
-                            type="radio"
                             name="civility"
                             :value="1"
                             checked
@@ -56,7 +55,6 @@ const submit = () => {
                         <RadioInput
                             id="civility-woman"
                             v-model="form.civility"
-                            type="radio"
                             name="civility"
                             :value="2"
                         />

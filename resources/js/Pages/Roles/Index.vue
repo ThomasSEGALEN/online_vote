@@ -176,12 +176,14 @@ const importFile = (event: Event) => {
                             >
                                 #
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Nom
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
@@ -190,6 +192,7 @@ const importFile = (event: Event) => {
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr
                             v-for="role in roles?.data"
@@ -201,11 +204,13 @@ const importFile = (event: Event) => {
                             >
                                 {{ role.id }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ role.name }}
                             </td>
+
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
                                     v-if="can?.updateRoles"
@@ -214,6 +219,7 @@ const importFile = (event: Event) => {
                                 >
                                     <UpdateIcon />
                                 </Link>
+
                                 <DangerButton
                                     v-if="can?.deleteRoles"
                                     @click="confirmRoleDeletion(role.id)"
@@ -234,6 +240,7 @@ const importFile = (event: Event) => {
                 :total="roles?.total"
                 :links="roles?.links"
             />
+
             <ResponsivePagination
                 v-if="roles?.total > roles?.per_page"
                 class="flex md:hidden"

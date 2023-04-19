@@ -94,7 +94,6 @@ const submit = () => {
                             <RadioInput
                                 :id="`civility-${civility.id}`"
                                 v-model="form.civility"
-                                type="radio"
                                 name="civility"
                                 :value="civility.id"
                                 :checked="civility.id === form.civility"

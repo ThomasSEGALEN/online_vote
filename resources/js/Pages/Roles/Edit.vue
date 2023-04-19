@@ -59,6 +59,7 @@ const submit = () => {
                 >
                     <BackIcon />
                 </Link>
+
                 <h2
                     class="ml-2 font-semibold text-xl text-gray-800 leading-tight"
                 >
@@ -112,30 +113,35 @@ const submit = () => {
                                             >
                                                 Nom
                                             </th>
+
                                             <th
                                                 scope="col"
                                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                                             >
                                                 Lister
                                             </th>
+
                                             <th
                                                 scope="col"
                                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                                             >
                                                 Consulter
                                             </th>
+
                                             <th
                                                 scope="col"
                                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                                             >
                                                 Créer
                                             </th>
+
                                             <th
                                                 scope="col"
                                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                                             >
                                                 Modifier
                                             </th>
+
                                             <th
                                                 scope="col"
                                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
@@ -144,6 +150,7 @@ const submit = () => {
                                             </th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         <tr class="bg-white border-b">
                                             <td
@@ -169,12 +176,14 @@ const submit = () => {
                                                 />
                                             </td>
                                         </tr>
+
                                         <tr class="border-b bg-gray-100">
                                             <td
                                                 class="text-md text-gray-900 font-bold px-6 py-4"
                                             >
                                                 Rôles
                                             </td>
+
                                             <td
                                                 v-for="index in 5"
                                                 :key="index"
@@ -192,12 +201,14 @@ const submit = () => {
                                                 />
                                             </td>
                                         </tr>
+
                                         <tr class="border-b bg-white">
                                             <td
                                                 class="text-md text-gray-900 font-bold px-6 py-4"
                                             >
                                                 Groupes
                                             </td>
+
                                             <td
                                                 v-for="index in 5"
                                                 :key="index"
@@ -215,12 +226,14 @@ const submit = () => {
                                                 />
                                             </td>
                                         </tr>
+
                                         <tr class="border-b bg-gray-100">
                                             <td
                                                 class="text-md text-gray-900 font-bold px-6 py-4"
                                             >
                                                 Séances
                                             </td>
+
                                             <td
                                                 v-for="index in 5"
                                                 :key="index"
