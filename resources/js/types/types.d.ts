@@ -35,7 +35,24 @@ declare interface Group {
 
 declare interface Civility {
     id: number;
+    label: string;
     name: string;
+}
+
+declare interface Status {
+    id: number;
+    name: string;
+}
+
+declare interface Session {
+    id: number;
+    title: string;
+    description: string;
+    start_date: Date;
+    end_date: Date;
+    status_id: number;
+    created_at: Date;
+    updated_at: Date;
 }
 
 declare interface Link {
