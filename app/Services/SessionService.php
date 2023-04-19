@@ -7,6 +7,7 @@ use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Document;
 use App\Models\Group;
 use App\Models\Session;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -33,6 +34,19 @@ class SessionService
     }
 
     /**
+     * List status data.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function mapStatus()
+    {
+        return Status::orderBy('id')->get()->map(fn ($status) => [
+            'id' => $status->id,
+            'name' => $status->name
+        ]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
@@ -55,9 +69,11 @@ class SessionService
                         'id' => $session->id,
                         'title' => $session->title,
                         'start_date' => $session->start_date,
-                        'end_date' => $session->end_date
+                    'end_date' => $session->end_date,
+                    'status_id' => $session->status_id
                     ]
                 ),
+            'status' => $this->mapStatus(),
             'filters' => $request->only('search'),
             'can' => [
                 'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
@@ -75,7 +91,8 @@ class SessionService
     public function create(): array
     {
         return [
-            'users' => $this->mapUsers()
+            'users' => $this->mapUsers(),
+            'status' => $this->mapStatus()
         ];
     }
 
@@ -126,7 +143,8 @@ class SessionService
                 'end_date' => $session->end_date,
                 'users' => $session->users()->pluck('id')->toArray()
             ],
-            'users' => $this->mapUsers()
+            'users' => $this->mapUsers(),
+            'status' => $this->mapStatus()
         ];
     }
 
