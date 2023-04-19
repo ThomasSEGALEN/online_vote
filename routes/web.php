@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ExportImportController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
 Route::get('/app', function () {
     return inertia('Welcome', [
