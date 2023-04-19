@@ -23,6 +23,10 @@ const props = defineProps({
             return {};
         },
     },
+    status: {
+        type: Array<Status>,
+        default: () => [],
+    },
     filters: {
         type: Object,
         default: () => {
@@ -162,6 +166,12 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
+                                Statut
+                            </th>
+                            <th
+                                scope="col"
+                                class="text-md font-bold text-gray-900 px-6 py-4 text-left"
+                            >
                                 Actions
                             </th>
                         </tr>
@@ -191,6 +201,16 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ session.end_date }}
+                            </td>
+                            <td
+                                class="text-md text-gray-900 font-semibold px-6 py-4"
+                            >
+                                {{
+                                    status.find(
+                                        (status: Status) =>
+                                            status.id === session.status_id
+                                    )?.name
+                                }}
                             </td>
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
