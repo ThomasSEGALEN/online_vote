@@ -12,6 +12,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Multiselect from "@vueform/multiselect";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import RadioInput from "@/Components/RadioInput.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 
@@ -24,6 +25,10 @@ const props = defineProps({
     },
     users: {
         type: Array<User>,
+        default: () => [],
+    },
+    statuses: {
+        type: Array<Status>,
         default: () => [],
     },
 });
@@ -83,6 +88,35 @@ const submit = () => {
 
         <div class="p-4 md:p-6">
             <form @submit.prevent="submit">
+                <div class="mb-4">
+                    <span class="block font-medium text-md text-gray-700">
+                        Statut
+                    </span>
+
+                    <div class="mt-1 space-x-4">
+                        <div
+                            v-for="status in statuses"
+                            :key="status.id"
+                            class="inline-flex items-center space-x-1 ml-0.5"
+                        >
+                            <RadioInput
+                                :id="`status-${status.id}`"
+                                v-model="form.status"
+                                name="status"
+                                :value="status.id"
+                                :checked="status.id === form.status"
+                            />
+
+                            <InputLabel
+                                :for="`status-${status.id}`"
+                                :value="status.name"
+                            />
+                        </div>
+                    </div>
+
+                    <InputError class="mt-2" :message="form.errors.status" />
+                </div>
+
                 <div class="w-full flex flex-col lg:flex-row">
                     <div class="flex flex-col w-full max-w-md">
                         <div>

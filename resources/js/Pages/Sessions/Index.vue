@@ -23,7 +23,7 @@ const props = defineProps({
             return {};
         },
     },
-    status: {
+    statuses: {
         type: Array<Status>,
         default: () => [],
     },
@@ -126,6 +126,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                 >
                     {{ successMessage }}
                 </p>
+
                 <p
                     v-else-if="showMessage && errorMessage"
                     class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
@@ -144,30 +145,35 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                             >
                                 #
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Titre
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Date de début
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Date de fin
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Statut
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
@@ -176,6 +182,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                             </th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr
                             v-for="session in sessions?.data"
@@ -187,31 +194,36 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                             >
                                 {{ session.id }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ session.title }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ session.start_date }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ session.end_date }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{
-                                    status.find(
+                                    statuses.find(
                                         (status: Status) =>
                                             status.id === session.status_id
                                     )?.name
                                 }}
                             </td>
+
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
                                     v-if="can?.updateSessions"
@@ -240,6 +252,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                 :total="sessions?.total"
                 :links="sessions?.links"
             />
+
             <ResponsivePagination
                 v-if="sessions?.total > sessions?.per_page"
                 class="flex md:hidden"

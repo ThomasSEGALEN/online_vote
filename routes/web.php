@@ -32,6 +32,7 @@ Route::get('/app', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    // VoteController index - replace route names and put sessions viewany authorization
     Route::get('/', function (Request $request) {
         return inertia('Home', [
             'sessions' =>
@@ -48,7 +49,8 @@ Route::group(['middleware' => ['auth']], function () {
                         'id' => $session->id,
                         'title' => $session->title,
                         'start_date' => $session->start_date,
-                        'end_date' => $session->end_date
+                    'end_date' => $session->end_date,
+                    'status_id' => $session->status_id
                     ]
                 ),
         ]);

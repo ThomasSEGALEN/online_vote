@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Validator::extend('max_size', function ($attribute, $value, $parameters, $validator) {
-
             $total_size = array_reduce($value, function ($sum, $item) {
                 $sum += filesize($item->path());
 

@@ -6,7 +6,8 @@ export default function sessionForm(
     start_date = "",
     end_date = "",
     users: Array<number> = [],
-    documents: FileList | null = null
+    documents: FileList | null = null,
+    status = 1
 ) {
     const form = useForm({
         title: title,
@@ -15,6 +16,7 @@ export default function sessionForm(
         end_date: end_date,
         users: users,
         documents: documents,
+        status: status,
     });
 
     return form;

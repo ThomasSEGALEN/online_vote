@@ -73,7 +73,7 @@ class SessionService
                     'status_id' => $session->status_id
                     ]
                 ),
-            'status' => $this->mapStatus(),
+            'statuses' => $this->mapStatus(),
             'filters' => $request->only('search'),
             'can' => [
                 'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
@@ -92,7 +92,7 @@ class SessionService
     {
         return [
             'users' => $this->mapUsers(),
-            'status' => $this->mapStatus()
+            'statuses' => $this->mapStatus()
         ];
     }
 
@@ -108,17 +108,20 @@ class SessionService
             'title' => $request->title,
             'description' => $request->description,
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date
+            'end_date' => $request->end_date,
+            'status_id' => $request->status
         ]);
 
-        foreach ($request->file('documents') as $file) {
-            $document = Document::create([
-                'name' => $file->getClientOriginalName(),
-                'path' => time() . '_' . $file->getClientOriginalName(),
-                'session_id' => $session->id
-            ]);
+        if ($request->file('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $document = Document::create([
+                    'name' => $file->getClientOriginalName(),
+                    'path' => time() . '_' . $file->getClientOriginalName(),
+                    'session_id' => $session->id
+                ]);
 
-            $file->move(public_path('documents'), $document->path);
+                $file->move(public_path('documents'), $document->path);
+            }
         }
 
         $session->users()->attach($request->users);
@@ -144,7 +147,7 @@ class SessionService
                 'users' => $session->users()->pluck('id')->toArray()
             ],
             'users' => $this->mapUsers(),
-            'status' => $this->mapStatus()
+            'statuses' => $this->mapStatus()
         ];
     }
 
@@ -165,7 +168,8 @@ class SessionService
             'title' => $request->title,
             'description' => $request->description,
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date
+            'end_date' => $request->end_date,
+            'status_id' => $request->status
         ]);
 
         foreach ($session->documents as $document) {

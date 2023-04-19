@@ -24,7 +24,8 @@ class SessionUpdateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'users' => ['required', 'array'],
-            'users.*' => ['integer']
+            'users.*' => ['integer'],
+            'status' => ['required', 'integer']
         ];
     }
 }
