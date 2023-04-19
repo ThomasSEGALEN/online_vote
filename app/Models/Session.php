@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -20,7 +21,8 @@ class Session extends Model
         'title',
         'description',
         'start_date',
-        'end_date'
+        'end_date',
+        'status_id'
     ];
 
     /**
@@ -42,6 +44,17 @@ class Session extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    /**
+     * Status relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function civility(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
+    }
+
 
     // /**
     //  * Vote relationship
