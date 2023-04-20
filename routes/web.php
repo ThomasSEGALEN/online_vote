@@ -7,9 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
-use App\Models\Session;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,8 +21,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
-
 Route::get('/app', function () {
     return inertia('Welcome', [
         'canLogin' => Route::has('login'),
@@ -35,29 +31,9 @@ Route::get('/app', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    // VoteController index - replace route names and put sessions viewany authorization
-    Route::get('/', function (Request $request) {
-        return inertia('Home', [
-            'sessions' =>
-            Session::when(
-                $request->input('search'),
-                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
-            )
-                ->orderBy('id')
-                ->paginate(20)
-                ->appends($request->only('search'))
-                ->through(
-                    fn ($session) =>
-                    [
-                        'id' => $session->id,
-                        'title' => $session->title,
-                        'start_date' => $session->start_date,
-                    'end_date' => $session->end_date,
-                    'status_id' => $session->status_id
-                    ]
-                ),
-        ]);
-    })->name('home');
+    Route::get('/', [SessionController::class, 'home'])->name('home');
+
+    Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
