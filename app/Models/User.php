@@ -88,4 +88,14 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * Session relationship.
+     *
+     * @return BelongsToMany
+     */
+    public function sessions(): BelongsToMany
+    {
+        return $this->belongsToMany(Session::class);
+    }
 }
