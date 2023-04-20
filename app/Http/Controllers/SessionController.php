@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Session;
+use App\Models\Status;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,36 @@ class SessionController extends Controller
 {
     public function __construct(private SessionService $sessionService)
     {
+    }
+
+    public function home(Request $request)
+    {
+        return inertia('Home', [
+            'sessions' =>
+            Session::when(
+                $request->input('search'),
+                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
+            )
+                ->orderBy('id')
+                ->paginate(20)
+                ->appends($request->only('search'))
+                ->through(
+                    fn ($session) =>
+                    [
+                        'id' => $session->id,
+                        'title' => $session->title,
+                        'description' => $session->description,
+                        'start_date' => $session->start_date,
+                        'end_date' => $session->end_date,
+                        'status_id' => $session->status_id,
+                        'allowed' => !$session->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
+                    ]
+                ),
+            'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
+                'id' => $status->id,
+                'name' => $status->name
+            ])
+        ]);
     }
 
     /**
@@ -58,10 +89,15 @@ class SessionController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @param \App\Models\Session $session
+     * @return \Inertia\Response
      */
-    public function show(Session $session)
+    public function show(Session $session): Response
     {
-        //
+        $this->authorize('view', $session);
+
+        return inertia('Sessions/Show', $this->sessionService->show($session));
     }
 
     /**

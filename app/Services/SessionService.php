@@ -8,6 +8,7 @@ use App\Models\Document;
 use App\Models\Group;
 use App\Models\Session;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -16,9 +17,22 @@ class SessionService
     /**
      * List users data.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function mapUsers(): Collection
+    {
+        return User::orderBy('last_name')->orderBy('first_name')->get()->map(fn ($user) => [
+            'id' => $user->id,
+            'name' => $user->last_name . ' ' . $user->first_name
+        ]);
+    }
+
+    /**
+     * List grouped users data.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function mapGroupedUsers(): Collection
     {
         return Group::orderBy('name')->get()->map(
             fn ($group) => [
@@ -38,7 +52,7 @@ class SessionService
      *
      * @return \Illuminate\Support\Collection
      */
-    public function mapStatus()
+    public function mapStatus(): Collection
     {
         return Status::orderBy('id')->get()->map(fn ($status) => [
             'id' => $status->id,
@@ -91,7 +105,7 @@ class SessionService
     public function create(): array
     {
         return [
-            'users' => $this->mapUsers(),
+            'users' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatus()
         ];
     }
@@ -130,6 +144,32 @@ class SessionService
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @return array
+     */
+    public function show(Session $session): array
+    {
+        return [
+            'session' => [
+                'id' => $session->id,
+                'title' => $session->title,
+                'description' => $session->description,
+                'start_date' => $session->start_date,
+                'end_date' => $session->end_date,
+                'status_id' => $session->status_id,
+                'users' => $session->users()->pluck('id')->toArray(),
+                'documents' => $session->documents->map(fn ($document) => [
+                    'id' => $document->id,
+                    'name' => $document->name,
+                    'path' => public_path("documents/" . $document->path)
+                ])
+            ],
+            'users' => $this->mapUsers()
+        ];
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Session $session
@@ -146,7 +186,7 @@ class SessionService
                 'end_date' => $session->end_date,
                 'users' => $session->users()->pluck('id')->toArray()
             ],
-            'users' => $this->mapUsers(),
+            'users' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatus()
         ];
     }
