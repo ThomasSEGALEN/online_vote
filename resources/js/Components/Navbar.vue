@@ -9,7 +9,7 @@ const { user, permissions } = usePage().props.auth as any;
 const showingNavigationDropdown = ref<boolean>(false);
 
 const hasAccess = (permissionName: string): boolean =>
-    permissions.find(
+    permissions.some(
         (permission: Permission) => permission.name === permissionName
     );
 
