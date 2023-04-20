@@ -28,7 +28,7 @@ class SessionPolicy
      */
     public function view(User $user, Session $session): bool
     {
-        return $user->permissions->contains('name', 'viewSessions');
+        return $user->permissions->contains('name', 'viewSessions') || $user->sessions->contains('id', $session->id);
     }
 
     /**
