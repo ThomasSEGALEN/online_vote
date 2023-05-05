@@ -187,7 +187,9 @@ return [
         'users' => 'Les utilisateurs',
         'title' => 'Le titre',
         'description' => 'La description',
-        'documents' => 'Les documents'
+        'documents' => 'Les documents',
+        'votes.title.*' => 'Le titre',
+        'votes.users.*' => 'Les utilisateurs'
     ],
 
 ];
