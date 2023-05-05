@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Session;
 use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,7 +26,10 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermissionSeeder::class,
             StatusSeeder::class,
-            SessionSeeder::class
+            SessionSeeder::class,
+            VoteTypeSeeder::class,
+            VoteSeeder::class,
+            VoteAnswerSeeder::class
         ]);
 
         User::factory()->count(150)->create();
@@ -39,7 +43,6 @@ class DatabaseSeeder extends Seeder
         $roles->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
         );
-        // $roles->find('2')->permissions()->attach([2, 7, 12, 17]);
 
         $users->find('1')->permissions()->attach(
             $permissions->pluck('id')->toArray()
@@ -57,6 +60,10 @@ class DatabaseSeeder extends Seeder
 
         $sessions->each(function ($session) use ($groups) {
             $session->users()->attach($groups->find(rand(1, 2))->users()->pluck('id')->toArray());
+
+            $session->votes->each(function ($vote) use ($session) {
+                $vote->users()->attach($session->users()->pluck('id')->toArray());
+            });
         });
     }
 }
