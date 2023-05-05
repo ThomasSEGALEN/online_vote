@@ -92,10 +92,20 @@ class User extends Authenticatable // implements MustVerifyEmail
     /**
      * Session relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function sessions(): BelongsToMany
     {
         return $this->belongsToMany(Session::class);
+    }
+
+    /**
+     * Vote relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function votes(): BelongsToMany
+    {
+        return $this->belongsToMany(Vote::class);
     }
 }

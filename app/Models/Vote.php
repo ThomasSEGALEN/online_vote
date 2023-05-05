@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Session extends Model
+class Vote extends Model
 {
     use HasFactory;
 
@@ -22,37 +22,39 @@ class Session extends Model
         'description',
         'start_date',
         'end_date',
-        'status_id'
+        'session_id',
+        'status_id',
+        'type_id'
     ];
 
     /**
-     * Document relationship.
+     * Answer relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function documents(): HasMany
+    public function answers(): HasMany
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(VoteAnswer::class);
     }
 
     /**
-     * User relationship.
+     * Result relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users(): BelongsToMany
+    public function results(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(VoteResult::class);
     }
 
     /**
-     * Vote relationship
+     * Session relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function votes(): HasMany
+    public function session(): BelongsTo
     {
-        return $this->hasMany(Vote::class);
+        return $this->belongsTo(Session::class);
     }
 
     /**
@@ -63,5 +65,25 @@ class Session extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    /**
+     * Type relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(VoteType::class);
+    }
+    
+    /**
+     * User relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 }
