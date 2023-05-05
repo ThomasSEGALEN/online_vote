@@ -25,7 +25,7 @@ class Document extends Model
     /**
      * Session relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function session(): BelongsToMany
     {
