@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Http\Requests\SessionPrestoreRequest;
+use App\Http\Requests\SessionPreupdateRequest;
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Document;
@@ -9,6 +11,8 @@ use App\Models\Group;
 use App\Models\Session;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Vote;
+use App\Models\VoteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -48,11 +52,24 @@ class SessionService
     }
 
     /**
-     * List status data.
+     * List statuses data.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function mapStatus(): Collection
+    public function mapVoteTypes(): Collection
+    {
+        return VoteType::orderBy('id')->get()->map(fn ($vote_type) => [
+            'id' => $vote_type->id,
+            'name' => $vote_type->name
+        ]);
+    }
+
+    /**
+     * List votes types data.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function mapStatuses(): Collection
     {
         return Status::orderBy('id')->get()->map(fn ($status) => [
             'id' => $status->id,
@@ -83,11 +100,11 @@ class SessionService
                         'id' => $session->id,
                         'title' => $session->title,
                         'start_date' => $session->start_date,
-                    'end_date' => $session->end_date,
-                    'status_id' => $session->status_id
+                        'end_date' => $session->end_date,
+                        'status_id' => $session->status_id
                     ]
                 ),
-            'statuses' => $this->mapStatus(),
+            'statuses' => $this->mapStatuses(),
             'filters' => $request->only('search'),
             'can' => [
                 'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
@@ -105,8 +122,10 @@ class SessionService
     public function create(): array
     {
         return [
-            'users' => $this->mapGroupedUsers(),
-            'statuses' => $this->mapStatus()
+            'users' => $this->mapUsers(),
+            'groupedUsers' => $this->mapGroupedUsers(),
+            'statuses' => $this->mapStatuses(),
+            'vote_types' => $this->mapVoteTypes()
         ];
     }
 
@@ -139,6 +158,20 @@ class SessionService
         }
 
         $session->users()->attach($request->users);
+
+        for ($index = 0; $index < $request->amount; $index++) {
+            $vote = Vote::create([
+                'title' => $request->votes['title'][$index],
+                'description' => $request->votes['description'][$index],
+                'start_date' => $request->votes['start_date'][$index],
+                'end_date' => $request->votes['end_date'][$index],
+                'session_id' => $session->id,
+                'status_id' => $request->votes['status'][$index],
+                'type_id' => $request->votes['type'][$index]
+            ]);
+
+            $vote->users()->attach($request->votes['users'][$index]);
+        }
 
         return $session;
     }
@@ -184,11 +217,40 @@ class SessionService
                 'description' => $session->description,
                 'start_date' => $session->start_date,
                 'end_date' => $session->end_date,
+                'status_id' => $session->status_id,
+                'votes' => $session->votes->map(fn ($vote) => [
+                    'id' => $vote->id,
+                    'title' => $vote->title,
+                    'description' => $vote->description,
+                    'start_date' => $vote->start_date,
+                    'end_date' => $vote->end_date,
+                    'status_id' => $vote->status_id,
+                    'type_id' => $vote->type_id,
+                    'answers' => $vote->answers->map(fn ($answer) => [
+                        'name' => $answer->name,
+                        'color' => $answer->color
+                    ]),
+                    'users' => $vote->users()->pluck('id')->toArray()
+                ]),
                 'users' => $session->users()->pluck('id')->toArray()
             ],
             'users' => $this->mapGroupedUsers(),
-            'statuses' => $this->mapStatus()
+            'statuses' => $this->mapStatuses(),
+            'vote_types' => $this->mapVoteTypes()
         ];
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \App\Http\Requests\SessionUpdateRequest $request
+     * @param \App\Models\Session $session
+     */
+    public function preupdate(SessionPreupdateRequest $request, Session $session)
+    {
+        if (($request->title !== $session->title) && Session::where('title', $request->title)->first()) {
+            $request->validate(['title' => ['required', 'string', 'unique:sessions']]);
+        }
     }
 
     /**
@@ -202,6 +264,12 @@ class SessionService
     {
         if (($request->title !== $session->title) && Session::where('title', $request->title)->first()) {
             $request->validate(['title' => ['required', 'string', 'unique:sessions']]);
+        }
+
+        foreach ($request->session->votes as $key => $vote) {
+            if (($request->votes['title'][$key] !== $vote->title) && Vote::where('title', $request->votes['title'][$key])->first()) {
+                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
+            }
         }
 
         $session->update([
@@ -231,6 +299,20 @@ class SessionService
         }
 
         $session->users()->sync($request->users);
+
+        foreach ($request->session->votes as $key => $vote) {
+            $vote->update([
+                'title' => $request->votes['title'][$key],
+                'description' => $request->votes['description'][$key],
+                'start_date' => $request->votes['start_date'][$key],
+                'end_date' => $request->votes['end_date'][$key],
+                'title' => $request->votes['title'][$key],
+                'status_id' => $request->votes['status'][$key],
+                'type_id' => $request->votes['type'][$key]
+            ]);
+
+            $vote->users()->sync($request->votes['users'][$key]);
+        }
 
         return $session;
     }

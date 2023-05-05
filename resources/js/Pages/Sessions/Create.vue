@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import sessionForm from "@/Composables/sessionForm";
@@ -11,13 +11,19 @@ import FileInput from "@/Components/FileInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Multiselect from "@vueform/multiselect";
+import NumberInput from "@/Components/NumberInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
 import TextInput from "@/Components/TextInput.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
-defineProps({
+const props = defineProps({
     users: {
+        type: Array<User>,
+        default: () => [],
+    },
+    groupedUsers: {
         type: Array<User>,
         default: () => [],
     },
@@ -25,16 +31,53 @@ defineProps({
         type: Array<Status>,
         default: () => [],
     },
+    vote_types: {
+        type: Array<VoteType>,
+        default: () => [],
+    },
 });
 
+const formStep = ref<number>(1);
+const amountInput = ref<HTMLInputElement>();
 const titleInput = ref<HTMLInputElement>();
 const usersInput = ref<HTMLInputElement>();
 const showParticipants = ref<boolean>(false);
+const currentVote = ref<number>(0);
 
-const form = sessionForm();
+const { groupedUsers, users } = toRefs(props);
 
-const submit = () => {
-    form.post(route("sessions.store"), {
+const form = sessionForm({});
+
+const hasError = (index: number): boolean =>
+    form.errors[`votes.title.${index}` as keyof object] ||
+    form.errors[`votes.users.${index}` as keyof object];
+
+const getSessionUsers = (): Array<string> => [
+    ...new Set(
+        groupedUsers.value
+            .flatMap((group) =>
+                group.options
+                    .filter((user) => form.users.includes(user.id))
+                    .map((user) => user.name)
+            )
+            .sort()
+    ),
+];
+
+const getVoteUsers = (index: number): Array<string> => [
+    ...new Set(
+        groupedUsers.value
+            .flatMap((group) =>
+                group.options
+                    .filter((user) => form.votes.users[index].includes(user.id))
+                    .map((user) => user.name)
+            )
+            .sort()
+    ),
+];
+
+const nextStep = () =>
+    form.post(route("sessions.prestore"), {
         onError: () => {
             if (form.errors.users) {
                 form.reset("users");
@@ -44,9 +87,33 @@ const submit = () => {
                 form.reset("title");
                 titleInput.value?.focus();
             }
+            if (form.errors.amount) {
+                form.reset("amount");
+                amountInput.value?.focus();
+            }
+        },
+        onSuccess: () => {
+            for (let index = 0; index < form.amount; index++) {
+                form.votes.title.push(`${form.title} - ${index + 1}`);
+                form.votes.description.push(form.description);
+                form.votes.users.push(
+                    users.value
+                        .filter((user) => form.users.includes(user.id))
+                        .map((u) => u.id)
+                );
+                form.votes.start_date.push(form.start_date);
+                form.votes.end_date.push(form.end_date);
+                form.votes.status.push(form.status);
+                form.votes.type.push(1);
+            }
+
+            formStep.value++;
         },
     });
-};
+
+const previousStep = () => formStep.value--;
+
+const submit = () => form.post(route("sessions.store"));
 </script>
 
 <template>
@@ -70,252 +137,646 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
-                <div class="mb-4">
-                    <span class="block font-medium text-md text-gray-700">
-                        Statut
-                    </span>
+                <div v-if="formStep === 1">
+                    <div
+                        class="flex flex-col md:flex-row max-w-md justify-between"
+                    >
+                        <div>
+                            <span
+                                class="block font-medium text-md text-gray-700"
+                            >
+                                Statut
+                            </span>
 
-                    <div class="mt-1 space-x-4">
-                        <div
-                            v-for="status in statuses"
-                            :key="status.id"
-                            class="inline-flex items-center space-x-1 ml-0.5"
-                        >
-                            <RadioInput
-                                :id="`status-${status.id}`"
-                                v-model="form.status"
-                                name="status"
-                                :value="status.id"
-                                :checked="status.id === form.status"
-                            />
+                            <div class="mt-1 space-x-4">
+                                <div
+                                    v-for="status in statuses"
+                                    :key="status.id"
+                                    class="inline-flex items-center space-x-1 ml-0.5"
+                                >
+                                    <RadioInput
+                                        :id="`status-${status.id}`"
+                                        v-model="form.status"
+                                        :value="status.id"
+                                    />
 
-                            <InputLabel
-                                :for="`status-${status.id}`"
-                                :value="status.name"
+                                    <InputLabel
+                                        :for="`status-${status.id}`"
+                                        :value="status.name"
+                                    />
+                                </div>
+                            </div>
+
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.status"
                             />
                         </div>
-                    </div>
 
-                    <InputError class="mt-2" :message="form.errors.status" />
-                </div>
-
-                <div class="w-full flex flex-col lg:flex-row">
-                    <div class="flex flex-col w-full max-w-md">
                         <div>
-                            <InputLabel for="title" value="Titre" />
+                            <InputLabel for="amount" value="Nombre de votes" />
 
-                            <TextInput
-                                id="title"
-                                ref="titleInput"
-                                v-model="form.title"
-                                type="text"
+                            <NumberInput
+                                id="amount"
+                                ref="amountInput"
+                                v-model.number="form.amount"
+                                :min="1"
+                                :max="20"
                                 class="mt-1 block w-full"
-                                autofocus
                                 required
                             />
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.title"
+                                :message="form.errors.amount"
                             />
-                        </div>
-
-                        <div class="mt-4">
-                            <InputLabel for="description" value="Description" />
-
-                            <TextareaInput
-                                id="description"
-                                v-model="form.description"
-                                class="mt-1 block w-full"
-                            ></TextareaInput>
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.description"
-                            />
-                        </div>
-
-                        <div
-                            class="mt-4 flex flex-col md:flex-row md:space-x-7"
-                        >
-                            <div>
-                                <InputLabel
-                                    for="start_date"
-                                    value="Date de début"
-                                />
-
-                                <TextInput
-                                    id="start_date"
-                                    v-model="form.start_date"
-                                    type="datetime-local"
-                                    class="mt-1 block w-full"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.start_date"
-                                />
-                            </div>
-
-                            <div class="mt-4 md:mt-0">
-                                <InputLabel
-                                    for="end_date"
-                                    value="Date de fin"
-                                />
-
-                                <TextInput
-                                    id="end_date"
-                                    v-model="form.end_date"
-                                    type="datetime-local"
-                                    class="mt-1 block w-full"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.end_date"
-                                />
-                            </div>
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 lg:ml-8 lg:mt-0 max-w-md">
-                        <div>
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Utilisateurs
-                            </span>
+                    <div
+                        class="mt-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
+                    >
+                        <div class="flex flex-col w-full max-w-md">
+                            <div>
+                                <InputLabel for="title" value="Titre" />
 
-                            <div class="mt-1 max-w-md">
-                                <Multiselect
-                                    ref="usersInput"
-                                    v-model="form.users"
-                                    :groups="true"
-                                    mode="multiple"
-                                    :multiple-label="
+                                <TextInput
+                                    id="title"
+                                    ref="titleInput"
+                                    v-model="form.title"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    autofocus
+                                    required
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.title"
+                                />
+                            </div>
+
+                            <div class="mt-4">
+                                <InputLabel
+                                    for="description"
+                                    value="Description"
+                                />
+
+                                <TextareaInput
+                                    id="description"
+                                    v-model="form.description"
+                                    class="mt-1 block w-full"
+                                ></TextareaInput>
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.description"
+                                />
+                            </div>
+
+                            <div
+                                class="mt-4 flex flex-col md:flex-row md:space-x-7 md:justify-between"
+                            >
+                                <div>
+                                    <InputLabel
+                                        for="start_date"
+                                        value="Date de début"
+                                    />
+
+                                    <TextInput
+                                        id="start_date"
+                                        v-model="form.start_date"
+                                        type="datetime-local"
+                                        class="mt-1 block w-full"
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.start_date"
+                                    />
+                                </div>
+
+                                <div class="mt-4 md:mt-0">
+                                    <InputLabel
+                                        for="end_date"
+                                        value="Date de fin"
+                                    />
+
+                                    <TextInput
+                                        id="end_date"
+                                        v-model="form.end_date"
+                                        type="datetime-local"
+                                        class="mt-1 block w-full"
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.end_date"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <span
+                                    class="block font-medium text-md text-gray-700"
+                                >
+                                    Documents
+                                </span>
+
+                                <FileInput
+                                    class="mt-1 block w-full"
+                                    type="file"
+                                    multiple
+                                    @input="
+                                        form.documents = (<HTMLInputElement>(
+                                            $event.target
+                                        )).files
+                                    "
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.documents"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="w-full mt-4 lg:mt-0 max-w-md">
+                            <div>
+                                <span
+                                    class="block font-medium text-md text-gray-700"
+                                >
+                                    Utilisateurs
+                                </span>
+
+                                <div class="mt-1 max-w-md">
+                                    <Multiselect
+                                        ref="usersInput"
+                                        v-model="form.users"
+                                        :groups="true"
+                                        mode="multiple"
+                                        :multiple-label="
                                         (values: string) => values.length > 1 ? 
                                             `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
                                     "
-                                    label="name"
-                                    value-prop="id"
-                                    :close-on-select="false"
-                                    :hide-selected="false"
-                                    :searchable="true"
-                                    no-results-text="Aucun résultat"
-                                    no-options-text="Aucune option"
-                                    :options="users"
-                                    :classes="{
-                                        container:
-                                            'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
-                                        containerActive:
-                                            'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
-                                        clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
-                                        group: 'p-0 m-0',
-                                        groupLabel:
-                                            'flex text-sm box-border items-center justify-start text-left py-1 px-3 font-semibold bg-gray-200 cursor-default leading-normal',
-                                        groupLabelPointed:
-                                            'bg-gray-300 text-gray-700',
-                                        groupLabelSelected:
-                                            'bg-indigo-500 text-white',
-                                        groupLabelSelectedPointed:
-                                            'bg-indigo-500 text-white opacity-90',
-                                        option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
-                                        optionPointed:
-                                            'text-gray-800 bg-gray-100',
-                                        optionSelected:
-                                            'text-white bg-indigo-500',
-                                        optionSelectedPointed:
-                                            'text-white bg-indigo-500 opacity-90',
-                                    }"
-                                    required
+                                        label="name"
+                                        value-prop="id"
+                                        :close-on-select="false"
+                                        :hide-selected="false"
+                                        :searchable="true"
+                                        no-results-text="Aucun résultat"
+                                        no-options-text="Aucune option"
+                                        :options="groupedUsers"
+                                        :classes="{
+                                            container:
+                                                'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
+                                            containerActive:
+                                                'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
+                                            clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                            group: 'p-0 m-0',
+                                            groupLabel:
+                                                'flex text-sm box-border items-center justify-start text-left py-1 px-3 font-semibold bg-gray-200 cursor-default leading-normal',
+                                            groupLabelPointed:
+                                                'bg-gray-300 text-gray-700',
+                                            groupLabelSelected:
+                                                'bg-indigo-500 text-white',
+                                            groupLabelSelectedPointed:
+                                                'bg-indigo-500 text-white opacity-90',
+                                            option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                            optionPointed:
+                                                'text-gray-800 bg-gray-100',
+                                            optionSelected:
+                                                'text-white bg-indigo-500',
+                                            optionSelectedPointed:
+                                                'text-white bg-indigo-500 opacity-90',
+                                        }"
+                                        required
+                                    />
+                                </div>
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.users"
                                 />
                             </div>
 
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.users"
-                            />
-                        </div>
+                            <div class="mt-4 w-fit">
+                                <button
+                                    type="button"
+                                    @click="
+                                        showParticipants = !showParticipants
+                                    "
+                                >
+                                    <div class="inline-flex items-center">
+                                        <span
+                                            class="block font-medium text-md text-gray-700"
+                                        >
+                                            Liste des participants ({{
+                                                form.users.length
+                                            }})
+                                        </span>
 
-                        <div class="mt-4">
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Documents
-                            </span>
+                                        <div class="ml-1">
+                                            <template v-if="showParticipants">
+                                                <CaretUpIcon />
+                                            </template>
 
-                            <FileInput
-                                class="mt-1 block w-full"
-                                type="file"
-                                name="document"
-                                multiple
-                                @input="
-                                    form.documents = (<HTMLInputElement>(
-                                        $event.target
-                                    )).files
-                                "
-                            />
+                                            <template v-else>
+                                                <CaretDownIcon />
+                                            </template>
+                                        </div>
+                                    </div>
+                                </button>
 
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.documents"
-                            />
+                                <ul class="mt-1 max-h-36 overflow-y-auto">
+                                    <li
+                                        v-for="(
+                                            user, index
+                                        ) in getSessionUsers()"
+                                        v-show="showParticipants"
+                                        :key="index"
+                                    >
+                                        <span
+                                            class="block font-medium text-sm text-gray-700"
+                                        >
+                                            {{ user }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-4 w-fit">
-                    <div class="flex">
-                        <span class="block font-medium text-md text-gray-700">
-                            Liste des participants ({{ form.users.length }})
-                        </span>
+                <div v-if="formStep === 2">
+                    <p
+                        v-if="form.hasErrors"
+                        class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
+                    >
+                        Veuillez vérifier la saisie des votes
+                    </p>
 
+                    <div
+                        v-for="(vote, voteIndex) in form.amount"
+                        :key="voteIndex"
+                    >
                         <button
-                            class="ml-1"
                             type="button"
-                            @click="showParticipants = !showParticipants"
+                            @click="
+                                currentVote !== voteIndex
+                                    ? (currentVote = voteIndex)
+                                    : (currentVote = -1)
+                            "
                         >
-                            <template v-if="showParticipants">
-                                <CaretUpIcon />
-                            </template>
+                            <div class="inline-flex items-center">
+                                <div class="mr-1">
+                                    <template v-if="currentVote === voteIndex">
+                                        <CaretUpIcon />
+                                    </template>
 
-                            <template v-else>
-                                <CaretDownIcon />
-                            </template>
+                                    <template v-else>
+                                        <CaretDownIcon />
+                                    </template>
+                                </div>
+
+                                <span
+                                    class="block font-medium text-md"
+                                    :class="
+                                        hasError(voteIndex)
+                                            ? 'text-red-600'
+                                            : 'text-gray-700'
+                                    "
+                                >
+                                    {{ form.title }} - {{ voteIndex + 1 }}
+                                </span>
+                            </div>
                         </button>
-                    </div>
 
-                    <ul class="mt-1 max-h-48 overflow-y-auto">
-                        <li
-                            v-for="(user, index) in [
-                                ...new Set(
-                                    users
-                                        .flatMap((group) =>
-                                            group.options
-                                                .filter((user) =>
-                                                    form.users.includes(user.id)
-                                                )
-                                                .map((user) => user.name)
-                                        )
-                                        .sort()
-                                ),
-                            ]"
-                            v-show="showParticipants"
-                            :key="index"
-                        >
-                            <span
-                                class="block font-medium text-sm text-gray-700"
+                        <div v-show="currentVote === voteIndex">
+                            <div
+                                class="flex flex-col md:flex-row max-w-md justify-between"
                             >
-                                {{ user }}
-                            </span>
-                        </li>
-                    </ul>
+                                <div>
+                                    <span
+                                        class="block font-medium text-md text-gray-700"
+                                    >
+                                        Statut
+                                    </span>
+
+                                    <div class="mt-1 space-x-4">
+                                        <div
+                                            v-for="status in statuses"
+                                            :key="status.id"
+                                            class="inline-flex items-center space-x-1 ml-0.5"
+                                        >
+                                            <RadioInput
+                                                :id="`status-${status.id}-${voteIndex}`"
+                                                v-model="
+                                                    form.votes.status[voteIndex]
+                                                "
+                                                :value="status.id"
+                                            />
+
+                                            <InputLabel
+                                                :for="`status-${status.id}-${voteIndex}`"
+                                                :value="status.name"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors[
+                                                    `votes.status.${voteIndex}` as keyof object
+                                                ]"
+                                    />
+                                </div>
+
+                                <div class="mt-4 md:mt-0">
+                                    <span
+                                        class="block font-medium text-md text-gray-700"
+                                    >
+                                        Scrutin
+                                    </span>
+
+                                    <div class="mt-1 space-x-4">
+                                        <div
+                                            v-for="vote_type in vote_types"
+                                            :key="vote_type.id"
+                                            class="inline-flex items-center space-x-1 ml-0.5"
+                                        >
+                                            <RadioInput
+                                                :id="`vote_type-${vote_type.id}-${voteIndex}`"
+                                                v-model="
+                                                    form.votes.type[voteIndex]
+                                                "
+                                                :value="vote_type.id"
+                                            />
+
+                                            <InputLabel
+                                                :for="`vote_type-${vote_type.id}-${voteIndex}`"
+                                                :value="vote_type.name"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors[
+                                                    `votes.types.${voteIndex}` as keyof object
+                                                ]"
+                                    />
+                                </div>
+                            </div>
+
+                            <div
+                                class="my-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
+                            >
+                                <div class="flex flex-col w-full max-w-md">
+                                    <div>
+                                        <InputLabel for="title" value="Titre" />
+
+                                        <TextInput
+                                            id="title"
+                                            ref="titleInput"
+                                            v-model="
+                                                form.votes.title[voteIndex]
+                                            "
+                                            type="text"
+                                            class="mt-1 block w-full"
+                                            autofocus
+                                        />
+
+                                        <InputError
+                                            class="mt-2"
+                                            :message="
+                                                form.errors[
+                                                    `votes.title.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                        />
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <InputLabel
+                                            for="description"
+                                            value="Description"
+                                        />
+
+                                        <TextareaInput
+                                            id="description"
+                                            ref="descriptionInput"
+                                            v-model="
+                                                form.votes.description[
+                                                    voteIndex
+                                                ]
+                                            "
+                                            class="mt-1 block w-full"
+                                        ></TextareaInput>
+
+                                        <InputError
+                                            class="mt-2"
+                                            :message="
+                                                form.errors[
+                                                    `votes.description.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                        />
+                                    </div>
+
+                                    <div
+                                        class="mt-4 flex flex-col md:flex-row md:space-x-7"
+                                    >
+                                        <div>
+                                            <InputLabel
+                                                for="start_date"
+                                                value="Date de début"
+                                            />
+
+                                            <TextInput
+                                                id="start_date"
+                                                ref="startDateInput"
+                                                v-model="form.start_date"
+                                                type="datetime-local"
+                                                class="mt-1 block w-full"
+                                            />
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="
+                                                form.errors[
+                                                    `votes.start_date.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                            />
+                                        </div>
+
+                                        <div class="mt-4 md:mt-0">
+                                            <InputLabel
+                                                for="end_date"
+                                                value="Date de fin"
+                                            />
+
+                                            <TextInput
+                                                id="end_date"
+                                                ref="endDateInput"
+                                                v-model="form.end_date"
+                                                type="datetime-local"
+                                                class="mt-1 block w-full"
+                                            />
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="
+                                                form.errors[
+                                                    `votes.end_date.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-full mt-4 lg:mt-0 max-w-md">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-md text-gray-700"
+                                        >
+                                            Utilisateurs
+                                        </span>
+
+                                        <div class="mt-1 max-w-md">
+                                            <Multiselect
+                                                ref="usersInput"
+                                                v-model="
+                                                    form.votes.users[voteIndex]
+                                                "
+                                                :groups="true"
+                                                mode="multiple"
+                                                :multiple-label="
+                                        (values: string) => values.length > 1 ? 
+                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                                    "
+                                                label="name"
+                                                value-prop="id"
+                                                :close-on-select="false"
+                                                :hide-selected="false"
+                                                :searchable="true"
+                                                no-results-text="Aucun résultat"
+                                                no-options-text="Aucune option"
+                                                :options="groupedUsers"
+                                                :classes="{
+                                                    container:
+                                                        'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
+                                                    containerActive:
+                                                        'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
+                                                    clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                                    group: 'p-0 m-0',
+                                                    groupLabel:
+                                                        'flex text-sm box-border items-center justify-start text-left py-1 px-3 font-semibold bg-gray-200 cursor-default leading-normal',
+                                                    groupLabelPointed:
+                                                        'bg-gray-300 text-gray-700',
+                                                    groupLabelSelected:
+                                                        'bg-indigo-500 text-white',
+                                                    groupLabelSelectedPointed:
+                                                        'bg-indigo-500 text-white opacity-90',
+                                                    option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                                    optionPointed:
+                                                        'text-gray-800 bg-gray-100',
+                                                    optionSelected:
+                                                        'text-white bg-indigo-500',
+                                                    optionSelectedPointed:
+                                                        'text-white bg-indigo-500 opacity-90',
+                                                }"
+                                            />
+                                        </div>
+
+                                        <InputError
+                                            class="mt-2"
+                                            :message="
+                                                form.errors[
+                                                    `votes.users.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                        />
+                                    </div>
+
+                                    <div class="mt-4 w-fit">
+                                        <button
+                                            type="button"
+                                            @click="
+                                                showParticipants =
+                                                    !showParticipants
+                                            "
+                                        >
+                                            <div
+                                                class="inline-flex items-center"
+                                            >
+                                                <span
+                                                    class="block font-medium text-md text-gray-700"
+                                                >
+                                                    Liste des participants ({{
+                                                        form.votes.users[
+                                                            voteIndex
+                                                        ].length
+                                                    }})
+                                                </span>
+
+                                                <div class="ml-1">
+                                                    <template
+                                                        v-if="showParticipants"
+                                                    >
+                                                        <CaretUpIcon />
+                                                    </template>
+
+                                                    <template v-else>
+                                                        <CaretDownIcon />
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        <ul
+                                            class="mt-1 max-h-36 overflow-y-auto"
+                                        >
+                                            <li
+                                                v-for="(
+                                                    user, index
+                                                ) in getVoteUsers(voteIndex)"
+                                                v-show="showParticipants"
+                                                :key="index"
+                                            >
+                                                <span
+                                                    class="block font-medium text-sm text-gray-700"
+                                                >
+                                                    {{ user }}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mt-6">
+                <div
+                    class="flex items-center mt-8 max-w-md lg:max-w-full"
+                    :class="formStep === 1 ? 'justify-end' : 'justify-between'"
+                >
+                    <SecondaryButton v-if="formStep === 1" @click="nextStep">
+                        Suivant
+                    </SecondaryButton>
+                    <SecondaryButton
+                        v-if="formStep === 2"
+                        @click="previousStep"
+                    >
+                        Précédent
+                    </SecondaryButton>
                     <PrimaryButton
+                        v-if="formStep === 2"
                         :class="{
                             'opacity-25': form.processing,
                         }"

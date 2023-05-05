@@ -27,7 +27,14 @@ class SessionStoreRequest extends FormRequest
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
             'documents' => ['nullable', 'array', 'max_size:8192'],
-            'documents.*' => ['file']
+            'documents.*' => ['file'],
+            'amount' => ['required', 'integer'],
+            'votes' => ['required', 'array'],
+            'votes.title.*' => ['required', 'string'],
+            'votes.users.*' => ['required', 'array'],
+            'votes.users.*.*' => ['integer'],
+            'votes.status.*' => ['required', 'integer'],
+            'votes.type.*' => ['required', 'integer']
         ];
     }
 }

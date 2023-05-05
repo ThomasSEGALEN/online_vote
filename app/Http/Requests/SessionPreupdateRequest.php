@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SessionUpdateRequest extends FormRequest
+class SessionPreupdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,13 +27,7 @@ class SessionUpdateRequest extends FormRequest
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
             'documents' => ['nullable', 'array', 'max_size:8192'],
-            'documents.*' => ['file'],
-            'votes' => ['required', 'array'],
-            'votes.title.*' => ['required', 'string'],
-            'votes.users.*' => ['required', 'array'],
-            'votes.users.*.*' => ['integer'],
-            'votes.status.*' => ['required', 'integer'],
-            'votes.type.*' => ['required', 'integer']
+            'documents.*' => ['file']
         ];
     }
 }
