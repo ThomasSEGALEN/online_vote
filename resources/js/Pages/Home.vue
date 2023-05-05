@@ -16,7 +16,7 @@ defineProps({
     },
 });
 
-const { permissions } = usePage().props.auth as any;
+const { permissions } = usePage().props.auth;
 
 const hasAccess = (session: Session): boolean =>
     permissions.some(
@@ -34,16 +34,18 @@ const hasAccess = (session: Session): boolean =>
             </h2>
         </template>
 
-        {{ statuses }}
-
-        <div v-for="session in sessions?.data" :key="session.id">
+        <div
+            v-for="session in sessions.data as Array<Session>"
+            :key="session.id"
+        >
             <template v-if="hasAccess(session)">
                 <Link :href="route('sessions.show', session.id)">
                     {{ session.title }}
                 </Link>
-                {{ session }}
                 <br />
-                {{ hasAccess(session) }}
+                <b>Session data:</b> {{ session }}
+                <br />
+                <b>hasAccess check:</b> {{ hasAccess(session) }}
             </template>
         </div>
     </AuthenticatedLayout>

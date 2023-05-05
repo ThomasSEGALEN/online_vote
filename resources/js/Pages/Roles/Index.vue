@@ -41,14 +41,14 @@ const props = defineProps({
     },
 });
 
-const search = ref<string>(props.filters?.search);
+const search = ref<string>(props.filters.search);
 const confirmingRoleDeletion = ref<boolean>(false);
 const roleId = ref<number>();
 const showMessage = ref<boolean>(false);
 const fileInput = ref<HTMLInputElement>();
 
-const successMessage = computed(() => (usePage().props.flash as any).success);
-const errorMessage = computed(() => (usePage().props.flash as any).error);
+const successMessage = computed(() => usePage().props.flash.success);
+const errorMessage = computed(() => usePage().props.flash.error);
 
 onMounted(() => {
     showMessage.value = true;
@@ -106,7 +106,7 @@ const importFile = (event: Event) => {
         <div class="p-4 md:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
-                    v-if="can?.createRoles"
+                    v-if="can.createRoles"
                     class="flex items-center space-x-2 mb-2"
                 >
                     <Link
@@ -195,7 +195,7 @@ const importFile = (event: Event) => {
 
                     <tbody>
                         <tr
-                            v-for="role in roles?.data"
+                            v-for="role in roles.data as Array<Role>"
                             :key="role.id"
                             class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
                         >
@@ -213,7 +213,7 @@ const importFile = (event: Event) => {
 
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
-                                    v-if="can?.updateRoles"
+                                    v-if="can.updateRoles"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                                     :href="route('roles.edit', role.id)"
                                 >
@@ -221,7 +221,7 @@ const importFile = (event: Event) => {
                                 </Link>
 
                                 <DangerButton
-                                    v-if="can?.deleteRoles"
+                                    v-if="can.deleteRoles"
                                     @click="confirmRoleDeletion(role.id)"
                                 >
                                     <DeleteIcon />
@@ -233,21 +233,21 @@ const importFile = (event: Event) => {
             </div>
 
             <Pagination
-                v-if="roles?.total > roles?.per_page"
+                v-if="roles.total > roles.per_page"
                 class="hidden md:flex"
-                :to="roles?.to"
-                :from="roles?.from"
-                :total="roles?.total"
-                :links="roles?.links"
+                :to="roles.to"
+                :from="roles.from"
+                :total="roles.total"
+                :links="roles.links"
             />
 
             <ResponsivePagination
-                v-if="roles?.total > roles?.per_page"
+                v-if="roles.total > roles.per_page"
                 class="flex md:hidden"
-                :to="roles?.to"
-                :from="roles?.from"
-                :total="roles?.total"
-                :links="roles?.links"
+                :to="roles.to"
+                :from="roles.from"
+                :total="roles.total"
+                :links="roles.links"
             />
 
             <Modal :show="confirmingRoleDeletion" @close="closeModal">

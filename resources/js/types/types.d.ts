@@ -56,6 +56,25 @@ declare interface Session {
     allowed: boolean;
 }
 
+declare interface Vote {
+    id: number;
+    title: string;
+    description: string;
+    start_date: Date;
+    end_date: Date;
+    users: Array<number>;
+    status_id: number;
+    type_id: number;
+    created_at: Date;
+    updated_at: Date;
+    allowed: boolean;
+}
+
+declare interface VoteType {
+    id: number;
+    name: string;
+}
+
 declare interface Link {
     active: boolean;
     label: string;

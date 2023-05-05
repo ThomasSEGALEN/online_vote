@@ -21,7 +21,7 @@ defineProps({
     },
 });
 
-const { user } = usePage().props.auth as any;
+const { user } = usePage().props.auth;
 </script>
 
 <template>

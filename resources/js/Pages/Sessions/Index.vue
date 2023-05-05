@@ -46,8 +46,8 @@ const confirmingSessionDeletion = ref<boolean>(false);
 const sessionId = ref<number>();
 const showMessage = ref<boolean>(false);
 
-const successMessage = computed(() => (usePage().props.flash as any).success);
-const errorMessage = computed(() => (usePage().props.flash as any).error);
+const successMessage = computed(() => usePage().props.flash.success);
+const errorMessage = computed(() => usePage().props.flash.error);
 
 onMounted(() => {
     showMessage.value = true;
@@ -96,7 +96,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
         <div class="p-4 md:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
-                    v-if="can?.createSessions"
+                    v-if="can.createSessions"
                     class="flex items-center space-x-2 mb-2"
                 >
                     <Link
@@ -185,7 +185,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
 
                     <tbody>
                         <tr
-                            v-for="session in sessions?.data"
+                            v-for="session in sessions.data as Array<Session>"
                             :key="session.id"
                             class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
                         >
@@ -220,20 +220,20 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                                     statuses.find(
                                         (status: Status) =>
                                             status.id === session.status_id
-                                    )?.name
+                                    )!.name
                                 }}
                             </td>
 
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
-                                    v-if="can?.updateSessions"
+                                    v-if="can.updateSessions"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                                     :href="route('sessions.edit', session.id)"
                                 >
                                     <UpdateIcon />
                                 </Link>
                                 <DangerButton
-                                    v-if="can?.deleteSessions"
+                                    v-if="can.deleteSessions"
                                     @click="confirmSessionDeletion(session.id)"
                                 >
                                     <DeleteIcon />
@@ -245,21 +245,21 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
             </div>
 
             <Pagination
-                v-if="sessions?.total > sessions?.per_page"
+                v-if="sessions.total > sessions.per_page"
                 class="hidden md:flex"
-                :to="sessions?.to"
-                :from="sessions?.from"
-                :total="sessions?.total"
-                :links="sessions?.links"
+                :to="sessions.to"
+                :from="sessions.from"
+                :total="sessions.total"
+                :links="sessions.links"
             />
 
             <ResponsivePagination
-                v-if="sessions?.total > sessions?.per_page"
+                v-if="sessions.total > sessions.per_page"
                 class="flex md:hidden"
-                :to="sessions?.to"
-                :from="sessions?.from"
-                :total="sessions?.total"
-                :links="sessions?.links"
+                :to="sessions.to"
+                :from="sessions.from"
+                :total="sessions.total"
+                :links="sessions.links"
             />
 
             <Modal :show="confirmingSessionDeletion" @close="closeModal">

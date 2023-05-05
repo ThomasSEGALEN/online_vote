@@ -41,14 +41,14 @@ const props = defineProps({
     },
 });
 
-const search = ref<string>(props.filters?.search);
+const search = ref<string>(props.filters.search);
 const confirmingGroupDeletion = ref<boolean>(false);
 const groupId = ref<number>();
 const showMessage = ref<boolean>(false);
 const fileInput = ref<HTMLInputElement>();
 
-const successMessage = computed(() => (usePage().props.flash as any).success);
-const errorMessage = computed(() => (usePage().props.flash as any).error);
+const successMessage = computed(() => usePage().props.flash.success);
+const errorMessage = computed(() => usePage().props.flash.error);
 
 onMounted(() => {
     showMessage.value = true;
@@ -106,7 +106,7 @@ const importFile = (event: Event) => {
         <div class="p-4 md:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
-                    v-if="can?.createGroups"
+                    v-if="can.createGroups"
                     class="flex items-center space-x-2 mb-2"
                 >
                     <Link
@@ -195,7 +195,7 @@ const importFile = (event: Event) => {
 
                     <tbody>
                         <tr
-                            v-for="group in groups?.data"
+                            v-for="group in groups.data as Array<Group>"
                             :key="group.id"
                             class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
                         >
@@ -213,7 +213,7 @@ const importFile = (event: Event) => {
 
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
-                                    v-if="can?.updateGroups"
+                                    v-if="can.updateGroups"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                                     :href="route('groups.edit', group.id)"
                                 >
@@ -221,7 +221,7 @@ const importFile = (event: Event) => {
                                 </Link>
 
                                 <DangerButton
-                                    v-if="can?.deleteGroups"
+                                    v-if="can.deleteGroups"
                                     @click="confirmGroupDeletion(group.id)"
                                 >
                                     <DeleteIcon />
@@ -233,21 +233,21 @@ const importFile = (event: Event) => {
             </div>
 
             <Pagination
-                v-if="groups?.total > groups?.per_page"
+                v-if="groups.total > groups.per_page"
                 class="hidden md:flex"
-                :to="groups?.to"
-                :from="groups?.from"
-                :total="groups?.total"
-                :links="groups?.links"
+                :to="groups.to"
+                :from="groups.from"
+                :total="groups.total"
+                :links="groups.links"
             />
 
             <ResponsivePagination
-                v-if="groups?.total > groups?.per_page"
+                v-if="groups.total > groups.per_page"
                 class="flex md:hidden"
-                :to="groups?.to"
-                :from="groups?.from"
-                :total="groups?.total"
-                :links="groups?.links"
+                :to="groups.to"
+                :from="groups.from"
+                :total="groups.total"
+                :links="groups.links"
             />
 
             <Modal :show="confirmingGroupDeletion" @close="closeModal">
