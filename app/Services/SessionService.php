@@ -137,6 +137,12 @@ class SessionService
      */
     public function store(SessionStoreRequest $request): Session
     {
+        for ($index = 0; $index < $request->amount; $index++) {
+            if (Vote::where('title', $request->votes['title'][$index])->first()) {
+                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
+            }
+        }
+
         $session = Session::create([
             'title' => $request->title,
             'description' => $request->description,
