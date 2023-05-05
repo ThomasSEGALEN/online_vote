@@ -6,7 +6,6 @@ use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
