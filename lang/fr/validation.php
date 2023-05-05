@@ -94,6 +94,7 @@ return [
         'string' => ':attribute ne doit pas être supérieur à :max caractères',
     ],
     'max_digits' => ':attribute ne doit pas avoir plus de :max chiffres',
+    'max_size' => ':attribute ne doivent pas excéder :max_size Mo',
     'mimes' => ':attribute doit être un fichier de type : :value',
     'mimetypes' => ':attribute doit être un fichier de type : :values',
     'min' => [
@@ -175,9 +176,20 @@ return [
     */
 
     'attributes' => [
+        'first_name' => 'Le prénom',
+        'last_name' => 'Le nom de famille',
         'email' => "L'adresse e-mail",
         'password' => 'Le mot de passe',
+        'role' => 'Le rôle',
+        'groups' => 'Les groupes',
         'name' => 'Le nom',
+        'permissions' => 'Les permissions',
+        'users' => 'Les utilisateurs',
+        'title' => 'Le titre',
+        'description' => 'La description',
+        'documents' => 'Les documents',
+        'votes.title.*' => 'Le titre',
+        'votes.users.*' => 'Les utilisateurs'
     ],
 
 ];

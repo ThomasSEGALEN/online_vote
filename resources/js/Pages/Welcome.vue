@@ -21,7 +21,7 @@ defineProps({
     },
 });
 
-const { user } = usePage().props.auth as any;
+const { user } = usePage().props.auth;
 </script>
 
 <template>
@@ -36,10 +36,10 @@ const { user } = usePage().props.auth as any;
         >
             <Link
                 v-if="user"
-                :href="route('users.index')"
+                :href="route('home')"
                 class="text-sm text-gray-700 underline"
             >
-                Redirection
+                Accueil
             </Link>
 
             <template v-else>

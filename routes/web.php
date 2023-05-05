@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ExportImportController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/app', function () {
     return inertia('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -29,6 +31,10 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', [SessionController::class, 'home'])->name('home');
+
+    Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -59,7 +65,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/groups/import', [ExportImportController::class, 'importGroups'])->name('groups.import');
     Route::get('/groups/export', [ExportImportController::class, 'exportGroups'])->name('groups.export');
 
-    Route::get('/sessions', fn () => to_route('users.index'))->name('sessions.index');
+    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
+    Route::get('/sessions/create', [SessionController::class, 'create'])->name('sessions.create');
+    Route::post('/sessions/prestore', [SessionController::class, 'prestore'])->name('sessions.prestore');
+    Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
+    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
+    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
+    Route::put('/sessions/preupdate/{session}', [SessionController::class, 'preupdate'])->name('sessions.preupdate');
+    Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
+    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
 });
 
 require __DIR__ . '/auth.php';

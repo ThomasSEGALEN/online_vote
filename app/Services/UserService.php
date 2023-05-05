@@ -47,7 +47,7 @@ class UserService
      */
     public function mapRoles(): Collection
     {
-        return Role::orderBy('id')->get()->map(fn ($role) => [
+        return Role::orderBy('name')->get()->map(fn ($role) => [
             'id' => $role->id,
             'name' => $role->name
         ]);
@@ -85,8 +85,8 @@ class UserService
             'filters' => $request->only('search'),
             'can' => [
                 'createUsers' => $request->user()->permissions->contains('name', 'createUsers'),
-                'deleteUsers' => $request->user()->permissions->contains('name', 'deleteUsers'),
-                'updateUsers' => $request->user()->permissions->contains('name', 'updateUsers')
+                'updateUsers' => $request->user()->permissions->contains('name', 'updateUsers'),
+                'deleteUsers' => $request->user()->permissions->contains('name', 'deleteUsers')
             ]
         ];
     }
@@ -139,9 +139,6 @@ class UserService
     public function edit(User $user): array
     {
         return [
-            'civilities' => $this->mapCivilities(),
-            'groups' => $this->mapGroups(),
-            'roles' => $this->mapRoles(),
             'user' => [
                 'id' => $user->id,
                 'last_name' => $user->last_name,
@@ -150,7 +147,10 @@ class UserService
                 'civility_id' => $user->civility_id,
                 'role_id' => $user->role_id,
                 'groups' => $user->groups()->pluck('id')->toArray()
-            ]
+            ],
+            'civilities' => $this->mapCivilities(),
+            'roles' => $this->mapRoles(),
+            'groups' => $this->mapGroups()
         ];
     }
 
@@ -182,7 +182,7 @@ class UserService
         $user->groups()->attach($request->groups);
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
-        $user->permissions()->attach($permissions);
+        $user->permissions()->sync($permissions);
 
         return $user;
     }

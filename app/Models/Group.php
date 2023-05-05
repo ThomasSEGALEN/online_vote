@@ -20,7 +20,7 @@ class Group extends Model
     /**
      * User relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users(): BelongsToMany
     {

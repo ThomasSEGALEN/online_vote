@@ -9,6 +9,7 @@ import DangerButton from "@/Components/DangerButton.vue";
 import DeleteIcon from "@/Components/DeleteIcon.vue";
 import FileExportIcon from "@/Components/FileExportIcon.vue";
 import FileImportIcon from "@/Components/FileImportIcon.vue";
+import FileInput from "@/Components/FileInput.vue";
 import Modal from "@/Components/Modal.vue";
 import Pagination from "@/Components/Pagination.vue";
 import ResponsivePagination from "@/Components/ResponsivePagination.vue";
@@ -40,20 +41,18 @@ const props = defineProps({
     },
 });
 
-const search = ref<string>(props.filters?.search);
+const search = ref<string>(props.filters.search);
 const confirmingUserDeletion = ref<boolean>(false);
 const userId = ref<number>();
 const showMessage = ref<boolean>(false);
 const fileInput = ref<HTMLInputElement>();
 
-const successMessage = computed(() => (usePage().props.flash as any).success);
-const errorMessage = computed(() => (usePage().props.flash as any).error);
+const successMessage = computed(() => usePage().props.flash.success);
+const errorMessage = computed(() => usePage().props.flash.error);
 
 onMounted(() => {
     showMessage.value = true;
-    setTimeout(() => {
-        showMessage.value = false;
-    }, 3000);
+    setTimeout(() => (showMessage.value = false), 3000);
 });
 
 watch(
@@ -82,9 +81,7 @@ const deleteUser = () => {
 
 const closeModal = () => (confirmingUserDeletion.value = false);
 
-const clickFile = () => {
-    fileInput.value?.click();
-};
+const clickFile = () => fileInput.value?.click();
 
 const importFile = (event: Event) => {
     const file = (<HTMLInputElement>event.target).files?.[0];
@@ -109,7 +106,7 @@ const importFile = (event: Event) => {
         <div class="p-4 md:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
-                    v-if="can?.createUsers"
+                    v-if="can.createUsers"
                     class="flex items-center space-x-2 mb-2"
                 >
                     <Link
@@ -124,7 +121,8 @@ const importFile = (event: Event) => {
                         @click="clickFile"
                     >
                         <FileImportIcon />
-                        <input
+
+                        <FileInput
                             ref="fileInput"
                             type="file"
                             hidden
@@ -154,16 +152,17 @@ const importFile = (event: Event) => {
                 class="transition ease-in-out"
             >
                 <p
-                    v-if="showMessage && successMessage"
-                    class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
-                >
-                    {{ successMessage }}
-                </p>
-                <p
-                    v-else-if="showMessage && errorMessage"
+                    v-if="showMessage && errorMessage"
                     class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
                 >
                     {{ errorMessage }}
+                </p>
+
+                <p
+                    v-else-if="showMessage && successMessage"
+                    class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
+                >
+                    {{ successMessage }}
                 </p>
             </Transition>
 
@@ -177,24 +176,28 @@ const importFile = (event: Event) => {
                             >
                                 #
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Adresse e-mail
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Nom
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
                             >
                                 Prénom
                             </th>
+
                             <th
                                 scope="col"
                                 class="text-md font-bold text-gray-900 px-6 py-4 text-left"
@@ -205,7 +208,7 @@ const importFile = (event: Event) => {
                     </thead>
                     <tbody>
                         <tr
-                            v-for="user in users?.data"
+                            v-for="user in users.data as Array<User>"
                             :key="user.id"
                             class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
                         >
@@ -214,31 +217,36 @@ const importFile = (event: Event) => {
                             >
                                 {{ user.id }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ user.email }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ user.last_name }}
                             </td>
+
                             <td
                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                             >
                                 {{ user.first_name }}
                             </td>
+
                             <td class="flex space-x-5 px-6 py-4">
                                 <Link
-                                    v-if="can?.updateUsers"
+                                    v-if="can.updateUsers"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                                     :href="route('users.edit', user.id)"
                                 >
                                     <UpdateIcon />
                                 </Link>
+
                                 <DangerButton
-                                    v-if="can?.deleteUsers"
+                                    v-if="can.deleteUsers"
                                     @click="confirmUserDeletion(user.id)"
                                 >
                                     <DeleteIcon />
@@ -250,20 +258,21 @@ const importFile = (event: Event) => {
             </div>
 
             <Pagination
-                v-if="users?.total > users?.per_page"
+                v-if="users.total > users.per_page"
                 class="hidden md:flex"
-                :to="users?.to"
-                :from="users?.from"
-                :total="users?.total"
-                :links="users?.links"
+                :to="users.to"
+                :from="users.from"
+                :total="users.total"
+                :links="users.links"
             />
+
             <ResponsivePagination
-                v-if="users?.total > users?.per_page"
+                v-if="users.total > users.per_page"
                 class="flex md:hidden"
-                :to="users?.to"
-                :from="users?.from"
-                :total="users?.total"
-                :links="users?.links"
+                :to="users.to"
+                :from="users.from"
+                :total="users.total"
+                :links="users.links"
             />
 
             <Modal :show="confirmingUserDeletion" @close="closeModal">
