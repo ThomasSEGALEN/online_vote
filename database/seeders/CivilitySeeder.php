@@ -17,11 +17,11 @@ class CivilitySeeder extends Seeder
         DB::table('civilities')->insert([
             [
                 'label' => 'M.',
-                'name' => 'Monsieur',
+                'name' => 'Monsieur'
             ],
             [
                 'label' => 'Mme',
-                'name' => 'Madame',
+                'name' => 'Madame'
             ]
         ]);
     }

@@ -17,12 +17,12 @@ defineProps({
         type: Array<Civility>,
         default: () => [],
     },
-    groups: {
-        type: Array<Group>,
-        default: () => [],
-    },
     roles: {
         type: Array<Role>,
+        default: () => [],
+    },
+    groups: {
+        type: Array<Group>,
         default: () => [],
     },
 });
@@ -32,7 +32,7 @@ const firstNameInput = ref<HTMLInputElement>();
 const emailInput = ref<HTMLInputElement>();
 const passwordInput = ref<HTMLInputElement>();
 
-const form = userForm();
+const form = userForm({});
 
 const submit = () => {
     form.post(route("users.store"), {
@@ -78,46 +78,40 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
-                <div class="w-full flex flex-col lg:flex-row">
-                    <div class="flex flex-col w-full max-w-md">
-                        <div>
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Civilité
-                            </span>
+                <div class="mb-4">
+                    <span class="block font-medium text-md text-gray-700">
+                        Civilité
+                    </span>
 
-                            <div class="mt-1 space-x-4">
-                                <div
-                                    v-for="civility in civilities"
-                                    :key="civility.id"
-                                    class="inline-flex items-center space-x-1 ml-0.5"
-                                >
-                                    <RadioInput
-                                        :id="`civility-${civility.id}`"
-                                        v-model="form.civility"
-                                        type="radio"
-                                        name="civility"
-                                        :value="civility.id"
-                                        :checked="civility.id === form.civility"
-                                    />
+                    <div class="mt-1 space-x-4">
+                        <div
+                            v-for="civility in civilities"
+                            :key="civility.id"
+                            class="inline-flex items-center space-x-1 ml-0.5"
+                        >
+                            <RadioInput
+                                :id="`civility-${civility.id}`"
+                                v-model="form.civility"
+                                :value="civility.id"
+                            />
 
-                                    <InputLabel
-                                        :for="`civility-${civility.id}`"
-                                        :value="civility.name"
-                                    />
-                                </div>
-                            </div>
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.civility"
+                            <InputLabel
+                                :for="`civility-${civility.id}`"
+                                :value="civility.name"
                             />
                         </div>
+                    </div>
 
-                        <div class="mt-4">
+                    <InputError class="mt-2" :message="form.errors.civility" />
+                </div>
+
+                <div
+                    class="w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
+                >
+                    <div class="flex flex-col w-full max-w-md">
+                        <div>
                             <InputLabel for="last_name" value="Nom" />
 
                             <TextInput
@@ -195,7 +189,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
+                    <div class="w-full mt-4 lg:mt-0 max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"
@@ -203,28 +197,35 @@ const submit = () => {
                                 Rôles
                             </span>
 
-                            <div
-                                class="mt-1 max-h-48 overflow-y-auto overflow-x-hidden"
-                            >
-                                <div
-                                    v-for="role in roles"
-                                    :key="role.id"
-                                    class="flex items-center space-x-1 ml-0.5"
-                                >
-                                    <RadioInput
-                                        :id="`role-${role.id}`"
-                                        v-model="form.role"
-                                        type="radio"
-                                        name="role"
-                                        :value="role.id"
-                                        :checked="role.id === form.role"
-                                    />
-
-                                    <InputLabel
-                                        :for="`role-${role.id}`"
-                                        :value="role.name"
-                                    />
-                                </div>
+                            <div class="mt-1">
+                                <Multiselect
+                                    v-model="form.role"
+                                    mode="single"
+                                    label="name"
+                                    value-prop="id"
+                                    :close-on-select="false"
+                                    :searchable="true"
+                                    no-results-text="Aucun résultat"
+                                    no-options-text="Aucune option"
+                                    :options="roles"
+                                    :classes="{
+                                        container:
+                                            'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
+                                        containerActive:
+                                            'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
+                                        tag: 'bg-indigo-100 text-indigo-600 text-sm font-semibold py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1',
+                                        tagsSearch:
+                                            'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
+                                        clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                        option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                        optionPointed:
+                                            'text-gray-800 bg-gray-100',
+                                        optionSelected:
+                                            'text-white bg-indigo-500',
+                                        optionSelectedPointed:
+                                            'text-white bg-indigo-500 opacity-90',
+                                    }"
+                                />
                             </div>
 
                             <InputError
@@ -240,7 +241,7 @@ const submit = () => {
                                 Groupes
                             </span>
 
-                            <div class="mt-1 max-w-md">
+                            <div class="mt-1">
                                 <Multiselect
                                     v-model="form.groups"
                                     mode="tags"
@@ -260,6 +261,13 @@ const submit = () => {
                                         tagsSearch:
                                             'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
                                         clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                        option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                        optionPointed:
+                                            'text-gray-800 bg-gray-100',
+                                        optionSelected:
+                                            'text-white bg-indigo-500',
+                                        optionSelectedPointed:
+                                            'text-white bg-indigo-500 opacity-90',
                                     }"
                                 />
                             </div>

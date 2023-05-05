@@ -14,7 +14,7 @@ const props = defineProps({
     },
 });
 
-const { user } = usePage().props.auth as any;
+const { user } = usePage().props.auth;
 
 const form = useForm({
     last_name: user.last_name,
@@ -94,7 +94,8 @@ const form = useForm({
 
                 <div
                     v-if="
-                        props.mustVerifyEmail && user.email_verified_at === null
+                        props.mustVerifyEmail /*&& user.email_verified_at*/ ===
+                        null
                     "
                 >
                     <p class="text-sm mt-2 text-gray-800">

@@ -24,8 +24,11 @@ class UserUpdateRequest extends FormRequest
         return [
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
+            'email' => ['required', 'email', 'string'],
             'civility' => ['required', 'integer', 'in:1,2'],
-            'role' => ['required', 'integer']
+            'role' => ['required', 'integer'],
+            'groups' => ['nullable', 'array'],
+            'groups.*' => ['integer']
         ];
     }
 }

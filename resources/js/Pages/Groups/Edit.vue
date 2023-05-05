@@ -28,12 +28,12 @@ const nameInput = ref<HTMLInputElement>();
 
 const { group, users } = toRefs(props);
 
-const form = groupForm(
-    group.value.name,
-    users.value
+const form = groupForm({
+    name: group.value.name,
+    users: users.value
         .filter((user) => group.value.users.includes(user.id))
-        .map((u) => u.id)
-);
+        .map((u) => u.id),
+});
 
 const submit = () => {
     form.put(route("groups.update", group.value.id), {
@@ -48,13 +48,13 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Rôles" />
+    <Head title="Groupes" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="inline-flex items-center">
                 <Link
-                    :href="route('users.index')"
+                    :href="route('groups.index')"
                     class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
@@ -62,12 +62,12 @@ const submit = () => {
                 <h2
                     class="ml-2 font-semibold text-xl text-gray-800 leading-tight"
                 >
-                    Modification d'un rôle
+                    Modification d'un groupe
                 </h2>
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">
@@ -103,10 +103,15 @@ const submit = () => {
                             <div class="mt-1 max-w-md">
                                 <Multiselect
                                     v-model="form.users"
-                                    mode="tags"
+                                    mode="multiple"
+                                    :multiple-label="
+                                        (values: string) => values.length > 1 ? 
+                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                                    "
                                     label="name"
                                     value-prop="id"
                                     :close-on-select="false"
+                                    :hide-selected="false"
                                     :searchable="true"
                                     no-results-text="Aucun résultat"
                                     no-options-text="Aucune option"
@@ -116,10 +121,14 @@ const submit = () => {
                                             'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
                                         containerActive:
                                             'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
-                                        tag: 'bg-indigo-100 text-indigo-600 text-sm font-semibold py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1',
-                                        tagsSearch:
-                                            'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
                                         clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                        option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                        optionPointed:
+                                            'text-gray-800 bg-gray-100',
+                                        optionSelected:
+                                            'text-white bg-indigo-500',
+                                        optionSelectedPointed:
+                                            'text-white bg-indigo-500 opacity-90',
                                     }"
                                 />
                             </div>

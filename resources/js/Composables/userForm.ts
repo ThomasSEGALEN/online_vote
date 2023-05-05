@@ -1,13 +1,20 @@
 import { useForm } from "@inertiajs/vue3";
 
-export default function userForm(
+export default function userForm({
     civility = 1,
     last_name = "",
     first_name = "",
     email = "",
     role = 2,
-    groups: Array<number> = []
-) {
+    groups = [],
+}: {
+    civility?: number;
+    last_name?: string;
+    first_name?: string;
+    email?: string;
+    role?: number;
+    groups?: Array<number>;
+}) {
     const form = useForm({
         civility: civility,
         last_name: last_name,

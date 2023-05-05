@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Role;
 use App\Services\RoleService;
 use Illuminate\Http\RedirectResponse;
@@ -71,11 +72,11 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\RoleUpdateRequest $request
      * @param  \App\Models\Role $role
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Role $role): RedirectResponse
+    public function update(RoleUpdateRequest $request, Role $role): RedirectResponse
     {
         $this->authorize('update', $role);
 

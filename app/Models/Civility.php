@@ -25,7 +25,7 @@ class Civility extends Model
     /**
      * User relationship.
      *
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function users(): HasMany
     {

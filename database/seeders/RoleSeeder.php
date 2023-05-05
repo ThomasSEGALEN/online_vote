@@ -18,12 +18,12 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'Utilisateur',
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ],
         ]);
     }

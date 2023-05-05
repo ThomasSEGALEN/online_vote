@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
                 'civility_id' => Civility::MAN,
                 'role_id' => Role::ADMIN,
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'last_name' => 'Ségalen',
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
                 'civility_id' => Civility::WOMAN,
                 'role_id' => Role::USER,
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'last_name' => 'Ségalen',
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
                 'civility_id' => Civility::MAN,
                 'role_id' => Role::USER,
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ],
         ]);
     }
