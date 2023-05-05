@@ -4,7 +4,11 @@ import { ref } from "vue";
 import route from "ziggy-js";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
-const { user, permissions } = usePage().props.auth as any;
+const { user, permissions } = usePage().props.auth;
+
+const userFirstName = user.first_name;
+const userLastName = user.last_name;
+const userEmail = user.email;
 
 const showingNavigationDropdown = ref<boolean>(false);
 
@@ -120,12 +124,12 @@ const hasSomeAccess = (): boolean =>
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">
-                    {{ user.first_name }}
-                    {{ user.last_name }}
+                    {{ userFirstName }}
+                    {{ userLastName }}
                 </div>
 
                 <div class="font-medium text-sm text-gray-500">
-                    {{ user.email }}
+                    {{ userEmail }}
                 </div>
             </div>
 
@@ -302,14 +306,14 @@ const hasSomeAccess = (): boolean =>
             <ul class="flex flex-col py-4 space-y-1">
                 <li class="px-4">
                     <div class="font-medium text-base text-gray-800">
-                        {{ user.first_name }}
-                        {{ user.last_name }}
+                        {{ userFirstName }}
+                        {{ userLastName }}
                     </div>
 
                     <div
                         class="font-medium text-sm text-gray-500 pb-2 border-b"
                     >
-                        {{ user.email }}
+                        {{ userEmail }}
                     </div>
                 </li>
 
