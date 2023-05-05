@@ -32,7 +32,7 @@ const firstNameInput = ref<HTMLInputElement>();
 const emailInput = ref<HTMLInputElement>();
 const passwordInput = ref<HTMLInputElement>();
 
-const form = userForm();
+const form = userForm({});
 
 const submit = () => {
     form.post(route("users.store"), {
@@ -78,7 +78,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="mb-4">
                     <span class="block font-medium text-md text-gray-700">
@@ -94,9 +94,7 @@ const submit = () => {
                             <RadioInput
                                 :id="`civility-${civility.id}`"
                                 v-model="form.civility"
-                                name="civility"
                                 :value="civility.id"
-                                :checked="civility.id === form.civility"
                             />
 
                             <InputLabel
@@ -109,7 +107,9 @@ const submit = () => {
                     <InputError class="mt-2" :message="form.errors.civility" />
                 </div>
 
-                <div class="w-full flex flex-col lg:flex-row">
+                <div
+                    class="w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
+                >
                     <div class="flex flex-col w-full max-w-md">
                         <div>
                             <InputLabel for="last_name" value="Nom" />
@@ -189,7 +189,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 lg:ml-8 lg:mt-0 max-w-md">
+                    <div class="w-full mt-4 lg:mt-0 max-w-md">
                         <div>
                             <span
                                 class="block font-medium text-md text-gray-700"

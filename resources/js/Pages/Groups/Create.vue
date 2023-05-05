@@ -20,7 +20,7 @@ defineProps({
 
 const nameInput = ref<HTMLInputElement>();
 
-const form = groupForm();
+const form = groupForm({});
 
 const submit = () => {
     form.post(route("groups.store"), {
@@ -41,7 +41,7 @@ const submit = () => {
         <template #header>
             <div class="inline-flex items-center">
                 <Link
-                    :href="route('users.index')"
+                    :href="route('groups.index')"
                     class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
@@ -54,7 +54,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">

@@ -28,12 +28,12 @@ const nameInput = ref<HTMLInputElement>();
 
 const { role, permissions } = toRefs(props);
 
-const form = roleForm(
-    role.value.name,
-    permissions.value
+const form = roleForm({
+    name: role.value.name,
+    permissions: permissions.value
         .filter((permission) => role.value.permissions.includes(permission.id))
-        .map((p) => p.id)
-);
+        .map((p) => p.id),
+});
 
 const submit = () => {
     form.put(route("roles.update", role.value.id), {
@@ -54,7 +54,7 @@ const submit = () => {
         <template #header>
             <div class="inline-flex items-center">
                 <Link
-                    :href="route('users.index')"
+                    :href="route('roles.index')"
                     class="text-sm text-gray-700 underline"
                 >
                     <BackIcon />
@@ -68,7 +68,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">

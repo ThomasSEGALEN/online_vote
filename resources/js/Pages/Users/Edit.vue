@@ -40,16 +40,16 @@ const passwordInput = ref<HTMLInputElement>();
 
 const { user, groups } = toRefs(props);
 
-const form = userForm(
-    user.value.civility_id,
-    user.value.last_name,
-    user.value.first_name,
-    user.value.email,
-    user.value.role_id,
-    groups.value
+const form = userForm({
+    civility: user.value.civility_id,
+    last_name: user.value.last_name,
+    first_name: user.value.first_name,
+    email: user.value.email,
+    role: user.value.role_id,
+    groups: groups.value
         .filter((group) => user.value.groups.includes(group.id))
-        .map((g) => g.id)
-);
+        .map((g) => g.id),
+});
 
 const submit = () => {
     form.put(route("users.update", user.value.id), {
@@ -83,7 +83,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="mb-4">
                     <span class="block font-medium text-md text-gray-700">
@@ -99,9 +99,7 @@ const submit = () => {
                             <RadioInput
                                 :id="`civility-${civility.id}`"
                                 v-model="form.civility"
-                                name="civility"
                                 :value="civility.id"
-                                :checked="civility.id === form.civility"
                             />
 
                             <InputLabel
@@ -114,7 +112,9 @@ const submit = () => {
                     <InputError class="mt-2" :message="form.errors.civility" />
                 </div>
 
-                <div class="w-full flex flex-col lg:flex-row">
+                <div
+                    class="w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
+                >
                     <div class="flex flex-col w-full max-w-md">
                         <div>
                             <InputLabel for="last_name" value="Nom" />
