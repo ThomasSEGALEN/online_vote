@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vote_results', function (Blueprint $table) {
+        Schema::create('label_sets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('answer_id')->constrained('vote_answers')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vote_results');
+        Schema::dropIfExists('label_sets');
     }
 };
