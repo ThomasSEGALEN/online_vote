@@ -66,7 +66,12 @@ const closeModal = () => {
                     </p>
 
                     <div class="mt-6">
-                        <input hidden type="text" autocomplete="username" />
+                        <input
+                            id="hidden"
+                            hidden
+                            type="text"
+                            autocomplete="username"
+                        />
 
                         <InputLabel
                             for="password"

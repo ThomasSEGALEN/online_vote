@@ -132,7 +132,6 @@ class GroupService
      */
     public function destroy(Group $group)
     {
-        $group->users()->detach($group->users()->pluck('id')->toArray());
         $group->delete();
     }
 }

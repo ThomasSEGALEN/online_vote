@@ -179,7 +179,7 @@ class UserService
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        $user->groups()->attach($request->groups);
+        $user->groups()->sync($request->groups);
         $role = Role::where('id', $request->role)->first();
         $permissions = $role->permissions()->pluck('id')->toArray();
         $user->permissions()->sync($permissions);
@@ -194,8 +194,6 @@ class UserService
      */
     public function destroy(User $user)
     {
-        $user->groups()->detach($user->groups()->pluck('id')->toArray());
-        $user->permissions()->detach($user->permissions()->pluck('id')->toArray());
         $user->delete();
     }
 }

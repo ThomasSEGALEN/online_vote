@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             SessionSeeder::class,
             VoteTypeSeeder::class,
             VoteSeeder::class,
-            VoteAnswerSeeder::class
+            VoteAnswerSeeder::class,
+            LabelSetSeeder::class,
+            AnswerSeeder::class
         ]);
 
         User::factory()->count(150)->create();

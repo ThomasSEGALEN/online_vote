@@ -38,15 +38,16 @@ const hasAccess = (session: Session): boolean =>
             v-for="session in sessions.data as Array<Session>"
             :key="session.id"
         >
+            <Link :href="route('sessions.show', session.id)">
+                {{ session.title }}
+            </Link>
+            <br />
             <template v-if="hasAccess(session)">
-                <Link :href="route('sessions.show', session.id)">
-                    {{ session.title }}
-                </Link>
-                <br />
                 <b>Session data:</b> {{ session }}
                 <br />
-                <b>hasAccess check:</b> {{ hasAccess(session) }}
             </template>
+
+            <b>hasAccess check:</b> {{ hasAccess(session) }}
         </div>
     </AuthenticatedLayout>
 </template>

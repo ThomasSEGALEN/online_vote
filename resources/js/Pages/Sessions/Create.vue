@@ -180,7 +180,6 @@ const submit = () => form.post(route("sessions.store"));
 
                             <NumberInput
                                 id="amount"
-                                ref="amountInput"
                                 v-model.number="form.amount"
                                 :min="1"
                                 :max="20"
@@ -305,14 +304,11 @@ const submit = () => form.post(route("sessions.store"));
 
                         <div class="w-full mt-4 lg:mt-0 max-w-md">
                             <div>
-                                <span
-                                    class="block font-medium text-md text-gray-700"
-                                >
-                                    Utilisateurs
-                                </span>
+                                <InputLabel for="users" value="Utilisateurs" />
 
                                 <div class="mt-1 max-w-md">
                                     <Multiselect
+                                        id="users"
                                         ref="usersInput"
                                         v-model="form.users"
                                         :groups="true"
@@ -536,10 +532,13 @@ const submit = () => form.post(route("sessions.store"));
                             >
                                 <div class="flex flex-col w-full max-w-md">
                                     <div>
-                                        <InputLabel for="title" value="Titre" />
+                                        <InputLabel
+                                            :for="`vote_title-${voteIndex}`"
+                                            value="Titre"
+                                        />
 
                                         <TextInput
-                                            id="title"
+                                            :id="`vote_title-${voteIndex}`"
                                             ref="titleInput"
                                             v-model="
                                                 form.votes.title[voteIndex]
@@ -561,12 +560,12 @@ const submit = () => form.post(route("sessions.store"));
 
                                     <div class="mt-4">
                                         <InputLabel
-                                            for="description"
+                                            :for="`vote_description-${voteIndex}`"
                                             value="Description"
                                         />
 
                                         <TextareaInput
-                                            id="description"
+                                            :id="`vote_description-${voteIndex}`"
                                             ref="descriptionInput"
                                             v-model="
                                                 form.votes.description[
@@ -591,12 +590,12 @@ const submit = () => form.post(route("sessions.store"));
                                     >
                                         <div>
                                             <InputLabel
-                                                for="start_date"
+                                                :for="`vote_start_date-${voteIndex}`"
                                                 value="Date de début"
                                             />
 
                                             <TextInput
-                                                id="start_date"
+                                                :id="`vote_start_date-${voteIndex}`"
                                                 ref="startDateInput"
                                                 v-model="form.start_date"
                                                 type="datetime-local"
@@ -615,12 +614,12 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <div class="mt-4 md:mt-0">
                                             <InputLabel
-                                                for="end_date"
+                                                :for="`vote_end_date-${voteIndex}`"
                                                 value="Date de fin"
                                             />
 
                                             <TextInput
-                                                id="end_date"
+                                                :id="`vote_end_date-${voteIndex}`"
                                                 ref="endDateInput"
                                                 v-model="form.end_date"
                                                 type="datetime-local"
@@ -641,14 +640,14 @@ const submit = () => form.post(route("sessions.store"));
 
                                 <div class="w-full mt-4 lg:mt-0 max-w-md">
                                     <div>
-                                        <span
-                                            class="block font-medium text-md text-gray-700"
-                                        >
-                                            Utilisateurs
-                                        </span>
+                                        <InputLabel
+                                            :for="`vote_users-${voteIndex}`"
+                                            value="Utilisateurs"
+                                        />
 
                                         <div class="mt-1 max-w-md">
                                             <Multiselect
+                                                :id="`vote_users-${voteIndex}`"
                                                 ref="usersInput"
                                                 v-model="
                                                     form.votes.users[voteIndex]
@@ -769,12 +768,14 @@ const submit = () => form.post(route("sessions.store"));
                     <SecondaryButton v-if="formStep === 1" @click="nextStep">
                         Suivant
                     </SecondaryButton>
+
                     <SecondaryButton
                         v-if="formStep === 2"
                         @click="previousStep"
                     >
                         Précédent
                     </SecondaryButton>
+
                     <PrimaryButton
                         v-if="formStep === 2"
                         :class="{

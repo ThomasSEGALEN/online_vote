@@ -165,7 +165,7 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    id="permissionInput-{{ index }}"
+                                                    :id="`permissionInput-${index}`"
                                                     v-model="form.permissions"
                                                     :value="index"
                                                     :checked="
@@ -190,7 +190,9 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    id="permissionInput-{{ index+5 }}"
+                                                    :id="`permissionInput-${
+                                                        index + 5
+                                                    }`"
                                                     v-model="form.permissions"
                                                     :value="index + 5"
                                                     :checked="
@@ -215,7 +217,9 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    id="permissionInput-{{ index+10 }}"
+                                                    :id="`permissionInput-${
+                                                        index + 10
+                                                    }`"
                                                     v-model="form.permissions"
                                                     :value="index + 10"
                                                     :checked="
@@ -240,7 +244,9 @@ const submit = () => {
                                                 class="text-md text-gray-900 font-semibold px-6 py-4"
                                             >
                                                 <Checkbox
-                                                    id="permissionInput-{{ index+15 }}"
+                                                    :id="`permissionInput-${
+                                                        index + 15
+                                                    }`"
                                                     v-model="form.permissions"
                                                     :value="index + 15"
                                                     :checked="
@@ -263,7 +269,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-6 flex lg:justify-end max-w-2xl">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,

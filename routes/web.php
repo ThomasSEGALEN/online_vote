@@ -3,6 +3,7 @@
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ExportImportController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LabelSetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SessionController;
@@ -74,6 +75,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sessions/preupdate/{session}', [SessionController::class, 'preupdate'])->name('sessions.preupdate');
     Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
+
+    Route::post('/label-sets/store', [LabelSetController::class, 'store'])->name('labelSets.store');
+    Route::put('/label-sets/{labelSet}', [LabelSetController::class, 'update'])->name('labelSets.update');
+    Route::delete('/label-sets/{labelSet}', [LabelSetController::class, 'destroy'])->name('labelSets.destroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -8,7 +8,6 @@ use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Session;
 use App\Models\Status;
-use App\Models\Vote;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,6 +46,7 @@ class SessionController extends Controller
                             'start_date' => $vote->start_date,
                             'end_date' => $vote->end_date,
                             'status_id' => $vote->status_id,
+                            'type_id' => $vote->type_id,
                             'users' => $vote->users->map(fn ($user) => [
                                 'id' => $user->id,
                                 'name' => $user->last_name . ' ' . $user->first_name

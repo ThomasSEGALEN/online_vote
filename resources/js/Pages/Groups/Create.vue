@@ -81,14 +81,11 @@ const submit = () => {
 
                     <div class="w-full mt-4">
                         <div>
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Utilisateurs
-                            </span>
+                            <InputLabel for="users" value="Utilisateurs" />
 
                             <div class="mt-1 max-w-md">
                                 <Multiselect
+                                    id="users"
                                     v-model="form.users"
                                     mode="multiple"
                                     :multiple-label="
@@ -128,7 +125,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-6 flex lg:justify-end max-w-md">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,
