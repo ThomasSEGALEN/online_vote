@@ -131,7 +131,6 @@ class RoleService
      */
     public function destroy(Role $role)
     {
-        $role->permissions()->detach($role->permissions()->pluck('id')->toArray());
         $role->delete();
     }
 }

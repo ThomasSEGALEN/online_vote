@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\SessionPrestoreRequest;
 use App\Http\Requests\SessionPreupdateRequest;
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Document;
 use App\Models\Group;
+use App\Models\LabelSet;
 use App\Models\Session;
 use App\Models\Status;
 use App\Models\User;
@@ -19,9 +19,30 @@ use Illuminate\Support\Collection;
 class SessionService
 {
     /**
+     * List answers grouped by label data.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function mapAnswers(): Collection
+    {
+        return LabelSet::orderBy('id')->get()->map(
+            fn ($labelSet) => [
+                'id' => $labelSet->id,
+                'name' => $labelSet->name,
+                'answers' => $labelSet->answers->map(
+                    fn ($answer) => [
+                        'name' => $answer->name,
+                        'color' => $answer->color
+                    ]
+                )
+            ]
+        );
+    }
+
+    /**
      * List users data.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function mapUsers(): Collection
     {
@@ -104,6 +125,7 @@ class SessionService
                         'status_id' => $session->status_id
                     ]
                 ),
+            'labelSets' => $this->mapAnswers(),
             'statuses' => $this->mapStatuses(),
             'filters' => $request->only('search'),
             'can' => [
@@ -330,7 +352,6 @@ class SessionService
      */
     public function destroy(Session $session)
     {
-        $session->users()->detach($session->users()->pluck('id')->toArray());
         $session->delete();
     }
 }
