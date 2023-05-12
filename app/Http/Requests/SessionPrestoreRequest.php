@@ -28,7 +28,7 @@ class SessionPrestoreRequest extends FormRequest
             'status' => ['required', 'integer'],
             'documents' => ['nullable', 'array', 'max_size:8192'],
             'documents.*' => ['file'],
-            'amount' => ['required', 'integer']
+            'amount' => ['required', 'integer', 'min:1']
         ];
     }
 }
