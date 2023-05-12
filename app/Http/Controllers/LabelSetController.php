@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LabelSetStoreRequest;
 use App\Models\LabelSet;
 use App\Services\LabelSetService;
+use Illuminate\Http\RedirectResponse;
 
 class LabelSetController extends Controller
 {
@@ -14,8 +15,11 @@ class LabelSetController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param \App\Http\Requests\LabelSetStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LabelSetStoreRequest $request)
+    public function store(LabelSetStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', LabelSet::class);
 
@@ -26,8 +30,11 @@ class LabelSetController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param \App\Models\LabelSet $labelSet
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(LabelSet $labelSet)
+    public function destroy(LabelSet $labelSet): RedirectResponse
     {
         $this->authorize('delete', $labelSet);
 
