@@ -195,14 +195,11 @@ const submit = () => {
 
                     <div class="w-full mt-4 lg:ml-8 lg:mt-0 max-w-md">
                         <div>
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Rôles
-                            </span>
+                            <InputLabel for="role" value="Rôles" />
 
                             <div class="mt-1">
                                 <Multiselect
+                                    id="role"
                                     v-model="form.role"
                                     mode="single"
                                     label="name"
@@ -239,14 +236,11 @@ const submit = () => {
                         </div>
 
                         <div class="mt-4">
-                            <span
-                                class="block font-medium text-md text-gray-700"
-                            >
-                                Groupes
-                            </span>
+                            <InputLabel for="groups" value="Groupes" />
 
                             <div class="mt-1">
                                 <Multiselect
+                                    id="groups"
                                     v-model="form.groups"
                                     mode="tags"
                                     label="name"
@@ -284,7 +278,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-6 flex lg:justify-end">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,

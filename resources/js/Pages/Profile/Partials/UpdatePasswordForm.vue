@@ -19,7 +19,7 @@ const form = useForm({
 const updatePassword = () => {
     form.put(route("password.update"), {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+        onFinish: () => form.reset(),
         onError: () => {
             if (form.errors.password) {
                 form.reset("password", "password_confirmation");
@@ -50,7 +50,12 @@ const updatePassword = () => {
 
             <form class="mt-6 space-y-6" @submit.prevent="updatePassword">
                 <div>
-                    <input hidden type="text" autocomplete="username" />
+                    <input
+                        id="hidden"
+                        hidden
+                        type="text"
+                        autocomplete="username"
+                    />
 
                     <InputLabel
                         for="current_password"

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SessionPrestoreRequest extends FormRequest
+class LabelSetStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class SessionPrestoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'unique:sessions'],
-            'users' => ['required', 'array'],
-            'users.*' => ['integer'],
-            'status' => ['required', 'integer'],
-            'documents' => ['nullable', 'array', 'max_size:8192'],
-            'documents.*' => ['file'],
+            'label' => ['required', 'string', 'unique:label_sets,name'],
+            'names' => ['required', 'array'],
+            'names.*' => ['required', 'string'],
             'amount' => ['required', 'integer', 'min:1']
         ];
     }

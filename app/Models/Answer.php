@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Answer extends Model
 {
@@ -14,5 +15,15 @@ class Answer extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['label', 'name', 'color'];
+    protected $fillable = ['name', 'color', 'label_set_id'];
+
+    /**
+     * Label set relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function labelSet(): BelongsTo
+    {
+        return $this->belongsTo(LabelSet::class);
+    }
 }

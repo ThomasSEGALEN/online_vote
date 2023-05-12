@@ -18,9 +18,6 @@ import TextInput from "@/Components/TextInput.vue";
 import UpdateIcon from "@/Components/UpdateIcon.vue";
 
 const props = defineProps({
-    showCreateModal: Boolean,
-    showViewModal: Boolean,
-    showDeleteModal: Boolean,
     roles: {
         type: Object,
         default: () => {
@@ -110,14 +107,14 @@ const importFile = (event: Event) => {
                     class="flex items-center space-x-2 mb-2"
                 >
                     <Link
-                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
+                        class="inline-flex px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                         :href="route('roles.create')"
                     >
                         Nouveau rôle
                     </Link>
 
                     <button
-                        class="inline-flex items-center px-2 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
+                        class="inline-flex px-2 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
                         @click="clickFile"
                     >
                         <FileImportIcon />
@@ -139,6 +136,7 @@ const importFile = (event: Event) => {
                 </div>
 
                 <TextInput
+                    id="search"
                     v-model="search"
                     class="block mb-2"
                     type="text"
