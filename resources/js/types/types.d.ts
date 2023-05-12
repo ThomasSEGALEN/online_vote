@@ -75,6 +75,19 @@ declare interface VoteType {
     name: string;
 }
 
+declare interface LabelSet {
+    id: number;
+    name: string;
+    answers: Array<Answer>;
+}
+
+declare interface Answer {
+    id: number;
+    name: string;
+    color: string;
+    label_set_id: string;
+}
+
 declare interface Link {
     active: boolean;
     label: string;
