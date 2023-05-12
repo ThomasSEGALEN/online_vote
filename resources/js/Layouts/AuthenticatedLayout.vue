@@ -12,6 +12,7 @@ import Navbar from "@/Components/Navbar.vue";
                     <slot name="header" />
                 </div>
             </header>
+
             <slot />
         </main>
     </div>
