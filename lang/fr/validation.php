@@ -188,8 +188,10 @@ return [
         'title' => 'Le titre',
         'description' => 'La description',
         'documents' => 'Les documents',
+        'amount' => 'Le montant',
         'votes.title.*' => 'Le titre',
-        'votes.users.*' => 'Les utilisateurs'
+        'votes.users.*' => 'Les utilisateurs',
+        'names.*' => 'Le nom',
     ],
 
 ];
