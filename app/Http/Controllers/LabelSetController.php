@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LabelSetStoreRequest;
-use App\Models\Answer;
 use App\Models\LabelSet;
+use App\Services\LabelSetService;
 
 class LabelSetController extends Controller
 {
+    public function __construct(private LabelSetService $labelSetService)
+    {
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -15,19 +19,9 @@ class LabelSetController extends Controller
     {
         $this->authorize('create', LabelSet::class);
 
-        $labelSet = LabelSet::create([
-            'name' => $request->label
-        ]);
+        $labelSet = $this->labelSetService->store($request);
 
-        for ($index = 0; $index < $request->amount; $index++) {
-            Answer::create([
-                'name' => $request->names[$index],
-                'color' => $request->colors[$index] ?? "#000000",
-                'label_set_id' => $labelSet->id
-            ]);
-        }
-
-        return to_route('sessions.index')->with('success', "Le jeu d'étiquettes $request->label a été créé avec succès");
+        return to_route('sessions.index')->with('success', "Le jeu d'étiquettes $labelSet->name a été créé avec succès");
     }
 
     /**
