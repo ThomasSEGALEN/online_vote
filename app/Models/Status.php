@@ -31,4 +31,14 @@ class Status extends Model
     {
         return $this->hasMany(Session::class);
     }
+
+    /**
+     * Vote relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
 }
