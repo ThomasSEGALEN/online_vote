@@ -28,6 +28,16 @@ class VoteResult extends Model
     }
 
     /**
+     * Vote relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function vote(): BelongsTo
+    {
+        return $this->belongsTo(Vote::class);
+    }
+
+    /**
      * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

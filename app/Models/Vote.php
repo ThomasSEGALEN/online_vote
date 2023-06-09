@@ -40,11 +40,11 @@ class Vote extends Model
     /**
      * Result relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function results(): BelongsToMany
+    public function results(): HasMany
     {
-        return $this->belongsToMany(VoteResult::class);
+        return $this->hasMany(VoteResult::class);
     }
 
     /**
@@ -76,7 +76,7 @@ class Vote extends Model
     {
         return $this->belongsTo(VoteType::class);
     }
-    
+
     /**
      * User relationship.
      *
