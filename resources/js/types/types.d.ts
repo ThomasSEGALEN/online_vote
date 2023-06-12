@@ -85,7 +85,7 @@ declare interface Answer {
     id: number;
     name: string;
     color: string;
-    label_set_id: string;
+    label_set_id: number;
 }
 
 declare interface Link {
