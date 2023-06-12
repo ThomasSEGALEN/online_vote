@@ -92,10 +92,10 @@ const getVoteUsers = (users: Array<User>, index: number): Array<string> => [
     ),
 ];
 
-const nextStep = () =>
-    form
-        .transform((data) => ({ ...data, _method: "put" }))
-        .post(route("sessions.preupdate", session.value.id), {
+const nextStep = () => {
+    form.transform((data) => ({ ...data, _method: "put" })).post(
+        route("sessions.preupdate", session.value.id),
+        {
             onError: () => {
                 if (form.errors.users) {
                     form.reset("users");
@@ -107,7 +107,11 @@ const nextStep = () =>
                 }
             },
             onSuccess: () => formStep.value++,
-        });
+        }
+    );
+
+    console.log(formStep.value);
+};
 
 const previousStep = () => formStep.value--;
 
@@ -225,7 +229,6 @@ const submit = () => {
 
                                     <TextInput
                                         id="start_date"
-                                        ref="startDateInput"
                                         v-model="form.start_date"
                                         type="datetime-local"
                                         class="mt-1 block w-full"
@@ -245,7 +248,6 @@ const submit = () => {
 
                                     <TextInput
                                         id="end_date"
-                                        ref="endDateInput"
                                         v-model="form.end_date"
                                         type="datetime-local"
                                         class="mt-1 block w-full"
@@ -520,7 +522,6 @@ const submit = () => {
 
                                         <TextInput
                                             :id="`vote_title-${voteIndex}`"
-                                            ref="titleInput"
                                             v-model="
                                                 form.votes.title[voteIndex]
                                             "
@@ -547,7 +548,6 @@ const submit = () => {
 
                                         <TextareaInput
                                             :id="`vote_description-${voteIndex}`"
-                                            ref="descriptionInput"
                                             v-model="
                                                 form.votes.description[
                                                     voteIndex
@@ -577,7 +577,6 @@ const submit = () => {
 
                                             <TextInput
                                                 :id="`vote_start_date-${voteIndex}`"
-                                                ref="startDateInput"
                                                 v-model="form.start_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -601,7 +600,6 @@ const submit = () => {
 
                                             <TextInput
                                                 :id="`vote_end_date-${voteIndex}`"
-                                                ref="endDateInput"
                                                 v-model="form.end_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -629,7 +627,6 @@ const submit = () => {
                                         <div class="mt-1 max-w-md">
                                             <Multiselect
                                                 :id="`vote_users-${voteIndex}`"
-                                                ref="usersInput"
                                                 v-model="
                                                     form.votes.users[voteIndex]
                                                 "

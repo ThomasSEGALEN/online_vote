@@ -7,6 +7,7 @@ export default function sessionForm({
     end_date = "",
     status = 1,
     users = [],
+    label_sets = [],
     documents = null,
     amount = 1,
     votes = {
@@ -17,6 +18,8 @@ export default function sessionForm({
         status: [],
         type: [],
         users: [],
+        label_sets: [],
+        answers: [],
     },
 }: {
     title?: string;
@@ -25,6 +28,7 @@ export default function sessionForm({
     end_date?: string;
     status?: number;
     users?: Array<number>;
+    label_sets?: Array<number>;
     documents?: FileList | null;
     amount?: number;
     votes?: {
@@ -35,6 +39,8 @@ export default function sessionForm({
         status: Array<number>;
         type: Array<number>;
         users: Array<Array<number>>;
+        label_sets: Array<Array<number>>;
+        answers: Array<Array<{ name: string; color: string }>>;
     };
 }) {
     const form = useForm({
@@ -44,6 +50,7 @@ export default function sessionForm({
         end_date: end_date,
         status: status,
         users: users,
+        label_sets: label_sets,
         documents: documents,
         amount: amount,
         votes: votes,

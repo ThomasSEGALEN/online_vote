@@ -125,8 +125,6 @@ const deleteAnswer = () => {
     form.reset();
     closeAnswerDeletionModal();
 };
-console.log(props.labelSets);
-
 const deleteSession = () => {
     router.delete(`sessions/${sessionId.value}`, {
         onSuccess: () => closeModal(),

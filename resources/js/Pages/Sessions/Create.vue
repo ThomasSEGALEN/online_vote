@@ -7,11 +7,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import CaretDownIcon from "@/Components/CaretDownIcon.vue";
 import CaretUpIcon from "@/Components/CaretUpIcon.vue";
+import ColorInput from "@/Components/ColorInput.vue";
 import FileInput from "@/Components/FileInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import MinusIcon from "@/Components/MinusIcon.vue";
 import Multiselect from "@vueform/multiselect";
 import NumberInput from "@/Components/NumberInput.vue";
+import PlusIcon from "@/Components/PlusIcon.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
@@ -31,8 +34,12 @@ const props = defineProps({
         type: Array<Status>,
         default: () => [],
     },
-    vote_types: {
+    voteTypes: {
         type: Array<VoteType>,
+        default: () => [],
+    },
+    labelSets: {
+        type: Array<LabelSet>,
         default: () => [],
     },
 });
@@ -41,6 +48,7 @@ const formStep = ref<number>(1);
 const amountInput = ref<HTMLInputElement>();
 const titleInput = ref<HTMLInputElement>();
 const usersInput = ref<HTMLInputElement>();
+const labelSetsInput = ref<HTMLInputElement>();
 const showParticipants = ref<boolean>(false);
 const currentVote = ref<number>(0);
 
@@ -50,7 +58,8 @@ const form = sessionForm({});
 
 const hasError = (index: number): boolean =>
     form.errors[`votes.title.${index}` as keyof object] ||
-    form.errors[`votes.users.${index}` as keyof object];
+    form.errors[`votes.users.${index}` as keyof object] ||
+    form.errors[`votes.label_sets.${index}` as keyof object];
 
 const getSessionUsers = (): Array<string> => [
     ...new Set(
@@ -76,12 +85,24 @@ const getVoteUsers = (index: number): Array<string> => [
     ),
 ];
 
+const addAnswer = (voteIndex: number) =>
+    form.votes.answers[voteIndex].push({ name: "", color: "" });
+const removeAnswer = (voteIndex: number, index: number) => {
+    if (form.votes.answers[voteIndex].length === 1) return;
+
+    form.votes.answers[voteIndex].splice(index, 1);
+};
+
 const nextStep = () =>
     form.post(route("sessions.prestore"), {
         onError: () => {
             if (form.errors.users) {
                 form.reset("users");
                 usersInput.value?.focus();
+            }
+            if (form.errors.label_sets) {
+                form.reset("label_sets");
+                labelSetsInput.value?.focus();
             }
             if (form.errors.title) {
                 form.reset("title");
@@ -105,6 +126,8 @@ const nextStep = () =>
                 form.votes.end_date.push(form.end_date);
                 form.votes.status.push(form.status);
                 form.votes.type.push(1);
+                form.votes.label_sets.push(form.label_sets);
+                form.votes.answers.push([{ name: "", color: "" }]);
             }
 
             formStep.value++;
@@ -180,6 +203,7 @@ const submit = () => form.post(route("sessions.store"));
 
                             <NumberInput
                                 id="amount"
+                                ref="amountInput"
                                 v-model.number="form.amount"
                                 :min="1"
                                 :max="20"
@@ -304,6 +328,52 @@ const submit = () => form.post(route("sessions.store"));
 
                         <div class="w-full mt-4 lg:mt-0 max-w-md">
                             <div>
+                                <InputLabel
+                                    for="label_sets"
+                                    value="Jeu d'étiquettes"
+                                />
+
+                                <div class="mt-1 max-w-md">
+                                    <Multiselect
+                                        id="label_sets"
+                                        ref="labelSetsInput"
+                                        v-model="form.label_sets"
+                                        mode="tags"
+                                        label="name"
+                                        value-prop="id"
+                                        :close-on-select="false"
+                                        :searchable="true"
+                                        no-results-text="Aucun résultat"
+                                        no-options-text="Aucune option"
+                                        :options="labelSets"
+                                        :classes="{
+                                            container:
+                                                'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
+                                            containerActive:
+                                                'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
+                                            tag: 'bg-indigo-100 text-indigo-600 text-sm font-semibold py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1',
+                                            tagsSearch:
+                                                'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
+                                            clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                            option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                            optionPointed:
+                                                'text-gray-800 bg-gray-100',
+                                            optionSelected:
+                                                'text-white bg-indigo-500',
+                                            optionSelectedPointed:
+                                                'text-white bg-indigo-500 opacity-90',
+                                        }"
+                                        required
+                                    />
+                                </div>
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.label_sets"
+                                />
+                            </div>
+
+                            <div class="mt-4">
                                 <InputLabel for="users" value="Utilisateurs" />
 
                                 <div class="mt-1 max-w-md">
@@ -445,7 +515,8 @@ const submit = () => form.post(route("sessions.store"));
                                             : 'text-gray-700'
                                     "
                                 >
-                                    {{ form.title }} - {{ voteIndex + 1 }}
+                                    {{ form.title }} :
+                                    {{ form.votes.title[voteIndex] }}
                                 </span>
                             </div>
                         </button>
@@ -499,7 +570,7 @@ const submit = () => form.post(route("sessions.store"));
 
                                     <div class="mt-1 space-x-4">
                                         <div
-                                            v-for="vote_type in vote_types"
+                                            v-for="vote_type in voteTypes"
                                             :key="vote_type.id"
                                             class="inline-flex items-center space-x-1 ml-0.5"
                                         >
@@ -539,7 +610,6 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <TextInput
                                             :id="`vote_title-${voteIndex}`"
-                                            ref="titleInput"
                                             v-model="
                                                 form.votes.title[voteIndex]
                                             "
@@ -566,7 +636,6 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <TextareaInput
                                             :id="`vote_description-${voteIndex}`"
-                                            ref="descriptionInput"
                                             v-model="
                                                 form.votes.description[
                                                     voteIndex
@@ -596,7 +665,6 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <TextInput
                                                 :id="`vote_start_date-${voteIndex}`"
-                                                ref="startDateInput"
                                                 v-model="form.start_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -620,7 +688,6 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <TextInput
                                                 :id="`vote_end_date-${voteIndex}`"
-                                                ref="endDateInput"
                                                 v-model="form.end_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -636,10 +703,131 @@ const submit = () => form.post(route("sessions.store"));
                                             />
                                         </div>
                                     </div>
+
+                                    <div class="mt-4">
+                                        <span
+                                            class="block font-medium text-md text-gray-700"
+                                        >
+                                            Réponses
+                                        </span>
+
+                                        <div class="space-y-2">
+                                            <template
+                                                v-for="(answer, index) in form
+                                                    .votes.answers[voteIndex]
+                                                    .length"
+                                                :key="index"
+                                            >
+                                                <div
+                                                    class="flex flex-row space-x-1 items-center"
+                                                >
+                                                    <TextInput
+                                                        :id="`vote_answers-${voteIndex}-${index}`"
+                                                        v-model="
+                                                            form.votes.answers[
+                                                                voteIndex
+                                                            ][index].name
+                                                        "
+                                                        type="text"
+                                                        class="mt-1 block w-full"
+                                                    />
+
+                                                    <ColorInput
+                                                        v-model="
+                                                            form.votes.answers[
+                                                                voteIndex
+                                                            ][index].color
+                                                        "
+                                                        class="h-10"
+                                                    />
+
+                                                    <SecondaryButton
+                                                        @click="
+                                                            addAnswer(voteIndex)
+                                                        "
+                                                    >
+                                                        <PlusIcon />
+                                                    </SecondaryButton>
+
+                                                    <SecondaryButton
+                                                        @click="
+                                                            removeAnswer(
+                                                                voteIndex,
+                                                                index
+                                                            )
+                                                        "
+                                                    >
+                                                        <MinusIcon />
+                                                    </SecondaryButton>
+                                                </div>
+                                            </template>
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="
+                                                form.errors[
+                                                    `votes.description.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="w-full mt-4 lg:mt-0 max-w-md">
                                     <div>
+                                        <InputLabel
+                                            :for="`vote_label_sets-${voteIndex}`"
+                                            value="Jeu d'étiquettes"
+                                        />
+
+                                        <div class="mt-1 max-w-md">
+                                            <Multiselect
+                                                :id="`vote_label_sets-${voteIndex}`"
+                                                v-model="
+                                                    form.votes.label_sets[
+                                                        voteIndex
+                                                    ]
+                                                "
+                                                mode="tags"
+                                                label="name"
+                                                value-prop="id"
+                                                :close-on-select="false"
+                                                :searchable="true"
+                                                no-results-text="Aucun résultat"
+                                                no-options-text="Aucune option"
+                                                :options="labelSets"
+                                                :classes="{
+                                                    container:
+                                                        'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer shadow-sm border-2 border-gray-300 rounded-md bg-white text-base leading-snug outline-none',
+                                                    containerActive:
+                                                        'ring-2 ring-indigo-100 border-indigo-500 outline-none transition duration-150 ease-in-out',
+                                                    tag: 'bg-indigo-100 text-indigo-600 text-sm font-semibold py-0.5 pl-2 rounded mr-1 mb-1 flex items-center whitespace-nowrap rtl:pl-0 rtl:pr-2 rtl:mr-0 rtl:ml-1',
+                                                    tagsSearch:
+                                                        'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full text-gray-700',
+                                                    clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-100 rtl:pr-0 rtl:pl-3.5',
+                                                    option: 'flex items-center justify-start box-border text-left cursor-pointer text-base leading-snug py-2 px-3',
+                                                    optionPointed:
+                                                        'text-gray-800 bg-gray-100',
+                                                    optionSelected:
+                                                        'text-white bg-indigo-500',
+                                                    optionSelectedPointed:
+                                                        'text-white bg-indigo-500 opacity-90',
+                                                }"
+                                            />
+                                        </div>
+
+                                        <InputError
+                                            class="mt-2"
+                                            :message="
+                                                form.errors[
+                                                    `votes.label_sets.${voteIndex}` as keyof object
+                                                ]
+                                            "
+                                        />
+                                    </div>
+
+                                    <div class="mt-4">
                                         <InputLabel
                                             :for="`vote_users-${voteIndex}`"
                                             value="Utilisateurs"
@@ -648,7 +836,6 @@ const submit = () => form.post(route("sessions.store"));
                                         <div class="mt-1 max-w-md">
                                             <Multiselect
                                                 :id="`vote_users-${voteIndex}`"
-                                                ref="usersInput"
                                                 v-model="
                                                     form.votes.users[voteIndex]
                                                 "

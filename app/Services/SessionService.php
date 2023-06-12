@@ -12,6 +12,7 @@ use App\Models\Session;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\Vote;
+use App\Models\VoteAnswer;
 use App\Models\VoteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -23,7 +24,7 @@ class SessionService
      *
      * @return \Illuminate\Support\Collection
      */
-    public function mapAnswers(): Collection
+    public function mapLabelSets(): Collection
     {
         return LabelSet::orderBy('id')->get()->map(
             fn ($labelSet) => [
@@ -125,7 +126,7 @@ class SessionService
                         'status_id' => $session->status_id
                     ]
                 ),
-            'labelSets' => $this->mapAnswers(),
+            'labelSets' => $this->mapLabelSets(),
             'statuses' => $this->mapStatuses(),
             'filters' => $request->only('search'),
             'can' => [
@@ -147,7 +148,8 @@ class SessionService
             'users' => $this->mapUsers(),
             'groupedUsers' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatuses(),
-            'vote_types' => $this->mapVoteTypes()
+            'voteTypes' => $this->mapVoteTypes(),
+            'labelSets' => $this->mapLabelSets(),
         ];
     }
 
@@ -159,12 +161,6 @@ class SessionService
      */
     public function store(SessionStoreRequest $request): Session
     {
-        for ($index = 0; $index < $request->amount; $index++) {
-            if (Vote::where('title', $request->votes['title'][$index])->first()) {
-                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
-            }
-        }
-
         $session = Session::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -199,6 +195,26 @@ class SessionService
             ]);
 
             $vote->users()->attach($request->votes['users'][$index]);
+
+            $labelSetAnswers = LabelSet::where('id', $request->votes['label_sets'][$index])->first()->answers;
+
+            foreach ($labelSetAnswers as $answer) {
+                VoteAnswer::create([
+                    'name' => $answer->name,
+                    'color' => $answer->color  ?? "#000000",
+                    'vote_id' => $vote->id
+                ]);
+            }
+
+            if (!empty($request->votes['answers'][$index]['name'])) {
+                foreach ($request->votes['answers'][$index] as $answer) {
+                    VoteAnswer::create([
+                        'name' => $answer['name'],
+                        'color' => $answer['color']  ?? "#000000",
+                        'vote_id' => $vote->id
+                    ]);
+                }
+            }
         }
 
         return $session;
@@ -294,11 +310,11 @@ class SessionService
             $request->validate(['title' => ['required', 'string', 'unique:sessions']]);
         }
 
-        foreach ($request->session->votes as $key => $vote) {
-            if (($request->votes['title'][$key] !== $vote->title) && Vote::where('title', $request->votes['title'][$key])->first()) {
-                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
-            }
-        }
+        // foreach ($request->session->votes as $key => $vote) {
+        //     if (($request->votes['title'][$key] !== $vote->title) && Vote::where('title', $request->votes['title'][$key])->first()) {
+        //         $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
+        //     }
+        // }
 
         $session->update([
             'title' => $request->title,
