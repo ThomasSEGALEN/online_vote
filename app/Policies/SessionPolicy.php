@@ -48,10 +48,9 @@ class SessionPolicy
      * Determine whether the user can update the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Session $session
      * @return bool
      */
-    public function update(User $user, Session $session): bool
+    public function update(User $user): bool
     {
         return $user->permissions->contains('name', 'updateSessions');
     }
@@ -60,10 +59,9 @@ class SessionPolicy
      * Determine whether the user can delete the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Session $session
      * @return bool
      */
-    public function delete(User $user, Session $session): bool
+    public function delete(User $user): bool
     {
         return $user->permissions->contains('name', 'deleteSessions');
     }
