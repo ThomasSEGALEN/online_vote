@@ -47,7 +47,7 @@ const form = userForm({
     email: user.value.email,
     role: user.value.role_id,
     groups: groups.value
-        .filter((group) => user.value.groups.includes(group.id))
+        .filter((group: Group) => user.value.groups.includes(group.id))
         .map((g) => g.id),
 });
 

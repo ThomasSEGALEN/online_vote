@@ -31,7 +31,9 @@ const { role, permissions } = toRefs(props);
 const form = roleForm({
     name: role.value.name,
     permissions: permissions.value
-        .filter((permission) => role.value.permissions.includes(permission.id))
+        .filter((permission: Permission) =>
+            role.value.permissions.includes(permission.id)
+        )
         .map((p) => p.id),
 });
 

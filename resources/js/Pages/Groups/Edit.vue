@@ -31,7 +31,7 @@ const { group, users } = toRefs(props);
 const form = groupForm({
     name: group.value.name,
     users: users.value
-        .filter((user) => group.value.users.includes(user.id))
+        .filter((user: User) => group.value.users.includes(user.id))
         .map((u) => u.id),
 });
 
