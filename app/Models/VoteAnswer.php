@@ -35,7 +35,7 @@ class VoteAnswer extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function votes(): BelongsTo
+    public function vote(): BelongsTo
     {
         return $this->belongsTo(Vote::class);
     }

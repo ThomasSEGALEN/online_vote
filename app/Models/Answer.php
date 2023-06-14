@@ -18,7 +18,7 @@ class Answer extends Model
     protected $fillable = ['name', 'color', 'label_set_id'];
 
     /**
-     * Label set relationship
+     * Label set relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

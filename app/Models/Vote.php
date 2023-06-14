@@ -28,13 +28,23 @@ class Vote extends Model
     ];
 
     /**
-     * Answer relationship.
+     * Answer relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function answers(): HasMany
     {
         return $this->hasMany(VoteAnswer::class);
+    }
+
+    /**
+     * Label set relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function labelSets(): BelongsToMany
+    {
+        return $this->belongsToMany(LabelSet::class);
     }
 
     /**
@@ -48,7 +58,7 @@ class Vote extends Model
     }
 
     /**
-     * Session relationship
+     * Session relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
