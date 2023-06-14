@@ -30,9 +30,7 @@ class SessionPreupdateRequest extends FormRequest
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
             'documents' => ['nullable', 'array', 'max_size:8192'],
-            'documents.*' => ['file'],
-            'label_sets' => ['required', 'array'],
-            'label_sets.*' => ['integer']
+            'documents.*' => ['file']
         ];
     }
 }

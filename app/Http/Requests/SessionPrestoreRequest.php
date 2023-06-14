@@ -32,7 +32,7 @@ class SessionPrestoreRequest extends FormRequest
             'documents' => ['nullable', 'array', 'max_size:8192'],
             'documents.*' => ['file'],
             'amount' => ['required', 'integer', 'min:1'],
-            'label_sets' => ['required', 'array'],
+            'label_sets' => ['nullable', 'array'],
             'label_sets.*' => ['integer']
         ];
     }

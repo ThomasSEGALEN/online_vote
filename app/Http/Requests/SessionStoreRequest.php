@@ -38,9 +38,9 @@ class SessionStoreRequest extends FormRequest
             'votes.users.*.*' => ['integer'],
             'votes.status.*' => ['required', 'integer'],
             'votes.type.*' => ['required', 'integer'],
-            'label_sets' => ['required', 'array'],
+            'label_sets' => ['nullable', 'array'],
             'label_sets.*' => ['integer'],
-            'votes.label_sets.*' => ['required', 'array'],
+            'votes.label_sets.*' => ['nullable', 'array'],
             'votes.label_sets.*.*' => ['integer']
         ];
     }
