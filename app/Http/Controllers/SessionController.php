@@ -24,12 +24,12 @@ class SessionController extends Controller
         return inertia('Home', [
             'sessions' =>
             Session::when(
-                $request->input('search'),
-                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
+                $request->input('status'),
+                fn ($query, $status) => $query->where('status_id', $status)
             )
                 ->orderBy('id')
                 ->paginate(20)
-                ->appends($request->only('search'))
+                ->appends($request->only('status'))
                 ->through(
                     fn ($session) =>
                     [
@@ -60,7 +60,8 @@ class SessionController extends Controller
             'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
                 'id' => $status->id,
                 'name' => $status->name
-            ])
+            ]),
+            'filters' => $request->only('status')
         ]);
     }
 

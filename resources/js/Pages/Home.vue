@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
+import { throttle } from "lodash";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import RadioInput from "@/Components/RadioInput.vue";
 
-defineProps({
+const props = defineProps({
     sessions: {
         type: Object,
         default: () => {
@@ -14,7 +18,26 @@ defineProps({
         type: Array<Status>,
         default: () => [],
     },
+    filters: {
+        type: Object,
+        default: () => {
+            return {};
+        },
+    },
 });
+
+const status = ref<number>(props.filters.status);
+
+watch(
+    status,
+    throttle((value) => {
+        router.get(
+            route("home"),
+            { status: value },
+            { preserveState: true, replace: true }
+        );
+    }, 500)
+);
 
 const { permissions } = usePage().props.auth;
 
@@ -34,20 +57,79 @@ const hasAccess = (session: Session): boolean =>
             </h2>
         </template>
 
-        <div
-            v-for="session in sessions.data as Array<Session>"
-            :key="session.id"
-        >
-            <Link :href="route('sessions.show', session.id)">
-                {{ session.title }}
-            </Link>
-            <br />
-            <template v-if="hasAccess(session)">
-                <b>Session data:</b> {{ session }}
-                <br />
-            </template>
+        <div class="p-4 md:p-6 space-y-6">
+            <div>
+                <span class="block font-medium text-md text-gray-700">
+                    Filtre
+                </span>
 
-            <b>hasAccess check:</b> {{ hasAccess(session) }}
+                <div class="mt-1 space-x-4">
+                    <div class="inline-flex items-center space-x-1">
+                        <RadioInput
+                            id="status-all"
+                            v-model.number="status"
+                            :value="0"
+                        />
+
+                        <InputLabel for="status-all" value="Tous" />
+                    </div>
+
+                    <div class="inline-flex items-center space-x-1">
+                        <RadioInput
+                            id="status-open"
+                            v-model.number="status"
+                            :value="1"
+                        />
+
+                        <InputLabel for="status-open" value="Ouvert" />
+                    </div>
+
+                    <div class="inline-flex items-center space-x-1">
+                        <RadioInput
+                            id="status-closed"
+                            v-model.number="status"
+                            :value="2"
+                        />
+
+                        <InputLabel for="status-closed" value="Fermé" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- {{ (sessions.data as Array<Session>).filter((data) => data.status_id === 2) }} -->
+            <div
+                v-for="session in sessions.data as Array<Session>"
+                :key="session.id"
+            >
+                <Link :href="route('sessions.show', session.id)">
+                    <div
+                        v-show="hasAccess(session)"
+                        class="bg-white p-6 rounded-lg shadow-lg"
+                    >
+                        <div class="flex justify-between">
+                            <h2 class="text-2xl font-bold mb-2 text-gray-800">
+                                {{ session.title }}
+                            </h2>
+                            <span
+                                class="text-md mb-2 text-gray-800"
+                                :class="
+                                    session.status_id === 1
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                "
+                            >
+                                {{
+                                    session.status_id === 1 ? "Ouvert" : "Fermé"
+                                }}
+                            </span>
+                        </div>
+
+                        <p class="text-gray-700">
+                            {{ session.description }}
+                        </p>
+                    </div>
+                </Link>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
