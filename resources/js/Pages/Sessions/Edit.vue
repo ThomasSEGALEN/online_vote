@@ -167,10 +167,6 @@ const submit = () => {
             </div>
         </template>
 
-        {{ form.users }}
-        ---
-        {{ form.votes.users[0] }}
-
         <div class="p-4 md:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div v-if="formStep === 1">
