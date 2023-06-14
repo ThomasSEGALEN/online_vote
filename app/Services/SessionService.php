@@ -195,19 +195,10 @@ class SessionService
             ]);
 
             $vote->users()->attach($request->votes['users'][$index]);
+            $vote->labelSets()->attach($request->votes['label_sets'][$index]);
 
-            $labelSetAnswers = LabelSet::where('id', $request->votes['label_sets'][$index])->first()->answers;
-
-            foreach ($labelSetAnswers as $answer) {
-                VoteAnswer::create([
-                    'name' => $answer->name,
-                    'color' => $answer->color  ?? "#000000",
-                    'vote_id' => $vote->id
-                ]);
-            }
-
-            if (!empty($request->votes['answers'][$index]['name'])) {
-                foreach ($request->votes['answers'][$index] as $answer) {
+            foreach ($request->votes['answers'][$index] as $answer) {
+                if (!empty($answer['name'])) {
                     VoteAnswer::create([
                         'name' => $answer['name'],
                         'color' => $answer['color']  ?? "#000000",
@@ -274,13 +265,18 @@ class SessionService
                         'name' => $answer->name,
                         'color' => $answer->color
                     ]),
+                    'label_sets' => $vote->labelSets->map(fn ($label_set) => [
+                        'id' => $label_set->id,
+                        'name' => $label_set->name
+                    ]),
                     'users' => $vote->users()->pluck('id')->toArray()
                 ]),
                 'users' => $session->users()->pluck('id')->toArray()
             ],
             'users' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatuses(),
-            'vote_types' => $this->mapVoteTypes()
+            'voteTypes' => $this->mapVoteTypes(),
+            'labelSets' => $this->mapLabelSets(),
         ];
     }
 
@@ -309,12 +305,6 @@ class SessionService
         if (($request->title !== $session->title) && Session::where('title', $request->title)->first()) {
             $request->validate(['title' => ['required', 'string', 'unique:sessions']]);
         }
-
-        // foreach ($request->session->votes as $key => $vote) {
-        //     if (($request->votes['title'][$key] !== $vote->title) && Vote::where('title', $request->votes['title'][$key])->first()) {
-        //         $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
-        //     }
-        // }
 
         $session->update([
             'title' => $request->title,
@@ -350,12 +340,23 @@ class SessionService
                 'description' => $request->votes['description'][$key],
                 'start_date' => $request->votes['start_date'][$key],
                 'end_date' => $request->votes['end_date'][$key],
-                'title' => $request->votes['title'][$key],
                 'status_id' => $request->votes['status'][$key],
                 'type_id' => $request->votes['type'][$key]
             ]);
 
             $vote->users()->sync($request->votes['users'][$key]);
+            $vote->labelSets()->sync($request->votes['label_sets'][$key]);
+            VoteAnswer::where('vote_id', $vote->id)->delete();
+
+            foreach ($request->votes['answers'][$key] as $answer) {
+                if (!empty($answer['name'])) {
+                    VoteAnswer::create([
+                        'name' => $answer['name'],
+                        'color' => $answer['color']  ?? "#000000",
+                        'vote_id' => $vote->id
+                    ]);
+                }
+            }
         }
 
         return $session;

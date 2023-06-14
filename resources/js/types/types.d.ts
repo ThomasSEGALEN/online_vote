@@ -63,6 +63,8 @@ declare interface Vote {
     start_date: Date;
     end_date: Date;
     users: Array<number>;
+    answers: Array<Answer>;
+    label_sets: Array<LabelSet>;
     status_id: number;
     type_id: number;
     created_at: Date;

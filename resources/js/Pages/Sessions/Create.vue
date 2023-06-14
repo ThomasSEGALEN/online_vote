@@ -87,6 +87,7 @@ const getVoteUsers = (index: number): Array<string> => [
 
 const addAnswer = (voteIndex: number) =>
     form.votes.answers[voteIndex].push({ name: "", color: "" });
+
 const removeAnswer = (voteIndex: number, index: number) => {
     if (form.votes.answers[voteIndex].length === 1) return;
 
@@ -570,21 +571,21 @@ const submit = () => form.post(route("sessions.store"));
 
                                     <div class="mt-1 space-x-4">
                                         <div
-                                            v-for="vote_type in voteTypes"
-                                            :key="vote_type.id"
+                                            v-for="voteType in voteTypes"
+                                            :key="voteType.id"
                                             class="inline-flex items-center space-x-1 ml-0.5"
                                         >
                                             <RadioInput
-                                                :id="`vote_type-${vote_type.id}-${voteIndex}`"
+                                                :id="`vote_type-${voteType.id}-${voteIndex}`"
                                                 v-model="
                                                     form.votes.type[voteIndex]
                                                 "
-                                                :value="vote_type.id"
+                                                :value="voteType.id"
                                             />
 
                                             <InputLabel
-                                                :for="`vote_type-${vote_type.id}-${voteIndex}`"
-                                                :value="vote_type.name"
+                                                :for="`vote_type-${voteType.id}-${voteIndex}`"
+                                                :value="voteType.name"
                                             />
                                         </div>
                                     </div>
@@ -766,7 +767,7 @@ const submit = () => form.post(route("sessions.store"));
                                                 class="mt-2"
                                                 :message="
                                                 form.errors[
-                                                    `votes.description.${voteIndex}` as keyof object
+                                                    `votes.answers.${voteIndex}` as keyof object
                                                 ]
                                             "
                                             />

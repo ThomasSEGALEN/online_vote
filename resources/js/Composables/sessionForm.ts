@@ -17,9 +17,9 @@ export default function sessionForm({
         end_date: [],
         status: [],
         type: [],
-        users: [],
         label_sets: [],
         answers: [],
+        users: [],
     },
 }: {
     title?: string;
@@ -38,9 +38,9 @@ export default function sessionForm({
         end_date: Array<string>;
         status: Array<number>;
         type: Array<number>;
-        users: Array<Array<number>>;
         label_sets: Array<Array<number>>;
         answers: Array<Array<{ name: string; color: string }>>;
+        users: Array<Array<number>>;
     };
 }) {
     const form = useForm({
