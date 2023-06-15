@@ -27,9 +27,10 @@ class SessionController extends Controller
                 $request->input('status'),
                 fn ($query, $status) => $query->where('status_id', $status)
             )
-                ->orderBy('id')
-                ->paginate(20)
-                ->appends($request->only('status'))
+                ->where('title', 'like', '%' . $request->input('search') . '%')
+                ->orderBy('status_id')
+                ->paginate(10)
+                ->appends($request->only(['status', 'search']))
                 ->through(
                     fn ($session) =>
                     [
@@ -54,14 +55,16 @@ class SessionController extends Controller
                             'allowed' => !$vote->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
                         ]),
                         'allowed' => !$session->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
-
                     ]
                 ),
             'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
                 'id' => $status->id,
                 'name' => $status->name
             ]),
-            'filters' => $request->only('status')
+            'filters' => [
+                $request->only('status'),
+                $request->only('search')
+            ]
         ]);
     }
 

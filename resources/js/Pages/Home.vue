@@ -7,6 +7,7 @@ import { Permission, Session, Status } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import RadioInput from "@/Components/RadioInput.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     sessions: {
@@ -28,13 +29,14 @@ const props = defineProps({
 });
 
 const status = ref<number>(props.filters.status);
+const search = ref<string>(props.filters.search);
 
 watch(
-    status,
-    throttle((value) => {
+    [status, search],
+    throttle(([statusValue, searchValue]) => {
         router.get(
             route("home"),
-            { status: value },
+            { status: statusValue, search: searchValue },
             { preserveState: true, replace: true }
         );
     }, 500)
@@ -59,42 +61,51 @@ const hasAccess = (session: Session): boolean =>
         </template>
 
         <div class="p-4 lg:p-6">
-            <div>
-                <span class="block font-medium text-md text-gray-700">
-                    Filtre
-                </span>
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="block font-medium text-md text-gray-700">
+                        Filtre
+                    </span>
 
-                <div class="mt-1 space-x-4">
-                    <div class="inline-flex items-center space-x-1">
-                        <RadioInput
-                            id="status-all"
-                            v-model.number="status"
-                            :value="0"
-                        />
+                    <div class="mt-1 space-x-4">
+                        <div class="inline-flex items-center space-x-1">
+                            <RadioInput
+                                id="status-all"
+                                v-model.number="status"
+                                :value="0"
+                            />
 
-                        <InputLabel for="status-all" value="Tous" />
-                    </div>
+                            <InputLabel for="status-all" value="Tous" />
+                        </div>
 
-                    <div class="inline-flex items-center space-x-1">
-                        <RadioInput
-                            id="status-open"
-                            v-model.number="status"
-                            :value="1"
-                        />
+                        <div class="inline-flex items-center space-x-1">
+                            <RadioInput
+                                id="status-open"
+                                v-model.number="status"
+                                :value="1"
+                            />
 
-                        <InputLabel for="status-open" value="Ouvert" />
-                    </div>
+                            <InputLabel for="status-open" value="Ouvert" />
+                        </div>
 
-                    <div class="inline-flex items-center space-x-1">
-                        <RadioInput
-                            id="status-closed"
-                            v-model.number="status"
-                            :value="2"
-                        />
+                        <div class="inline-flex items-center space-x-1">
+                            <RadioInput
+                                id="status-closed"
+                                v-model.number="status"
+                                :value="2"
+                            />
 
-                        <InputLabel for="status-closed" value="Fermé" />
+                            <InputLabel for="status-closed" value="Fermé" />
+                        </div>
                     </div>
                 </div>
+
+                <TextInput
+                    id="search"
+                    v-model="search"
+                    type="text"
+                    placeholder="Recherche"
+                />
             </div>
 
             <!-- {{ (sessions.data as Array<Session>).filter((data) => data.status_id === 2) }} -->
@@ -106,16 +117,15 @@ const hasAccess = (session: Session): boolean =>
                     <Link :href="route('sessions.show', session.id)">
                         <div
                             v-show="hasAccess(session)"
-                            class="flex flex-col bg-white p-6 rounded-lg shadow-lg"
+                            class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
                         >
                             <div class="flex flex-wrap justify-between">
-                                <h2
-                                    class="text-2xl font-bold mb-2 text-gray-800"
-                                >
+                                <h2 class="text-2xl font-bold text-gray-800">
                                     {{ session.title }}
                                 </h2>
+
                                 <span
-                                    class="text-md mb-2 text-gray-800"
+                                    class="text-md text-gray-800"
                                     :class="
                                         session.status_id === 1
                                             ? 'text-green-500'
@@ -130,9 +140,9 @@ const hasAccess = (session: Session): boolean =>
                                 </span>
                             </div>
 
-                            <p class="text-gray-700 break-all">
+                            <p class="text-gray-700 break-all mt-4">
                                 {{
-                                    session.description.length > 100
+                                    session.description?.length > 100
                                         ? session.description.substring(
                                               0,
                                               100
