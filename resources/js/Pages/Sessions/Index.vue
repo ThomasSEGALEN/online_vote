@@ -52,7 +52,7 @@ const props = defineProps({
     },
 });
 
-const search = ref<string>(props.filters?.search);
+const search = ref<string>(props.filters.search);
 const confirmingAnswerAction = ref<boolean>(false);
 const confirmingAnswerCreation = ref<boolean>(false);
 const confirmingAnswerDeletion = ref<boolean>(false);
@@ -404,7 +404,6 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                 <TextInput
                     id="search"
                     v-model="search"
-                    class="block mb-2"
                     type="text"
                     placeholder="Recherche"
                 />

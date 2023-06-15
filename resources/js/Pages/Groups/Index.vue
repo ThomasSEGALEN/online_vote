@@ -139,7 +139,6 @@ const importFile = (event: Event) => {
                 <TextInput
                     id="search"
                     v-model="search"
-                    class="block mb-2"
                     type="text"
                     placeholder="Recherche"
                 />
