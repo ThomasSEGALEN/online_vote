@@ -4,6 +4,7 @@ import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
 import { throttle } from "lodash";
+import { Role } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import DeleteIcon from "@/Components/DeleteIcon.vue";
@@ -100,7 +101,7 @@ const importFile = (event: Event) => {
             </h2>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 lg:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
                     v-if="can.createRoles"
@@ -232,7 +233,7 @@ const importFile = (event: Event) => {
 
             <Pagination
                 v-if="roles.total > roles.per_page"
-                class="hidden md:flex"
+                class="hidden lg:flex"
                 :to="roles.to"
                 :from="roles.from"
                 :total="roles.total"
@@ -241,7 +242,7 @@ const importFile = (event: Event) => {
 
             <ResponsivePagination
                 v-if="roles.total > roles.per_page"
-                class="flex md:hidden"
+                class="flex lg:hidden"
                 :to="roles.to"
                 :from="roles.from"
                 :total="roles.total"

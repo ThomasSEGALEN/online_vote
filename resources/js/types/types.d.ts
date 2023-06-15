@@ -1,4 +1,4 @@
-declare interface User {
+export interface User {
     id: number;
     last_name: string;
     first_name: string;
@@ -14,37 +14,37 @@ declare interface User {
     options: Array<{ id: number; name: string }>;
 }
 
-declare interface Role {
+export interface Role {
     id: number;
     name: string;
     created_at: Date;
     updated_at: Date;
 }
 
-declare interface Permission {
+export interface Permission {
     id: number;
     name: string;
 }
 
-declare interface Group {
+export interface Group {
     id: number;
     name: string;
     created_at: Date;
     updated_at: Date;
 }
 
-declare interface Civility {
+export interface Civility {
     id: number;
     label: string;
     name: string;
 }
 
-declare interface Status {
+export interface Status {
     id: number;
     name: string;
 }
 
-declare interface Session {
+export interface Session {
     id: number;
     title: string;
     description: string;
@@ -56,7 +56,7 @@ declare interface Session {
     allowed: boolean;
 }
 
-declare interface Vote {
+export interface Vote {
     id: number;
     title: string;
     description: string;
@@ -72,25 +72,25 @@ declare interface Vote {
     allowed: boolean;
 }
 
-declare interface VoteType {
+export interface VoteType {
     id: number;
     name: string;
 }
 
-declare interface LabelSet {
+export interface LabelSet {
     id: number;
     name: string;
     answers: Array<Answer>;
 }
 
-declare interface Answer {
+export interface Answer {
     id: number;
     name: string;
     color: string;
     label_set_id: number;
 }
 
-declare interface Link {
+export interface Link {
     active: boolean;
     label: string;
     url: string;

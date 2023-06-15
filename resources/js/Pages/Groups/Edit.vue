@@ -3,6 +3,7 @@ import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import groupForm from "@/Composables/groupForm";
+import { User } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import InputError from "@/Components/InputError.vue";
@@ -67,7 +68,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
                     <div class="flex flex-col w-full max-w-md">

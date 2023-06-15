@@ -2,7 +2,8 @@
 import { computed, nextTick, onMounted, onUpdated, ref, watch } from "vue";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import { isEmpty, throttle } from "lodash";
+import { throttle } from "lodash";
+import { LabelSet, Session, Status } from "@/types/types";
 import AnswerIcon from "@/Components/AnswerIcon.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import CaretUpIcon from "@/Components/CaretUpIcon.vue";
@@ -192,7 +193,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                     Création d'un jeu d'étiquettes
                 </h2>
 
-                <div class="mt-6 flex flex-col md:flex-row justify-between">
+                <div class="mt-6 flex flex-col lg:flex-row justify-between">
                     <div>
                         <InputLabel for="label" value="Label" />
 
@@ -208,7 +209,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                         <InputError class="mt-2" :message="form.errors.label" />
                     </div>
 
-                    <div class="mt-4 md:mt-0">
+                    <div class="mt-4 lg:mt-0">
                         <InputLabel for="amount" value="Nombre de réponses" />
 
                         <NumberInput
@@ -256,7 +257,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                 </div>
 
                 <div
-                    class="mt-6 inline-flex md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 justify-end"
+                    class="mt-6 inline-flex lg:flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4 justify-end"
                 >
                     <SecondaryButton @click="closeAnswerCreationModal">
                         Annuler
@@ -283,7 +284,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                     Suppression d'un jeu d'étiquettes
                 </h2>
 
-                <div class="mt-6 flex flex-col md:flex-row justify-between">
+                <div class="mt-6 flex flex-col lg:flex-row justify-between">
                     <div v-if="labelSets.length">
                         <div
                             v-for="(labelSet, index) in labelSets"
@@ -360,14 +361,14 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                 </div>
 
                 <div
-                    class="mt-6 inline-flex md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 justify-end"
+                    class="mt-6 inline-flex lg:flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4 justify-end"
                 >
                     <SecondaryButton @click="closeAnswerDeletionModal">
                         Annuler
                     </SecondaryButton>
 
                     <PrimaryButton
-                        v-if="!isEmpty(labelSets)"
+                        v-if="labelSets.length"
                         :class="{
                             'opacity-25': form.processing,
                         }"
@@ -379,7 +380,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
             </form>
         </Modal>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 lg:p-6">
             <div class="flex flex-wrap flex-row justify-between">
                 <div
                     v-if="can.createSessions"
@@ -541,7 +542,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
 
             <Pagination
                 v-if="sessions.total > sessions.per_page"
-                class="hidden md:flex"
+                class="hidden lg:flex"
                 :to="sessions.to"
                 :from="sessions.from"
                 :total="sessions.total"
@@ -550,7 +551,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
 
             <ResponsivePagination
                 v-if="sessions.total > sessions.per_page"
-                class="flex md:hidden"
+                class="flex lg:hidden"
                 :to="sessions.to"
                 :from="sessions.from"
                 :total="sessions.total"

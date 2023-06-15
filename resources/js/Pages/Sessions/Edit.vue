@@ -3,6 +3,7 @@ import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import sessionForm from "@/Composables/sessionForm";
+import { LabelSet, Status, User, Vote, VoteType } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import CaretDownIcon from "@/Components/CaretDownIcon.vue";
@@ -167,7 +168,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div v-if="formStep === 1">
                     <div>
@@ -243,7 +244,7 @@ const submit = () => {
                             </div>
 
                             <div
-                                class="mt-4 flex flex-col md:flex-row md:space-x-7"
+                                class="mt-4 flex flex-col lg:flex-row lg:space-x-7"
                             >
                                 <div>
                                     <InputLabel
@@ -264,7 +265,7 @@ const submit = () => {
                                     />
                                 </div>
 
-                                <div class="mt-4 md:mt-0">
+                                <div class="mt-4 lg:mt-0">
                                     <InputLabel
                                         for="end_date"
                                         value="Date de fin"
@@ -459,7 +460,7 @@ const submit = () => {
 
                         <div v-show="currentVote === voteIndex">
                             <div
-                                class="flex flex-col md:flex-row max-w-md justify-between"
+                                class="flex flex-col lg:flex-row max-w-md justify-between"
                             >
                                 <div>
                                     <span
@@ -497,7 +498,7 @@ const submit = () => {
                                     />
                                 </div>
 
-                                <div class="mt-4 md:mt-0">
+                                <div class="mt-4 lg:mt-0">
                                     <span
                                         class="block font-medium text-md text-gray-700"
                                     >
@@ -591,7 +592,7 @@ const submit = () => {
                                     </div>
 
                                     <div
-                                        class="mt-4 flex flex-col md:flex-row md:space-x-7"
+                                        class="mt-4 flex flex-col lg:flex-row lg:space-x-7"
                                     >
                                         <div>
                                             <InputLabel
@@ -616,7 +617,7 @@ const submit = () => {
                                             />
                                         </div>
 
-                                        <div class="mt-4 md:mt-0">
+                                        <div class="mt-4 lg:mt-0">
                                             <InputLabel
                                                 :for="`vote_end_date-${voteIndex}`"
                                                 value="Date de fin"
