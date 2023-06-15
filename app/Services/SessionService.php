@@ -109,10 +109,7 @@ class SessionService
     {
         return [
             'sessions' =>
-            Session::when(
-                $request->input('search'),
-                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
-            )
+            Session::where('title', 'like', '%' . $request->input('search') . '%')
                 ->orderBy('id')
                 ->paginate(20)
                 ->appends($request->only('search'))
