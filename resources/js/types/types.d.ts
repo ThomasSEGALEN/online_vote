@@ -90,7 +90,7 @@ export interface Answer {
     label_set_id: number;
 }
 
-export interface Link {
+export interface ILink {
     active: boolean;
     label: string;
     url: string;
