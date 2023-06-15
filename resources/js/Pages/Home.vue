@@ -30,6 +30,7 @@ const props = defineProps({
 
 const status = ref<number>(props.filters.status);
 const search = ref<string>(props.filters.search);
+const { permissions } = usePage().props.auth;
 
 watch(
     [status, search],
@@ -41,8 +42,6 @@ watch(
         );
     }, 500)
 );
-
-const { permissions } = usePage().props.auth;
 
 const hasAccess = (session: Session): boolean =>
     permissions.some(
@@ -108,51 +107,65 @@ const hasAccess = (session: Session): boolean =>
                 />
             </div>
 
-            <!-- {{ (sessions.data as Array<Session>).filter((data) => data.status_id === 2) }} -->
-            <div class="flex flex-col space-y-6 mt-4">
-                <template
-                    v-for="session in sessions.data as Array<Session>"
-                    :key="session.id"
+            <div class="mt-4">
+                <div
+                    v-if="(sessions.data as Array<Session>).filter((session: Session) => session.allowed == true).length"
                 >
-                    <Link :href="route('sessions.show', session.id)">
-                        <div
-                            v-show="hasAccess(session)"
-                            class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
-                        >
-                            <div class="flex flex-wrap justify-between">
-                                <h2 class="text-2xl font-bold text-gray-800">
-                                    {{ session.title }}
-                                </h2>
+                    <div
+                        v-for="session in sessions.data as Array<Session>"
+                        v-show="hasAccess(session)"
+                        :key="session.id"
+                        class="mb-4"
+                    >
+                        <Link :href="route('sessions.show', session.id)">
+                            <div
+                                class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
+                            >
+                                <div class="flex flex-wrap justify-between">
+                                    <h2
+                                        class="text-2xl font-bold text-gray-800"
+                                    >
+                                        {{ session.title }}
+                                    </h2>
 
-                                <span
-                                    class="text-md text-gray-800"
-                                    :class="
-                                        session.status_id === 1
-                                            ? 'text-green-500'
-                                            : 'text-red-500'
-                                    "
+                                    <span
+                                        class="block font-medium text-md"
+                                        :class="
+                                            session.status_id === 1
+                                                ? 'text-green-500'
+                                                : 'text-red-500'
+                                        "
+                                    >
+                                        {{
+                                            session.status_id === 1
+                                                ? "Ouvert"
+                                                : "Fermé"
+                                        }}
+                                    </span>
+                                </div>
+
+                                <p
+                                    class="block font-medium text-md text-gray-700 break-all mt-4"
                                 >
                                     {{
-                                        session.status_id === 1
-                                            ? "Ouvert"
-                                            : "Fermé"
+                                        session.description?.length > 100
+                                            ? session.description.substring(
+                                                  0,
+                                                  100
+                                              ) + "..."
+                                            : session.description
                                     }}
-                                </span>
+                                </p>
                             </div>
+                        </Link>
+                    </div>
+                </div>
 
-                            <p class="text-gray-700 break-all mt-4">
-                                {{
-                                    session.description?.length > 100
-                                        ? session.description.substring(
-                                              0,
-                                              100
-                                          ) + "..."
-                                        : session.description
-                                }}
-                            </p>
-                        </div>
-                    </Link>
-                </template>
+                <div v-else>
+                    <p class="block font-medium text-md text-gray-700">
+                        Aucune séance trouvée
+                    </p>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
