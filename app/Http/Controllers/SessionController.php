@@ -28,6 +28,12 @@ class SessionController extends Controller
                 fn ($query, $status) => $query->where('status_id', $status)
             )
                 ->where('title', 'like', '%' . $request->input('search') . '%')
+                ->whereHas(
+                    'users',
+                    fn ($query) => !$request->user()->permissions->contains('name', 'viewAnySessions')
+                        ? $query->where('users.id', $request->user()->id)
+                        : null
+                )
                 ->orderBy('status_id')
                 ->paginate(10)
                 ->appends($request->only(['status', 'search']))
@@ -54,7 +60,6 @@ class SessionController extends Controller
                             ]),
                             'allowed' => !$vote->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
                         ]),
-                        'allowed' => !$session->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
                     ]
                 ),
             'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
@@ -64,6 +69,11 @@ class SessionController extends Controller
             'filters' => [
                 $request->only('status'),
                 $request->only('search')
+            ],
+            'can' => [
+                'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
+                'deleteSessions' => $request->user()->permissions->contains('name', 'deleteSessions'),
+                'updateSessions' => $request->user()->permissions->contains('name', 'updateSessions'),
             ]
         ]);
     }

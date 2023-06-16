@@ -21,6 +21,7 @@ defineProps({
 
 <template>
     <Head title="Votes" />
+
     <AuthenticatedLayout>
         <template #header>
             <div class="inline-flex items-center">
@@ -51,6 +52,7 @@ defineProps({
 
         <div v-if="session.users.length">
             <span>Usernames :</span>
+
             <li
                 v-for="user in users
                     .filter((user: User) => session.users.includes(user.id))"

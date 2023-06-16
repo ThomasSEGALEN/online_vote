@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { throttle } from "lodash";
-import { Permission, Session, Status } from "@/types/types";
+import { Session, Status } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import Pagination from "@/Components/Pagination.vue";
 import RadioInput from "@/Components/RadioInput.vue";
+import ResponsivePagination from "@/Components/ResponsivePagination.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
@@ -26,11 +28,16 @@ const props = defineProps({
             return {};
         },
     },
+    can: {
+        type: Object,
+        default: () => {
+            return {};
+        },
+    },
 });
 
 const status = ref<number>(props.filters.status);
 const search = ref<string>(props.filters.search);
-const { permissions } = usePage().props.auth;
 
 watch(
     [status, search],
@@ -42,11 +49,6 @@ watch(
         );
     }, 500)
 );
-
-const hasAccess = (session: Session): boolean =>
-    permissions.some(
-        (permission: Permission) => permission.name === "viewSessions"
-    ) || session.allowed;
 </script>
 
 <template>
@@ -60,7 +62,7 @@ const hasAccess = (session: Session): boolean =>
         </template>
 
         <div class="p-4 lg:p-6">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-wrap flex-row items-center justify-between">
                 <div>
                     <span class="block font-medium text-md text-gray-700">
                         Filtre
@@ -109,19 +111,18 @@ const hasAccess = (session: Session): boolean =>
 
             <div class="mt-4">
                 <div
-                    v-if="(sessions.data as Array<Session>).filter((session: Session) => session.allowed == true).length"
+                    v-for="session in sessions.data as Array<Session>"
+                    :key="session.id"
+                    class="mb-4"
                 >
-                    <div
-                        v-for="session in sessions.data as Array<Session>"
-                        v-show="hasAccess(session)"
-                        :key="session.id"
-                        class="mb-4"
-                    >
-                        <Link :href="route('sessions.show', session.id)">
-                            <div
-                                class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
-                            >
-                                <div class="flex flex-wrap justify-between">
+                    <Link :href="route('sessions.show', session.id)">
+                        <div
+                            class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
+                        >
+                            <div class="flex flex-col justify-between">
+                                <div
+                                    class="flex flex-col md:flex-row justify-between"
+                                >
                                     <h2
                                         class="text-2xl font-bold text-gray-800"
                                     >
@@ -148,25 +149,37 @@ const hasAccess = (session: Session): boolean =>
                                     class="block font-medium text-md text-gray-700 break-all mt-4"
                                 >
                                     {{
-                                        session.description?.length > 100
+                                        session.description?.length > 200
                                             ? session.description.substring(
                                                   0,
-                                                  100
+                                                  200
                                               ) + "..."
                                             : session.description
                                     }}
                                 </p>
                             </div>
-                        </Link>
-                    </div>
-                </div>
-
-                <div v-else>
-                    <p class="block font-medium text-md text-gray-700">
-                        Aucune séance trouvée
-                    </p>
+                        </div>
+                    </Link>
                 </div>
             </div>
+
+            <Pagination
+                v-if="sessions.total > sessions.per_page"
+                class="hidden lg:flex"
+                :to="sessions.to"
+                :from="sessions.from"
+                :total="sessions.total"
+                :links="sessions.links"
+            />
+
+            <ResponsivePagination
+                v-if="sessions.total > sessions.per_page"
+                class="flex lg:hidden"
+                :to="sessions.to"
+                :from="sessions.from"
+                :total="sessions.total"
+                :links="sessions.links"
+            />
         </div>
     </AuthenticatedLayout>
 </template>
