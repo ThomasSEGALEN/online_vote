@@ -49,6 +49,17 @@ watch(
         );
     }, 500)
 );
+
+const getDate = (timestamp: Date) => {
+    if (!timestamp) return;
+
+    const date = new Date(timestamp);
+    let hours = date.getHours();
+    let minutes = date.getMinutes().toString().padStart(2, "0");
+    let finalDate = `${date.toLocaleDateString()} - ${hours}H${minutes}`;
+
+    return finalDate;
+};
 </script>
 
 <template>
@@ -133,8 +144,8 @@ watch(
                                         class="block font-medium text-md"
                                         :class="
                                             session.status_id === 1
-                                                ? 'text-green-500'
-                                                : 'text-red-500'
+                                                ? 'text-green-600'
+                                                : 'text-red-600'
                                         "
                                     >
                                         {{
@@ -145,18 +156,33 @@ watch(
                                     </span>
                                 </div>
 
-                                <p
-                                    class="block font-medium text-md text-gray-700 break-all mt-4"
-                                >
-                                    {{
-                                        session.description?.length > 200
-                                            ? session.description.substring(
-                                                  0,
-                                                  200
-                                              ) + "..."
-                                            : session.description
-                                    }}
-                                </p>
+                                <div class="flex flex-row justify-between">
+                                    <p
+                                        class="block font-medium text-md text-gray-700 break-all mt-4"
+                                    >
+                                        {{
+                                            session.description?.length > 200
+                                                ? session.description.substring(
+                                                      0,
+                                                      200
+                                                  ) + "..."
+                                                : session.description
+                                        }}
+                                    </p>
+
+                                    <div>
+                                        <span
+                                            class="block font-medium text-sm text-gray-700"
+                                        >
+                                            {{ getDate(session.start_date) }}
+                                        </span>
+                                        <span
+                                            class="block font-medium text-sm text-gray-700"
+                                        >
+                                            {{ getDate(session.end_date) }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </Link>
