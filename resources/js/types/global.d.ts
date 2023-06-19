@@ -1,4 +1,5 @@
 import type { Page, PageProps } from "@inertiajs/core";
+import { Civility, Group, Permission, Role } from "@/types/types";
 
 declare module "@inertiajs/core" {
     interface PageProps {
