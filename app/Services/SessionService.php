@@ -100,6 +100,57 @@ class SessionService
     }
 
     /**
+     * Display home page with a listing of the resource.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function home(Request $request): array
+    {
+        return [
+            'sessions' =>
+            Session::when(
+                $request->input('status'),
+                fn ($query, $status) => $query->where('status_id', $status)
+            )
+                ->where('title', 'like', '%' . $request->input('search') . '%')
+                ->whereHas(
+                    'users',
+                    fn ($query) => !$request->user()->permissions->contains('name', 'viewAnySessions')
+                        ? $query->where('users.id', $request->user()->id)
+                        : null
+                )
+                ->orderBy('status_id')
+                ->paginate(10)
+                ->appends($request->only(['status', 'search']))
+                ->through(
+                    fn ($session) =>
+                    [
+                        'id' => $session->id,
+                        'title' => $session->title,
+                        'description' => $session->description,
+                        'start_date' => $session->start_date,
+                        'end_date' => $session->end_date,
+                        'status_id' => $session->status_id,
+                    ]
+                ),
+            'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
+                'id' => $status->id,
+                'name' => $status->name
+            ]),
+            'filters' => [
+                $request->only('status'),
+                $request->only('search')
+            ],
+            'can' => [
+                'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
+                'deleteSessions' => $request->user()->permissions->contains('name', 'deleteSessions'),
+                'updateSessions' => $request->user()->permissions->contains('name', 'updateSessions'),
+            ]
+        ];
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request
@@ -192,7 +243,6 @@ class SessionService
             ]);
 
             $vote->users()->attach($request->votes['users'][$index]);
-            $vote->labelSets()->attach($request->votes['label_sets'][$index]);
 
             foreach ($request->votes['answers'][$index] as $answer) {
                 if (!empty($answer['name'])) {
@@ -203,6 +253,21 @@ class SessionService
                     ]);
                 }
             }
+
+            if (!empty($request->votes['label_sets'][$index])) {
+                foreach ($request->votes['label_sets'][$index] as $vote_label_set) {
+                    $label_set = LabelSet::where('id', $vote_label_set)->first();
+
+                    foreach ($label_set->answers as $answer) {
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id,
+                            'label_set_id' => $answer['id']
+                        ]);
+                    }
+                }
+            };
         }
 
         return $session;
@@ -228,9 +293,34 @@ class SessionService
                     'id' => $document->id,
                     'name' => $document->name,
                     'path' => public_path("documents/" . $document->path)
-                ])
+                ]),
+                'votes' => $session->votes->map(fn ($vote) => [
+                    'id' => $vote->id,
+                    'title' => $vote->title,
+                    'description' => $vote->description,
+                    'start_date' => $vote->start_date,
+                    'end_date' => $vote->end_date,
+                    'status_id' => $vote->status_id,
+                    'type_id' => $vote->type_id,
+                    'users' => $vote->users->map(fn ($user) => [
+                        'id' => $user->id,
+                        'name' => $user->last_name . ' ' . $user->first_name
+                    ]),
+                    'answers' => $vote->answers->map(fn ($answer) => [
+                        'id' => $answer->id,
+                        'name' => $answer->name,
+                        'color' => $answer->color
+                    ]),
+                    'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->values()->isEmpty()
+                ]),
             ],
-            'users' => $this->mapUsers()
+            'users' => $this->mapUsers(),
+            'can' => [
+                'createSessions' => auth()->user()->permissions->contains('name', 'createSessions'),
+                'deleteSessions' => auth()->user()->permissions->contains('name', 'deleteSessions'),
+                'updateSessions' => auth()->user()->permissions->contains('name', 'updateSessions'),
+                'viewSessions' => auth()->user()->permissions->contains('name', 'viewSessions')
+            ]
         ];
     }
 
@@ -261,10 +351,6 @@ class SessionService
                     'answers' => $vote->answers->map(fn ($answer) => [
                         'name' => $answer->name,
                         'color' => $answer->color
-                    ]),
-                    'label_sets' => $vote->labelSets->map(fn ($label_set) => [
-                        'id' => $label_set->id,
-                        'name' => $label_set->name
                     ]),
                     'users' => $vote->users()->pluck('id')->toArray()
                 ]),
@@ -342,7 +428,6 @@ class SessionService
             ]);
 
             $vote->users()->sync($request->votes['users'][$key]);
-            $vote->labelSets()->sync($request->votes['label_sets'][$key]);
             VoteAnswer::where('vote_id', $vote->id)->delete();
 
             foreach ($request->votes['answers'][$key] as $answer) {
@@ -352,6 +437,21 @@ class SessionService
                         'color' => $answer['color']  ?? "#000000",
                         'vote_id' => $vote->id
                     ]);
+                }
+            }
+
+            if (!empty($request->votes['label_sets'][$key])) {
+                foreach ($request->votes['label_sets'][$key] as $vote_label_set) {
+                    $label_set = LabelSet::where('id', $vote_label_set)->first();
+
+                    foreach ($label_set->answers as $answer) {
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id,
+                            'label_set_id' => $answer['id']
+                        ]);
+                    }
                 }
             }
         }

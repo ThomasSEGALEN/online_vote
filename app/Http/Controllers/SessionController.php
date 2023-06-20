@@ -7,7 +7,6 @@ use App\Http\Requests\SessionPreupdateRequest;
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Session;
-use App\Models\Status;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,63 +18,15 @@ class SessionController extends Controller
     {
     }
 
-    public function home(Request $request)
+    /**
+     * Undocumented function
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Inertia\Response
+     */
+    public function home(Request $request): Response
     {
-        return inertia('Home', [
-            'sessions' =>
-            Session::when(
-                $request->input('status'),
-                fn ($query, $status) => $query->where('status_id', $status)
-            )
-                ->where('title', 'like', '%' . $request->input('search') . '%')
-                ->whereHas(
-                    'users',
-                    fn ($query) => !$request->user()->permissions->contains('name', 'viewAnySessions')
-                        ? $query->where('users.id', $request->user()->id)
-                        : null
-                )
-                ->orderBy('status_id')
-                ->paginate(10)
-                ->appends($request->only(['status', 'search']))
-                ->through(
-                    fn ($session) =>
-                    [
-                        'id' => $session->id,
-                        'title' => $session->title,
-                        'description' => $session->description,
-                        'start_date' => $session->start_date,
-                        'end_date' => $session->end_date,
-                        'status_id' => $session->status_id,
-                        'votes' => $session->votes->map(fn ($vote) => [
-                            'id' => $vote->id,
-                            'title' => $vote->title,
-                            'description' => $vote->description,
-                            'start_date' => $vote->start_date,
-                            'end_date' => $vote->end_date,
-                            'status_id' => $vote->status_id,
-                            'type_id' => $vote->type_id,
-                            'users' => $vote->users->map(fn ($user) => [
-                                'id' => $user->id,
-                                'name' => $user->last_name . ' ' . $user->first_name
-                            ]),
-                            'allowed' => !$vote->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
-                        ]),
-                    ]
-                ),
-            'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
-                'id' => $status->id,
-                'name' => $status->name
-            ]),
-            'filters' => [
-                $request->only('status'),
-                $request->only('search')
-            ],
-            'can' => [
-                'createSessions' => $request->user()->permissions->contains('name', 'createSessions'),
-                'deleteSessions' => $request->user()->permissions->contains('name', 'deleteSessions'),
-                'updateSessions' => $request->user()->permissions->contains('name', 'updateSessions'),
-            ]
-        ]);
+        return inertia('Home', $this->sessionService->home($request));
     }
 
     /**
