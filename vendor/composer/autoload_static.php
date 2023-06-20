@@ -385,8 +385,8 @@ class ComposerStaticInit1e745d1281aa94208efa552fe84498d7
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -602,6 +602,7 @@ class ComposerStaticInit1e745d1281aa94208efa552fe84498d7
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',
         'App\\Http\\Controllers\\SessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/SessionController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
+        'App\\Http\\Controllers\\VoteController' => __DIR__ . '/../..' . '/app/Http/Controllers/VoteController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -3666,6 +3667,7 @@ class ComposerStaticInit1e745d1281aa94208efa552fe84498d7
         'OpenSpout\\Reader\\XLSX\\Helper\\CellValueFormatter' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Helper/CellValueFormatter.php',
         'OpenSpout\\Reader\\XLSX\\Helper\\DateFormatHelper' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Helper/DateFormatHelper.php',
         'OpenSpout\\Reader\\XLSX\\Manager\\SharedStringsCaching\\CachingStrategyFactory' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Manager/SharedStringsCaching/CachingStrategyFactory.php',
+        'OpenSpout\\Reader\\XLSX\\Manager\\SharedStringsCaching\\CachingStrategyFactoryInterface' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Manager/SharedStringsCaching/CachingStrategyFactoryInterface.php',
         'OpenSpout\\Reader\\XLSX\\Manager\\SharedStringsCaching\\CachingStrategyInterface' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Manager/SharedStringsCaching/CachingStrategyInterface.php',
         'OpenSpout\\Reader\\XLSX\\Manager\\SharedStringsCaching\\FileBasedStrategy' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Manager/SharedStringsCaching/FileBasedStrategy.php',
         'OpenSpout\\Reader\\XLSX\\Manager\\SharedStringsCaching\\InMemoryStrategy' => __DIR__ . '/..' . '/openspout/openspout/src/Reader/XLSX/Manager/SharedStringsCaching/InMemoryStrategy.php',
