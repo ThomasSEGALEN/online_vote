@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRefs } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { Permission, User, Vote } from "@/types/types";
@@ -22,18 +22,27 @@ const props = defineProps({
     },
 });
 
+const showMessage = ref<boolean>(false);
+
+const successMessage = computed(() => usePage().props.flash.success);
+const errorMessage = computed(() => usePage().props.flash.error);
+
 const { session } = toRefs(props);
 
 const form = useForm({
     answers: session.value.votes.map((vote: Vote) => vote.answers[0].id),
 });
 
-const { permissions } = usePage().props.auth;
+onMounted(() => {
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 3000);
+});
 
-const hasAccess = (vote: Vote): boolean =>
-    permissions.some(
-        (permission: Permission) => permission.name === "viewSessions"
-    ) || vote.allowed;
+// const { permissions } = usePage().props.auth;
+// const hasAccess = (vote: Vote): boolean =>
+//     permissions.some(
+//         (permission: Permission) => permission.name === "viewSessions"
+//     ) || vote.allowed;
 
 const submit = (voteId: number, answerId: number) => {
     router.post(route("votes.vote"), {
@@ -63,6 +72,26 @@ const submit = (voteId: number, answerId: number) => {
                 </h2>
             </div>
         </template>
+
+        <Transition
+            enter-from-class="opacity-0"
+            leave-to-class="opacity-0"
+            class="transition ease-in-out"
+        >
+            <p
+                v-if="showMessage && errorMessage"
+                class="text-sm text-red-600 bg-red-100 py-2 px-4 rounded my-2"
+            >
+                {{ errorMessage }}
+            </p>
+
+            <p
+                v-else-if="showMessage && successMessage"
+                class="text-sm text-green-600 bg-green-100 py-2 px-4 rounded my-2"
+            >
+                {{ successMessage }}
+            </p>
+        </Transition>
 
         <!-- {{ session.votes.map((vote: Vote) => hasAccess(vote)) }} -->
 

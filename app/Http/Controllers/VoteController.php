@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vote;
+use App\Models\VoteAnswer;
 use App\Models\VoteResult;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,11 @@ class VoteController extends Controller
             'user_id' => $request->user()->id,
             'vote_id' => $request->vote
         ]);
+        
+        $answer = VoteAnswer::where('id', $request->answer)->first();
+
+        return back()->with('success', "Vous avez voté pour $answer->name");
+
     }
 
     /**
