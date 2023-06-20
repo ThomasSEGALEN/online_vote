@@ -38,16 +38,6 @@ class Vote extends Model
     }
 
     /**
-     * Label set relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function labelSets(): BelongsToMany
-    {
-        return $this->belongsToMany(LabelSet::class);
-    }
-
-    /**
      * Result relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -15,7 +15,7 @@ class VoteResult extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['answer_id', 'user_id'];
+    protected $fillable = ['answer_id', 'user_id', 'vote_id'];
 
     /**
      * Answer relationship.
@@ -28,16 +28,6 @@ class VoteResult extends Model
     }
 
     /**
-     * Vote relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function vote(): BelongsTo
-    {
-        return $this->belongsTo(Vote::class);
-    }
-
-    /**
      * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -45,5 +35,15 @@ class VoteResult extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Vote relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function vote(): BelongsTo
+    {
+        return $this->belongsTo(Vote::class);
     }
 }

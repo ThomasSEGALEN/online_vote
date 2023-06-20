@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LabelSet extends Model
@@ -29,12 +28,12 @@ class LabelSet extends Model
     }
 
     /**
-     * Vote relationship.
+     * Vote answer relationship.
      *
-     * @return BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function votes(): BelongsToMany
+    public function voteAnswer(): HasMany
     {
-        return $this->belongsToMany(Vote::class);
+        return $this->hasMany(VoteAnswer::class);
     }
 }

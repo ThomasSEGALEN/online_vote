@@ -21,6 +21,16 @@ class VoteAnswer extends Model
     public $timestamps = false;
 
     /**
+     * Label set relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function labelSet(): BelongsTo
+    {
+        return $this->belongsTo(LabelSet::class);
+    }
+
+    /**
      * Vote relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

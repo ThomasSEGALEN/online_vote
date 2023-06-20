@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('color');
             $table->foreignId('vote_id')->constrained('votes')->onDelete('cascade');
+            $table->foreignId('label_set_id')->nullable()->constrained('label_sets')->onDelete('cascade');
         });
     }
 
