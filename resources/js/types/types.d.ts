@@ -77,6 +77,14 @@ export interface VoteType {
     name: string;
 }
 
+export interface VoteAnswer {
+    id: number;
+    name: string;
+    color: string;
+    vote_id: number;
+    label_set_id?: number;
+}
+
 export interface LabelSet {
     id: number;
     name: string;
