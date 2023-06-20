@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/label-sets/{labelSet}', [LabelSetController::class, 'update'])->name('labelSets.update');
     Route::delete('/label-sets/{labelSet}', [LabelSetController::class, 'destroy'])->name('labelSets.destroy');
 
-    Route::post('/votes', [VoteController::class, 'vote'])->name('votes.vote');
+    Route::post('/votes', [VoteController::class, 'vote'])->middleware('check.vote')->name('votes.vote');
 });
 
 require __DIR__ . '/auth.php';
