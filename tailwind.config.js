@@ -1,25 +1,24 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+import {
+    fontFamily as _fontFamily,
+    screens as _screens,
+} from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-    content: [
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-        "./storage/framework/views/*.php",
-        "./resources/views/**/*.blade.php",
-        "./resources/js/**/*.vue",
-    ],
-
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ["Nunito", ...defaultTheme.fontFamily.sans],
-            },
-        },
-        screens: {
-            xs: "512px",
-            ...defaultTheme.screens,
+export const content = [
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+    "./storage/framework/views/*.php",
+    "./resources/views/**/*.blade.php",
+    "./resources/js/**/*.vue",
+];
+export const theme = {
+    extend: {
+        fontFamily: {
+            sans: ["Nunito", ..._fontFamily.sans],
         },
     },
-
-    plugins: [require("@tailwindcss/forms")],
+    screens: {
+        xs: "512px",
+        ..._screens,
+    },
 };
+export const plugins = [require("@tailwindcss/forms")];
