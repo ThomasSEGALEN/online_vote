@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, toRefs } from "vue";
+import { computed, onMounted, onUpdated, ref, toRefs } from "vue";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import { Permission, User, Vote } from "@/types/types";
+import { /*Permission,*/ User, Vote } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import RadioInput from "@/Components/RadioInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Pagination from "@/Components/Pagination.vue";
+import ResponsivePagination from "@/Components/ResponsivePagination.vue";
 
 const props = defineProps({
     session: {
@@ -22,6 +24,8 @@ const props = defineProps({
     },
 });
 
+console.log(props.session);
+
 const showMessage = ref<boolean>(false);
 
 const successMessage = computed(() => usePage().props.flash.success);
@@ -30,12 +34,19 @@ const errorMessage = computed(() => usePage().props.flash.error);
 const { session } = toRefs(props);
 
 const form = useForm({
-    answers: session.value.votes.map((vote: Vote) => vote.answers[0].id),
+    answers: session.value.votes.data.map((vote: Vote) => vote.answers[0].id),
 });
 
 onMounted(() => {
     showMessage.value = true;
     setTimeout(() => (showMessage.value = false), 3000);
+});
+
+onUpdated(() => {
+    showMessage.value = true;
+    setTimeout(() => {
+        showMessage.value = false;
+    }, 3000);
 });
 
 // const { permissions } = usePage().props.auth;
@@ -95,7 +106,7 @@ const submit = (voteId: number, answerId: number) => {
 
         <!-- {{ session.votes.map((vote: Vote) => hasAccess(vote)) }} -->
 
-        <div v-if="session.documents.length">
+        <!-- <div v-if="session.documents.length">
             <span>Documents:</span>
 
             <div v-for="document in session.documents" :key="document.name">
@@ -103,7 +114,7 @@ const submit = (voteId: number, answerId: number) => {
                     {{ document.name }}
                 </a>
             </div>
-        </div>
+        </div> -->
 
         <!-- <div v-if="session.users.length">
             <span>Usernames :</span>
@@ -117,7 +128,10 @@ const submit = (voteId: number, answerId: number) => {
             </li>
         </div> -->
 
-        <div v-for="(vote, voteIndex) in session.votes" :key="vote.id">
+        <div
+            v-for="(vote, voteIndex) in session.votes.data as Array<Vote>"
+            :key="vote.id"
+        >
             <form @submit.prevent="submit(vote.id, form.answers[voteIndex])">
                 {{ vote.title }}
 
@@ -149,5 +163,23 @@ const submit = (voteId: number, answerId: number) => {
                 </div>
             </form>
         </div>
+
+        <Pagination
+            v-if="session.votes.total > session.votes.per_page"
+            class="hidden lg:flex"
+            :to="session.votes.to"
+            :from="session.votes.from"
+            :total="session.votes.total"
+            :links="session.votes.links"
+        />
+
+        <ResponsivePagination
+            v-if="session.votes.total > session.votes.per_page"
+            class="flex lg:hidden"
+            :to="session.votes.to"
+            :from="session.votes.from"
+            :total="session.votes.total"
+            :links="session.votes.links"
+        />
     </AuthenticatedLayout>
 </template>
