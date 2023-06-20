@@ -113,10 +113,10 @@ const submit = () => {
                 >
                     <div class="flex flex-col w-full max-w-md">
                         <div>
-                            <InputLabel for="last_name" value="Nom" />
+                            <InputLabel for="lastName" value="Nom" />
 
                             <TextInput
-                                id="last_name"
+                                id="lastName"
                                 ref="lastNameInput"
                                 v-model="form.last_name"
                                 type="text"
@@ -133,10 +133,10 @@ const submit = () => {
                         </div>
 
                         <div class="mt-4">
-                            <InputLabel for="first_name" value="Prénom" />
+                            <InputLabel for="firstName" value="Prénom" />
 
                             <TextInput
-                                id="first_name"
+                                id="firstName"
                                 ref="firstNameInput"
                                 v-model="form.first_name"
                                 type="text"

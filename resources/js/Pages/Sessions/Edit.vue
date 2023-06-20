@@ -242,12 +242,12 @@ const submit = () => {
                             >
                                 <div>
                                     <InputLabel
-                                        for="start_date"
+                                        for="startDate"
                                         value="Date de début"
                                     />
 
                                     <TextInput
-                                        id="start_date"
+                                        id="startDate"
                                         v-model="form.start_date"
                                         type="datetime-local"
                                         class="mt-1 block w-full"
@@ -261,12 +261,12 @@ const submit = () => {
 
                                 <div class="mt-4 lg:mt-0">
                                     <InputLabel
-                                        for="end_date"
+                                        for="endDate"
                                         value="Date de fin"
                                     />
 
                                     <TextInput
-                                        id="end_date"
+                                        id="endDate"
                                         v-model="form.end_date"
                                         type="datetime-local"
                                         class="mt-1 block w-full"
@@ -506,7 +506,7 @@ const submit = () => {
                                             class="inline-flex items-center space-x-1 ml-0.5"
                                         >
                                             <RadioInput
-                                                :id="`vote_type-${voteType.id}-${voteIndex}`"
+                                                :id="`voteType-${voteType.id}-${voteIndex}`"
                                                 v-model="
                                                     form.votes.type[voteIndex]
                                                 "
@@ -514,7 +514,7 @@ const submit = () => {
                                             />
 
                                             <InputLabel
-                                                :for="`vote_type-${voteType.id}-${voteIndex}`"
+                                                :for="`voteType-${voteType.id}-${voteIndex}`"
                                                 :value="voteType.name"
                                             />
                                         </div>
@@ -535,12 +535,12 @@ const submit = () => {
                                 <div class="flex flex-col w-full max-w-md">
                                     <div>
                                         <InputLabel
-                                            :for="`vote_title-${voteIndex}`"
+                                            :for="`voteTitle-${voteIndex}`"
                                             value="Titre"
                                         />
 
                                         <TextInput
-                                            :id="`vote_title-${voteIndex}`"
+                                            :id="`voteTitle-${voteIndex}`"
                                             v-model="
                                                 form.votes.title[voteIndex]
                                             "
@@ -561,12 +561,12 @@ const submit = () => {
 
                                     <div class="mt-4">
                                         <InputLabel
-                                            :for="`vote_description-${voteIndex}`"
+                                            :for="`voteDescription-${voteIndex}`"
                                             value="Description"
                                         />
 
                                         <TextareaInput
-                                            :id="`vote_description-${voteIndex}`"
+                                            :id="`voteDescription-${voteIndex}`"
                                             v-model="
                                                 form.votes.description[
                                                     voteIndex
@@ -590,12 +590,12 @@ const submit = () => {
                                     >
                                         <div>
                                             <InputLabel
-                                                :for="`vote_start_date-${voteIndex}`"
+                                                :for="`voteStartDate-${voteIndex}`"
                                                 value="Date de début"
                                             />
 
                                             <TextInput
-                                                :id="`vote_start_date-${voteIndex}`"
+                                                :id="`voteStartDate-${voteIndex}`"
                                                 v-model="form.start_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -605,7 +605,7 @@ const submit = () => {
                                                 class="mt-2"
                                                 :message="
                                                 form.errors[
-                                                    `votes.start_date.${voteIndex}` as keyof object
+                                                    `votes.startDate.${voteIndex}` as keyof object
                                                 ]
                                             "
                                             />
@@ -613,12 +613,12 @@ const submit = () => {
 
                                         <div class="mt-4 lg:mt-0">
                                             <InputLabel
-                                                :for="`vote_end_date-${voteIndex}`"
+                                                :for="`voteEndDate-${voteIndex}`"
                                                 value="Date de fin"
                                             />
 
                                             <TextInput
-                                                :id="`vote_end_date-${voteIndex}`"
+                                                :id="`voteEndDate-${voteIndex}`"
                                                 v-model="form.end_date"
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
@@ -628,7 +628,7 @@ const submit = () => {
                                                 class="mt-2"
                                                 :message="
                                                 form.errors[
-                                                    `votes.end_date.${voteIndex}` as keyof object
+                                                    `votes.endDate.${voteIndex}` as keyof object
                                                 ]
                                             "
                                             />
@@ -653,7 +653,7 @@ const submit = () => {
                                                     class="flex flex-row space-x-1 items-center"
                                                 >
                                                     <TextInput
-                                                        :id="`vote_answers-${voteIndex}-${index}`"
+                                                        :id="`voteAnswers-${voteIndex}-${index}`"
                                                         v-model="
                                                             form.votes.answers[
                                                                 voteIndex
@@ -708,13 +708,13 @@ const submit = () => {
                                 <div class="w-full mt-4 lg:mt-0 max-w-md">
                                     <div>
                                         <InputLabel
-                                            :for="`vote_label_sets-${voteIndex}`"
+                                            :for="`voteLabelSets-${voteIndex}`"
                                             value="Jeu d'étiquettes"
                                         />
 
                                         <div class="mt-1 max-w-md">
                                             <Multiselect
-                                                :id="`vote_label_sets-${voteIndex}`"
+                                                :id="`voteLabelSets-${voteIndex}`"
                                                 v-model="
                                                     form.votes.label_sets[
                                                         voteIndex
@@ -752,7 +752,7 @@ const submit = () => {
                                             class="mt-2"
                                             :message="
                                                 form.errors[
-                                                    `votes.label_sets.${voteIndex}` as keyof object
+                                                    `votes.labelSets.${voteIndex}` as keyof object
                                                 ]
                                             "
                                         />
@@ -760,13 +760,13 @@ const submit = () => {
 
                                     <div class="mt-4">
                                         <InputLabel
-                                            :for="`vote_users-${voteIndex}`"
+                                            :for="`voteUsers-${voteIndex}`"
                                             value="Utilisateurs"
                                         />
 
                                         <div class="mt-1 max-w-md">
                                             <Multiselect
-                                                :id="`vote_users-${voteIndex}`"
+                                                :id="`voteUsers-${voteIndex}`"
                                                 v-model="
                                                     form.votes.users[voteIndex]
                                                 "

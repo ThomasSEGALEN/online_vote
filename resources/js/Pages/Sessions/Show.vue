@@ -66,7 +66,7 @@ const submit = (voteId: number, answerId: number) => {
 
         <!-- {{ session.votes.map((vote: Vote) => hasAccess(vote)) }} -->
 
-        <!-- <div v-if="session.documents.length">
+        <div v-if="session.documents.length">
             <span>Documents:</span>
 
             <div v-for="document in session.documents" :key="document.name">
@@ -74,7 +74,7 @@ const submit = (voteId: number, answerId: number) => {
                     {{ document.name }}
                 </a>
             </div>
-        </div> -->
+        </div>
 
         <!-- <div v-if="session.users.length">
             <span>Usernames :</span>

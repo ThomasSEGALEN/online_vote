@@ -141,11 +141,11 @@ class UserService
         return [
             'user' => [
                 'id' => $user->id,
-                'last_name' => $user->last_name,
-                'first_name' => $user->first_name,
+                'lastName' => $user->last_name,
+                'firstName' => $user->first_name,
                 'email' => $user->email,
-                'civility_id' => $user->civility_id,
-                'role_id' => $user->role_id,
+                'civilityId' => $user->civility_id,
+                'roleId' => $user->role_id,
                 'groups' => $user->groups()->pluck('id')->toArray()
             ],
             'civilities' => $this->mapCivilities(),

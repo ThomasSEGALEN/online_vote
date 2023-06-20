@@ -27,10 +27,10 @@ class SessionService
     public function mapLabelSets(): Collection
     {
         return LabelSet::orderBy('id')->get()->map(
-            fn ($labelSet) => [
-                'id' => $labelSet->id,
-                'name' => $labelSet->name,
-                'answers' => $labelSet->answers->map(
+            fn ($label_set) => [
+                'id' => $label_set->id,
+                'name' => $label_set->name,
+                'answers' => $label_set->answers->map(
                     fn ($answer) => [
                         'name' => $answer->name,
                         'color' => $answer->color

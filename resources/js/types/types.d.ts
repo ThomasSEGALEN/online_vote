@@ -53,7 +53,6 @@ export interface Session {
     status_id: number;
     created_at: Date;
     updated_at: Date;
-    allowed: boolean;
 }
 
 export interface Vote {
