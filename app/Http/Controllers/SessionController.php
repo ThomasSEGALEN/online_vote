@@ -19,17 +19,6 @@ class SessionController extends Controller
     }
 
     /**
-     * Undocumented function
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Inertia\Response
-     */
-    public function home(Request $request): Response
-    {
-        return inertia('Home', $this->sessionService->home($request));
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request $request

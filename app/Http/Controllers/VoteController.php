@@ -2,80 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote;
 use App\Models\VoteAnswer;
 use App\Models\VoteResult;
+use App\Services\VoteService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class VoteController extends Controller
 {
-    public function vote(Request $request)
+    public function __construct(private VoteService $voteService)
     {
-        VoteResult::create([
-            'answer_id' => $request->answer,
-            'user_id' => $request->user()->id,
-            'vote_id' => $request->vote
-        ]);
-        
-        $answer = VoteAnswer::where('id', $request->answer)->first();
-
-        return back()->with('success', "Vous avez voté pour $answer->name");
-
     }
 
     /**
-     * Display a listing of the resource.
+     * Display home page with a listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Inertia\Response
      */
-    public function index()
+    public function home(Request $request): Response
     {
-        //
+        return inertia('Home', $this->voteService->home($request));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Vote to a specified resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function vote(Request $request): RedirectResponse
     {
-        //
-    }
+        $answer = $this->voteService->vote($request);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Vote $vote)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vote $vote)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Vote $vote)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Vote $vote)
-    {
-        //
+        return redirect()->back()->with('success', "Vous avez voté pour $answer->name");
     }
 }
