@@ -24,7 +24,7 @@ class Document extends Model
     /**
      * Session relationship.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function session(): BelongsTo
     {
