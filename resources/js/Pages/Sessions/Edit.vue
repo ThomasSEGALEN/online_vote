@@ -68,13 +68,7 @@ const form = sessionForm({
         end_date: session.value.votes.map((vote: Vote) => vote.end_date),
         status: session.value.votes.map((vote: Vote) => vote.status_id),
         type: session.value.votes.map((vote: Vote) => vote.type_id),
-        label_sets: session.value.votes.map((vote: Vote) =>
-            vote.label_sets
-                .filter((vote) =>
-                    labelSets.value.some((label) => label.id === vote.id)
-                )
-                .map((vote) => vote.id)
-        ),
+        label_sets: [],
         answers: session.value.votes.map((vote: Vote) =>
             vote.answers.length < 1 ? [{ name: "", color: "" }] : vote.answers
         ),
