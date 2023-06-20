@@ -43,10 +43,10 @@ const { user, groups } = toRefs(props);
 
 const form = userForm({
     civility: user.value.civilityId,
-    last_name: user.value.lastName,
-    first_name: user.value.firstName,
+    last_name: user.value.last_name,
+    first_name: user.value.first_name,
     email: user.value.email,
-    role: user.value.roleId,
+    role: user.value.role_id,
     groups: groups.value
         .filter((group: Group) => user.value.groups.includes(group.id))
         .map((g) => g.id),
