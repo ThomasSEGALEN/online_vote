@@ -32,7 +32,7 @@ class LabelSet extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function voteAnswer(): HasMany
+    public function voteAnswers(): HasMany
     {
         return $this->hasMany(VoteAnswer::class);
     }
