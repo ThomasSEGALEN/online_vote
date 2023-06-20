@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +80,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/label-sets/store', [LabelSetController::class, 'store'])->name('labelSets.store');
     Route::put('/label-sets/{labelSet}', [LabelSetController::class, 'update'])->name('labelSets.update');
     Route::delete('/label-sets/{labelSet}', [LabelSetController::class, 'destroy'])->name('labelSets.destroy');
+
+    Route::post('/votes', [VoteController::class, 'vote'])->name('votes.vote');
 });
 
 require __DIR__ . '/auth.php';
