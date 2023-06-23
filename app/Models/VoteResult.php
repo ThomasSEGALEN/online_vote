@@ -15,7 +15,11 @@ class VoteResult extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['answer_id', 'user_id', 'vote_id'];
+    protected $fillable = [
+        'answer_id',
+        'user_id',
+        'vote_id'
+    ];
 
     /**
      * Answer relationship.

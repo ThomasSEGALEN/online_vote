@@ -15,7 +15,11 @@ class Answer extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'color', 'label_set_id'];
+    protected $fillable = [
+        'name',
+        'color',
+        'label_set_id'
+    ];
 
     /**
      * Label set relationship.

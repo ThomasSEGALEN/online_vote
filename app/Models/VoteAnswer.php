@@ -16,7 +16,11 @@ class VoteAnswer extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'color', 'vote_id'];
+    protected $fillable = [
+        'name',
+        'color',
+        'vote_id'
+    ];
 
     public $timestamps = false;
 
