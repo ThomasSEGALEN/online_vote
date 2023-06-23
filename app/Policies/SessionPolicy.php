@@ -31,10 +31,7 @@ class SessionPolicy
      */
     public function view(User $user, Session $session): bool
     {
-        $sessionInProgress =  $session->start_date || $session->end_date ? $session->start_date <= Carbon::now() && $session->end_date >= Carbon::now() : true;
-        $sessionOpen = $session->status->id == 1 ? true : false;
-
-        return $user->permissions->contains('name', 'viewSessions') || $user->sessions->contains('id', $session->id) && $sessionInProgress && $sessionOpen;
+        return $user->permissions->contains('name', 'viewSessions') || $user->sessions->contains('id', $session->id);
     }
 
     /**
