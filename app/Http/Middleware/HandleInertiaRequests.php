@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
             ],
             'auth' => [
-                'user' => fn () => $request->user() ? $request->user()->only('last_name', 'first_name', 'email') : null,
+                'user' => fn () => $request->user() ? $request->user()->only('id', 'last_name', 'first_name', 'email') : null,
                 'civility' => $request->user() ? $request->user()->civility->only('id', 'label', 'name') : null,
                 'role' => $request->user() ? $request->user()->role->only('id', 'name') : null,
                 'groups' => $request->user() ? $request->user()->groups->transform(fn ($group) => $group->only('id', 'name')) : null,
