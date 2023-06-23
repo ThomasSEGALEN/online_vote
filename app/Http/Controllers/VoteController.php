@@ -36,6 +36,6 @@ class VoteController extends Controller
     {
         $answer = $this->voteService->vote($request);
 
-        return redirect()->back()->with('success', "Vous avez voté pour $answer->name");
+        return back()->with('success', "Vous avez voté ($answer->name)");
     }
 }

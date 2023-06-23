@@ -13,6 +13,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
+use App\Models\VoteResult;
 use App\Models\VoteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -262,28 +263,17 @@ class SessionService
                             'name' => $answer->name,
                             'color' => $answer->color
                         ]),
-                        'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->values()->isEmpty()
+                        'results' => VoteResult::selectRaw('vote_results.answer_id, vote_answers.name, vote_answers.color, DATE(created_at) as date, COUNT(*) as count')
+                            ->where('vote_answers.vote_id', $vote->id)
+                            ->join('vote_answers', 'vote_answers.id', 'vote_results.answer_id')
+                            ->groupBy('date', 'vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
+                            ->orderBy('date')
+                            ->orderBy('vote_results.answer_id')
+                            ->get(),
+                        'voted' => !$vote->results->filter(fn ($result) => $result->user_id === auth()->user()->id)->isEmpty(),
+                        'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->isEmpty()
                     ]
                 ),
-                // $session->votes->map(fn ($vote) => [
-                //     'id' => $vote->id,
-                //     'title' => $vote->title,
-                //     'description' => $vote->description,
-                //     'start_date' => $vote->start_date,
-                //     'end_date' => $vote->end_date,
-                //     'status_id' => $vote->status_id,
-                //     'type_id' => $vote->type_id,
-                //     'users' => $vote->users->map(fn ($user) => [
-                //         'id' => $user->id,
-                //         'name' => $user->last_name . ' ' . $user->first_name
-                //     ]),
-                //     'answers' => $vote->answers->map(fn ($answer) => [
-                //         'id' => $answer->id,
-                //         'name' => $answer->name,
-                //         'color' => $answer->color
-                //     ]),
-                //     'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->values()->isEmpty()
-                // ]),
             ],
             'users' => $this->mapUsers(),
             'can' => [
@@ -399,17 +389,28 @@ class SessionService
             ]);
 
             $vote->users()->sync($request->votes['users'][$key]);
-            VoteAnswer::where('vote_id', $vote->id)->delete();
+
+            $answers = [];
 
             foreach ($request->votes['answers'][$key] as $answer) {
-                if (!empty($answer['name'])) {
-                    VoteAnswer::create([
-                        'name' => $answer['name'],
-                        'color' => $answer['color']  ?? "#000000",
-                        'vote_id' => $vote->id
-                    ]);
+                if (isset($answer['name'])) {
+                    array_push($answers, $answer['name']);
+
+                    $vote_answer = VoteAnswer::where('vote_id', $vote->id)->where('name', $answer['name']);
+
+                    if (!$vote_answer->first()) {
+                        $vote_answer->delete();
+
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id
+                        ]);
+                    }
                 }
             }
+
+            VoteAnswer::where('vote_id', $vote->id)->whereNotIn('name', $answers)->delete();
 
             if (!empty($request->votes['label_sets'][$key])) {
                 foreach ($request->votes['label_sets'][$key] as $vote_label_set) {
