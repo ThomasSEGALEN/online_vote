@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Session;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SessionPolicy
@@ -30,7 +31,10 @@ class SessionPolicy
      */
     public function view(User $user, Session $session): bool
     {
-        return $user->permissions->contains('name', 'viewSessions') || $user->sessions->contains('id', $session->id);
+        $sessionInProgress =  $session->start_date || $session->end_date ? $session->start_date <= Carbon::now() && $session->end_date >= Carbon::now() : true;
+        $sessionOpen = $session->status->id == 1 ? true : false;
+
+        return $user->permissions->contains('name', 'viewSessions') || $user->sessions->contains('id', $session->id) && $sessionInProgress && $sessionOpen;
     }
 
     /**
