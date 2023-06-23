@@ -62,13 +62,15 @@ export interface Vote {
     start_date: Date;
     end_date: Date;
     users: Array<number>;
-    answers: Array<Answer>;
+    answers: Array<VoteAnswer>;
+    results: Array<VoteResult>;
     label_sets: Array<LabelSet>;
     status_id: number;
     type_id: number;
     created_at: Date;
     updated_at: Date;
     allowed: boolean;
+    voted: boolean;
 }
 
 export interface VoteType {
@@ -80,8 +82,16 @@ export interface VoteAnswer {
     id: number;
     name: string;
     color: string;
-    vote_id: number;
+    vote_id?: number;
     label_set_id?: number;
+}
+
+export interface VoteResult {
+    answer_id: number;
+    name: string;
+    color: string;
+    date: Date;
+    count: number;
 }
 
 export interface LabelSet {
