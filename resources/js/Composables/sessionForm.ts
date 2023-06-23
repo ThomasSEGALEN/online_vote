@@ -7,6 +7,7 @@ export default function sessionForm({
     end_date = "",
     status = 1,
     users = [],
+    label_sets = [],
     documents = null,
     amount = 1,
     votes = {
@@ -16,6 +17,8 @@ export default function sessionForm({
         end_date: [],
         status: [],
         type: [],
+        label_sets: [],
+        answers: [],
         users: [],
     },
 }: {
@@ -25,6 +28,7 @@ export default function sessionForm({
     end_date?: string;
     status?: number;
     users?: Array<number>;
+    label_sets?: Array<number>;
     documents?: FileList | null;
     amount?: number;
     votes?: {
@@ -34,6 +38,8 @@ export default function sessionForm({
         end_date: Array<string>;
         status: Array<number>;
         type: Array<number>;
+        label_sets: Array<Array<number>>;
+        answers: Array<Array<{ name: string; color: string }>>;
         users: Array<Array<number>>;
     };
 }) {
@@ -44,6 +50,7 @@ export default function sessionForm({
         end_date: end_date,
         status: status,
         users: users,
+        label_sets: label_sets,
         documents: documents,
         amount: amount,
         votes: votes,

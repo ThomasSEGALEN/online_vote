@@ -17,6 +17,8 @@ class Permission extends Model
      */
     protected $fillable = ['name'];
 
+    public $timestamps = false;
+
     /**
      * Role relationship.
      *

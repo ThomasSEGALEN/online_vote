@@ -1,4 +1,4 @@
-declare interface User {
+export interface User {
     id: number;
     last_name: string;
     first_name: string;
@@ -14,37 +14,37 @@ declare interface User {
     options: Array<{ id: number; name: string }>;
 }
 
-declare interface Role {
+export interface Role {
     id: number;
     name: string;
     created_at: Date;
     updated_at: Date;
 }
 
-declare interface Permission {
+export interface Permission {
     id: number;
     name: string;
 }
 
-declare interface Group {
+export interface Group {
     id: number;
     name: string;
     created_at: Date;
     updated_at: Date;
 }
 
-declare interface Civility {
+export interface Civility {
     id: number;
     label: string;
     name: string;
 }
 
-declare interface Status {
+export interface Status {
     id: number;
     name: string;
 }
 
-declare interface Session {
+export interface Session {
     id: number;
     title: string;
     description: string;
@@ -56,39 +56,59 @@ declare interface Session {
     allowed: boolean;
 }
 
-declare interface Vote {
+export interface Vote {
     id: number;
     title: string;
     description: string;
     start_date: Date;
     end_date: Date;
     users: Array<number>;
+    answers: Array<VoteAnswer>;
+    results: Array<VoteResult>;
+    label_sets: Array<LabelSet>;
     status_id: number;
     type_id: number;
     created_at: Date;
     updated_at: Date;
     allowed: boolean;
+    voted: boolean;
 }
 
-declare interface VoteType {
+export interface VoteType {
     id: number;
     name: string;
 }
 
-declare interface LabelSet {
+export interface VoteAnswer {
+    id: number;
+    name: string;
+    color: string;
+    vote_id?: number;
+    label_set_id?: number;
+}
+
+export interface VoteResult {
+    answer_id: number;
+    name: string;
+    color: string;
+    date: Date;
+    count: number;
+}
+
+export interface LabelSet {
     id: number;
     name: string;
     answers: Array<Answer>;
 }
 
-declare interface Answer {
+export interface Answer {
     id: number;
     name: string;
     color: string;
-    label_set_id: string;
+    label_set_id: number;
 }
 
-declare interface Link {
+export interface ILink {
     active: boolean;
     label: string;
     url: string;

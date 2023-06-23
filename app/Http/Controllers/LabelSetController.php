@@ -38,7 +38,7 @@ class LabelSetController extends Controller
     {
         $this->authorize('delete', $labelSet);
 
-        $labelSet->delete();
+        $this->labelSetService->destroy($labelSet);
 
         return to_route('sessions.index')->with('success', "Le jeu d'étiquettes $labelSet->name a été supprimé avec succès");
     }

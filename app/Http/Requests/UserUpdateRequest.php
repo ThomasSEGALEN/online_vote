@@ -25,6 +25,7 @@ class UserUpdateRequest extends FormRequest
             'last_name' => ['required', 'string'],
             'first_name' => ['required', 'string'],
             'email' => ['required', 'email', 'string'],
+            'password' => ['nullable', 'string', 'min:8'],
             'civility' => ['required', 'integer', 'in:1,2'],
             'role' => ['required', 'integer'],
             'groups' => ['nullable', 'array'],

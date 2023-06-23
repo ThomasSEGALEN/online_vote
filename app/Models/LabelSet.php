@@ -18,12 +18,22 @@ class LabelSet extends Model
     protected $fillable = ['name'];
 
     /**
-     * Answer relationship
+     * Answer relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+
+    /**
+     * Vote answer relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function voteAnswers(): HasMany
+    {
+        return $this->hasMany(VoteAnswer::class);
     }
 }

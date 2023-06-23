@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
+import { ILink } from "@/types/types";
 import AngleLeftIcon from "@/Components/AngleLeftIcon.vue";
 import AngleRightIcon from "@/Components/AngleRightIcon.vue";
 
@@ -17,7 +18,7 @@ defineProps({
         default: () => 0,
     },
     links: {
-        type: Array<Link>,
+        type: Array<ILink>,
         default: () => [],
     },
 });

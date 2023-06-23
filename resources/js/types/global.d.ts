@@ -1,4 +1,5 @@
 import type { Page, PageProps } from "@inertiajs/core";
+import { Civility, Group, Permission, Role } from "@/types/types";
 
 declare module "@inertiajs/core" {
     interface PageProps {
@@ -11,6 +12,7 @@ declare module "@inertiajs/core" {
         };
         auth: {
             user: {
+                id: number;
                 first_name: string;
                 last_name: string;
                 email: string;

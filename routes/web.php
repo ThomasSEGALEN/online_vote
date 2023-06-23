@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -32,9 +33,7 @@ Route::get('/app', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/', [SessionController::class, 'home'])->name('home');
-
-    Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
+    Route::get('/', [VoteController::class, 'home'])->name('home');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -76,9 +75,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
 
+    Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
+
     Route::post('/label-sets/store', [LabelSetController::class, 'store'])->name('labelSets.store');
     Route::put('/label-sets/{labelSet}', [LabelSetController::class, 'update'])->name('labelSets.update');
     Route::delete('/label-sets/{labelSet}', [LabelSetController::class, 'destroy'])->name('labelSets.destroy');
+
+    Route::post('/votes', [VoteController::class, 'vote'])->middleware('check.vote')->name('votes.vote');
 });
 
 require __DIR__ . '/auth.php';

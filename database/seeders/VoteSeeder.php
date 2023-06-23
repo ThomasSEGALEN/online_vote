@@ -59,6 +59,17 @@ class VoteSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
+            [
+                'title' => 'Séance 3 - Vote 1',
+                'description' => 'Description du vote 1',
+                'start_date' => '2023-01-01 12:00:00',
+                'end_date' => '2023-01-01 18:00:00',
+                'session_id' => 3,
+                'status_id' => Status::CLOSED,
+                'type_id' => VoteType::SECRET,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
         ]);
     }
 }

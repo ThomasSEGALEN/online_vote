@@ -23,6 +23,9 @@ class SessionUpdateRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
             'users' => ['required', 'array'],
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
@@ -33,7 +36,11 @@ class SessionUpdateRequest extends FormRequest
             'votes.users.*' => ['required', 'array'],
             'votes.users.*.*' => ['integer'],
             'votes.status.*' => ['required', 'integer'],
-            'votes.type.*' => ['required', 'integer']
+            'votes.type.*' => ['required', 'integer'],
+            'label_sets' => ['nullable', 'array'],
+            'label_sets.*' => ['integer'],
+            'votes.label_sets.*' => ['nullable', 'array'],
+            'votes.label_sets.*.*' => ['integer']
         ];
     }
 }

@@ -3,6 +3,7 @@ import { ref, toRefs } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import userForm from "@/Composables/userForm";
+import { Civility, Group, Role } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import InputError from "@/Components/InputError.vue";
@@ -41,13 +42,13 @@ const passwordInput = ref<HTMLInputElement>();
 const { user, groups } = toRefs(props);
 
 const form = userForm({
-    civility: user.value.civility_id,
+    civility: user.value.civilityId,
     last_name: user.value.last_name,
     first_name: user.value.first_name,
     email: user.value.email,
     role: user.value.role_id,
     groups: groups.value
-        .filter((group) => user.value.groups.includes(group.id))
+        .filter((group: Group) => user.value.groups.includes(group.id))
         .map((g) => g.id),
 });
 
@@ -83,7 +84,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 md:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-5xl">
             <form @submit.prevent="submit">
                 <div class="mb-4">
                     <span class="block font-medium text-md text-gray-700">
@@ -117,10 +118,10 @@ const submit = () => {
                 >
                     <div class="flex flex-col w-full max-w-md">
                         <div>
-                            <InputLabel for="last_name" value="Nom" />
+                            <InputLabel for="lastName" value="Nom" />
 
                             <TextInput
-                                id="last_name"
+                                id="lastName"
                                 ref="lastNameInput"
                                 v-model="form.last_name"
                                 type="text"
@@ -137,10 +138,10 @@ const submit = () => {
                         </div>
 
                         <div class="mt-4">
-                            <InputLabel for="first_name" value="Prénom" />
+                            <InputLabel for="firstName" value="Prénom" />
 
                             <TextInput
-                                id="first_name"
+                                id="firstName"
                                 ref="firstNameInput"
                                 v-model="form.first_name"
                                 type="text"

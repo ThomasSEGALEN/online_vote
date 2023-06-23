@@ -16,9 +16,23 @@ class VoteAnswer extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'color', 'vote_id'];
+    protected $fillable = [
+        'name',
+        'color',
+        'vote_id'
+    ];
 
     public $timestamps = false;
+
+    /**
+     * Label set relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function labelSet(): BelongsTo
+    {
+        return $this->belongsTo(LabelSet::class);
+    }
 
     /**
      * Vote relationship.
@@ -35,7 +49,7 @@ class VoteAnswer extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function votes(): BelongsTo
+    public function vote(): BelongsTo
     {
         return $this->belongsTo(Vote::class);
     }

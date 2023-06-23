@@ -12,6 +12,8 @@ use App\Models\Session;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\Vote;
+use App\Models\VoteAnswer;
+use App\Models\VoteResult;
 use App\Models\VoteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -23,13 +25,13 @@ class SessionService
      *
      * @return \Illuminate\Support\Collection
      */
-    public function mapAnswers(): Collection
+    public function mapLabelSets(): Collection
     {
         return LabelSet::orderBy('id')->get()->map(
-            fn ($labelSet) => [
-                'id' => $labelSet->id,
-                'name' => $labelSet->name,
-                'answers' => $labelSet->answers->map(
+            fn ($label_set) => [
+                'id' => $label_set->id,
+                'name' => $label_set->name,
+                'answers' => $label_set->answers->map(
                     fn ($answer) => [
                         'name' => $answer->name,
                         'color' => $answer->color
@@ -108,10 +110,7 @@ class SessionService
     {
         return [
             'sessions' =>
-            Session::when(
-                $request->input('search'),
-                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
-            )
+            Session::where('title', 'like', '%' . $request->input('search') . '%')
                 ->orderBy('id')
                 ->paginate(20)
                 ->appends($request->only('search'))
@@ -125,7 +124,7 @@ class SessionService
                         'status_id' => $session->status_id
                     ]
                 ),
-            'labelSets' => $this->mapAnswers(),
+            'labelSets' => $this->mapLabelSets(),
             'statuses' => $this->mapStatuses(),
             'filters' => $request->only('search'),
             'can' => [
@@ -147,7 +146,8 @@ class SessionService
             'users' => $this->mapUsers(),
             'groupedUsers' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatuses(),
-            'vote_types' => $this->mapVoteTypes()
+            'voteTypes' => $this->mapVoteTypes(),
+            'labelSets' => $this->mapLabelSets(),
         ];
     }
 
@@ -159,12 +159,6 @@ class SessionService
      */
     public function store(SessionStoreRequest $request): Session
     {
-        for ($index = 0; $index < $request->amount; $index++) {
-            if (Vote::where('title', $request->votes['title'][$index])->first()) {
-                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
-            }
-        }
-
         $session = Session::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -199,6 +193,31 @@ class SessionService
             ]);
 
             $vote->users()->attach($request->votes['users'][$index]);
+
+            foreach ($request->votes['answers'][$index] as $answer) {
+                if (!empty($answer['name'])) {
+                    VoteAnswer::create([
+                        'name' => $answer['name'],
+                        'color' => $answer['color']  ?? "#000000",
+                        'vote_id' => $vote->id
+                    ]);
+                }
+            }
+
+            if (!empty($request->votes['label_sets'][$index])) {
+                foreach ($request->votes['label_sets'][$index] as $vote_label_set) {
+                    $label_set = LabelSet::where('id', $vote_label_set)->first();
+
+                    foreach ($label_set->answers as $answer) {
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id,
+                            'label_set_id' => $answer['id']
+                        ]);
+                    }
+                }
+            };
         }
 
         return $session;
@@ -224,9 +243,45 @@ class SessionService
                     'id' => $document->id,
                     'name' => $document->name,
                     'path' => public_path("documents/" . $document->path)
-                ])
+                ]),
+                'votes' => $session->votes()->paginate(1)->through(
+                    fn ($vote) =>
+                    [
+                        'id' => $vote->id,
+                        'title' => $vote->title,
+                        'description' => $vote->description,
+                        'start_date' => $vote->start_date,
+                        'end_date' => $vote->end_date,
+                        'status_id' => $vote->status_id,
+                        'type_id' => $vote->type_id,
+                        'users' => $vote->users->map(fn ($user) => [
+                            'id' => $user->id,
+                            'name' => $user->last_name . ' ' . $user->first_name
+                        ]),
+                        'answers' => $vote->answers->map(fn ($answer) => [
+                            'id' => $answer->id,
+                            'name' => $answer->name,
+                            'color' => $answer->color
+                        ]),
+                        'results' => VoteResult::selectRaw('vote_results.answer_id, vote_answers.name, vote_answers.color, DATE(created_at) as date, COUNT(*) as count')
+                            ->where('vote_answers.vote_id', $vote->id)
+                            ->join('vote_answers', 'vote_answers.id', 'vote_results.answer_id')
+                            ->groupBy('date', 'vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
+                            ->orderBy('date')
+                            ->orderBy('vote_results.answer_id')
+                            ->get(),
+                        'voted' => !$vote->results->filter(fn ($result) => $result->user_id === auth()->user()->id)->isEmpty(),
+                        'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->isEmpty()
+                    ]
+                ),
             ],
-            'users' => $this->mapUsers()
+            'users' => $this->mapUsers(),
+            'can' => [
+                'createSessions' => auth()->user()->permissions->contains('name', 'createSessions'),
+                'deleteSessions' => auth()->user()->permissions->contains('name', 'deleteSessions'),
+                'updateSessions' => auth()->user()->permissions->contains('name', 'updateSessions'),
+                'viewSessions' => auth()->user()->permissions->contains('name', 'viewSessions')
+            ]
         ];
     }
 
@@ -264,7 +319,8 @@ class SessionService
             ],
             'users' => $this->mapGroupedUsers(),
             'statuses' => $this->mapStatuses(),
-            'vote_types' => $this->mapVoteTypes()
+            'voteTypes' => $this->mapVoteTypes(),
+            'labelSets' => $this->mapLabelSets(),
         ];
     }
 
@@ -292,12 +348,6 @@ class SessionService
     {
         if (($request->title !== $session->title) && Session::where('title', $request->title)->first()) {
             $request->validate(['title' => ['required', 'string', 'unique:sessions']]);
-        }
-
-        foreach ($request->session->votes as $key => $vote) {
-            if (($request->votes['title'][$key] !== $vote->title) && Vote::where('title', $request->votes['title'][$key])->first()) {
-                $request->validate(['votes.title.*' => ['required', 'string', 'unique:votes,title']]);
-            }
         }
 
         $session->update([
@@ -334,12 +384,48 @@ class SessionService
                 'description' => $request->votes['description'][$key],
                 'start_date' => $request->votes['start_date'][$key],
                 'end_date' => $request->votes['end_date'][$key],
-                'title' => $request->votes['title'][$key],
                 'status_id' => $request->votes['status'][$key],
                 'type_id' => $request->votes['type'][$key]
             ]);
 
             $vote->users()->sync($request->votes['users'][$key]);
+
+            $answers = [];
+
+            foreach ($request->votes['answers'][$key] as $answer) {
+                if (isset($answer['name'])) {
+                    array_push($answers, $answer['name']);
+
+                    $vote_answer = VoteAnswer::where('vote_id', $vote->id)->where('name', $answer['name']);
+
+                    if (!$vote_answer->first()) {
+                        $vote_answer->delete();
+
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id
+                        ]);
+                    }
+                }
+            }
+
+            VoteAnswer::where('vote_id', $vote->id)->whereNotIn('name', $answers)->delete();
+
+            if (!empty($request->votes['label_sets'][$key])) {
+                foreach ($request->votes['label_sets'][$key] as $vote_label_set) {
+                    $label_set = LabelSet::where('id', $vote_label_set)->first();
+
+                    foreach ($label_set->answers as $answer) {
+                        VoteAnswer::create([
+                            'name' => $answer['name'],
+                            'color' => $answer['color']  ?? "#000000",
+                            'vote_id' => $vote->id,
+                            'label_set_id' => $answer['id']
+                        ]);
+                    }
+                }
+            }
         }
 
         return $session;

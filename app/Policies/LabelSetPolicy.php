@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\LabelSet;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -25,10 +24,9 @@ class LabelSetPolicy
      * Determine whether the user can update the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\LabelSet $labelSet
      * @return bool
      */
-    public function update(User $user, LabelSet $labelSet): bool
+    public function update(User $user): bool
     {
         return $user->permissions->contains('name', 'updateSessions');
     }
@@ -37,10 +35,9 @@ class LabelSetPolicy
      * Determine whether the user can delete the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\LabelSet $labelSet
      * @return bool
      */
-    public function delete(User $user, LabelSet $labelSet): bool
+    public function delete(User $user): bool
     {
         return $user->permissions->contains('name', 'deleteSessions');
     }

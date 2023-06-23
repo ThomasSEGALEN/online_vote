@@ -66,7 +66,7 @@ const { user } = usePage().props.auth;
             </div>
 
             <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg">
-                <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
                     <div class="p-6">
                         <div class="flex items-center">
                             <svg
@@ -103,7 +103,7 @@ const { user } = usePage().props.auth;
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 md:border-t-0 md:border-l"
+                        class="p-6 border-t border-gray-200 lg:border-t-0 lg:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -175,7 +175,7 @@ const { user } = usePage().props.auth;
                         </div>
                     </div>
 
-                    <div class="p-6 border-t border-gray-200 md:border-l">
+                    <div class="p-6 border-t border-gray-200 lg:border-l">
                         <div class="flex items-center">
                             <svg
                                 fill="none"
