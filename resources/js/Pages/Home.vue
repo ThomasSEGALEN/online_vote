@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
 import { throttle } from "lodash";
-import { Session, Status } from "@/types/types";
+import { Permission, Session, Status } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Pagination from "@/Components/Pagination.vue";
@@ -39,6 +39,8 @@ const props = defineProps({
 const status = ref<number>(props.filters.status);
 const search = ref<string>(props.filters.search);
 
+const { permissions } = usePage().props.auth;
+
 watch(
     [status, search],
     throttle(([statusValue, searchValue]) => {
@@ -49,6 +51,11 @@ watch(
         );
     }, 500)
 );
+
+const hasAccess = (session: Session): boolean =>
+    permissions.some(
+        (permission: Permission) => permission.name === "viewSessions"
+    ) || session.allowed;
 
 const getDate = (timestamp: Date) => {
     if (!timestamp) return;
@@ -126,7 +133,73 @@ const getDate = (timestamp: Date) => {
                     :key="session.id"
                     class="mb-4"
                 >
-                    <Link :href="route('sessions.show', session.id)">
+                    <template v-if="hasAccess(session)">
+                        <Link :href="route('sessions.show', session.id)">
+                            <div
+                                class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
+                            >
+                                <div class="flex flex-col justify-between">
+                                    <div
+                                        class="flex flex-col md:flex-row justify-between"
+                                    >
+                                        <h2
+                                            class="text-2xl font-bold text-gray-800"
+                                        >
+                                            {{ session.title }}
+                                        </h2>
+
+                                        <span
+                                            class="block font-medium text-md"
+                                            :class="
+                                                session.status_id === 1
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
+                                            "
+                                        >
+                                            {{
+                                                session.status_id === 1
+                                                    ? "Ouvert"
+                                                    : "Fermé"
+                                            }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-row justify-between">
+                                        <p
+                                            class="block font-medium text-md text-gray-700 break-all mt-4"
+                                        >
+                                            {{
+                                                session.description?.length >
+                                                200
+                                                    ? session.description.substring(
+                                                          0,
+                                                          200
+                                                      ) + "..."
+                                                    : session.description
+                                            }}
+                                        </p>
+
+                                        <div>
+                                            <span
+                                                class="block font-medium text-sm text-gray-700"
+                                            >
+                                                {{
+                                                    getDate(session.start_date)
+                                                }}
+                                            </span>
+                                            <span
+                                                class="block font-medium text-sm text-gray-700"
+                                            >
+                                                {{ getDate(session.end_date) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                    </template>
+
+                    <template v-else>
                         <div
                             class="flex flex-col justify-evenly bg-white p-6 rounded-lg shadow-lg"
                         >
@@ -185,7 +258,7 @@ const getDate = (timestamp: Date) => {
                                 </div>
                             </div>
                         </div>
-                    </Link>
+                    </template>
                 </div>
             </div>
 

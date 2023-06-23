@@ -43,6 +43,7 @@ class VoteService
                         'start_date' => $session->start_date,
                         'end_date' => $session->end_date,
                         'status_id' => $session->status_id,
+                        'allowed' => !$session->users->filter(fn ($user) => $user->id === auth()->user()->id)->isEmpty()
                     ]
                 ),
             'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [

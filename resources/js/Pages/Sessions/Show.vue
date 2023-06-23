@@ -76,6 +76,17 @@ const hasAccess = (vote: Vote): boolean =>
         (permission: Permission) => permission.name === "viewSessions"
     ) || vote.allowed;
 
+const isExpired = (vote: Vote): boolean => {
+    const now = Date.now();
+    const start = new Date(vote.start_date).getTime();
+    const end = new Date(vote.end_date).getTime();
+    const voteInProgress =
+        vote.start_date || vote.end_date ? start <= now && end >= now : true;
+    const voteOpen = vote.status_id === 1 ? true : false;
+
+    return voteInProgress && voteOpen && !vote.voted;
+};
+
 const filterAnswer = (vote: Vote, index: number) =>
     vote.answers.filter(
         (answer: VoteAnswer) => answer.id === form.answers[index]
@@ -175,10 +186,11 @@ const chartData = computed(() => {
 
         <div class="grid grid-cols-1 p-4 lg:p-6">
             <div
-                class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg"
+                v-if="session.description || session.documents.length"
+                class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg mb-4"
             >
                 <div v-if="session.description">
-                    <h2 class="text-lg font-semibold text-gray-800">
+                    <h2 class="text-lg font-semibold text-gray-800 break-all">
                         Description
                     </h2>
 
@@ -190,7 +202,7 @@ const chartData = computed(() => {
                 </div>
 
                 <div v-if="session.documents.length">
-                    <h2 class="text-lg font-semibold text-gray-800">
+                    <h2 class="text-lg font-semibold text-gray-800 break-all">
                         Documents
                     </h2>
 
@@ -211,7 +223,7 @@ const chartData = computed(() => {
             <div
                 v-for="(vote, voteIndex) in session.votes.data as Array<Vote>"
                 :key="vote.id"
-                class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg my-4"
+                class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg mb-4"
             >
                 <template v-if="hasAccess(vote)">
                     <Transition
@@ -234,12 +246,14 @@ const chartData = computed(() => {
                         </p>
                     </Transition>
 
-                    <h2 class="text-lg font-bold text-gray-800">
+                    <h2 class="text-lg font-bold text-gray-800 break-all">
                         {{ vote.title }}
                     </h2>
 
                     <div v-if="vote.description">
-                        <h2 class="text-lg font-semibold text-gray-800">
+                        <h2
+                            class="text-lg font-semibold text-gray-800 break-all"
+                        >
                             Description
                         </h2>
 
@@ -251,26 +265,11 @@ const chartData = computed(() => {
                     </div>
 
                     <div>
-                        <template v-if="vote.voted">
-                            <div>
-                                <h2 class="text-lg font-semibold text-gray-800">
-                                    Résultats
-                                </h2>
-
-                                <Bar
-                                    id="barChart"
-                                    :height="100"
-                                    :options="chartOptions"
-                                    :data="chartData"
-                                />
-                            </div>
-                        </template>
-
-                        <template v-else>
+                        <template v-if="isExpired(vote)">
                             <div>
                                 <div class="flex flex-col">
                                     <h2
-                                        class="text-lg font-semibold text-gray-800"
+                                        class="text-lg font-semibold text-gray-800 break-all"
                                     >
                                         Choix
                                     </h2>
@@ -358,6 +357,23 @@ const chartData = computed(() => {
                                 </Modal>
                             </div>
                         </template>
+
+                        <template v-else>
+                            <div>
+                                <h2
+                                    class="text-lg font-semibold text-gray-800 break-all"
+                                >
+                                    Résultats
+                                </h2>
+
+                                <Bar
+                                    id="barChart"
+                                    :height="100"
+                                    :options="chartOptions"
+                                    :data="chartData"
+                                />
+                            </div>
+                        </template>
                     </div>
                 </template>
 
@@ -367,7 +383,9 @@ const chartData = computed(() => {
                     </span>
 
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-800">
+                        <h2
+                            class="text-lg font-semibold text-gray-800 break-all"
+                        >
                             Résultats
                         </h2>
 
