@@ -32,6 +32,36 @@ class VoteAnswerSeeder extends Seeder
                 'name' => 'Contre',
                 'color' => '#FF0000',
                 'vote_id' => 2
+            ],
+            [
+                'name' => 'Oui',
+                'color' => '#0000FF',
+                'vote_id' => 3
+            ],
+            [
+                'name' => 'Non',
+                'color' => '#FF0000',
+                'vote_id' => 3
+            ],
+            [
+                'name' => 'Pour',
+                'color' => '#0000FF',
+                'vote_id' => 4
+            ],
+            [
+                'name' => 'Contre',
+                'color' => '#FF0000',
+                'vote_id' => 4
+            ],
+            [
+                'name' => 'Oui',
+                'color' => '#0000FF',
+                'vote_id' => 5
+            ],
+            [
+                'name' => 'Non',
+                'color' => '#FF0000',
+                'vote_id' => 5
             ]
         ]);
     }

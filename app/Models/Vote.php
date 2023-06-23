@@ -28,7 +28,7 @@ class Vote extends Model
     ];
 
     /**
-     * Answer relationship.
+     * Answer relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -48,7 +48,7 @@ class Vote extends Model
     }
 
     /**
-     * Session relationship
+     * Session relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

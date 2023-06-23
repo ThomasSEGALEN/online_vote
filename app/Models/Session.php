@@ -46,7 +46,7 @@ class Session extends Model
     }
 
     /**
-     * Vote relationship
+     * Vote relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

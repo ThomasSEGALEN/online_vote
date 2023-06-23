@@ -23,7 +23,7 @@ defineProps({
             </h2>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 lg:p-6">
             <UpdatePasswordForm class="max-w-xl mb-12" />
 
             <DeleteUserForm class="max-w-xl" />

@@ -2,6 +2,7 @@
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import route from "ziggy-js";
+import { Permission } from "@/types/types";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
 const { user, permissions } = usePage().props.auth;
@@ -24,8 +25,8 @@ const hasSomeAccess = (): boolean =>
 </script>
 
 <template>
-    <div class="flex justify-between h-16 md:h-fit">
-        <div class="flex items-center border-b px-2 w-full md:hidden">
+    <div class="flex justify-between h-16 lg:h-fit">
+        <div class="flex items-center border-b px-2 w-full lg:hidden">
             <button
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
@@ -71,7 +72,7 @@ const hasSomeAccess = (): boolean =>
             block: showingNavigationDropdown,
             hidden: !showingNavigationDropdown,
         }"
-        class="md:hidden"
+        class="lg:hidden"
     >
         <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink
@@ -150,7 +151,7 @@ const hasSomeAccess = (): boolean =>
     </div>
 
     <div
-        class="hidden md:flex flex-col fixed top-0 left-0 w-56 h-full bg-white border-r"
+        class="hidden lg:flex flex-col fixed top-0 left-0 w-56 h-full bg-white border-r"
     >
         <div class="flex flex-row items-center justify-start px-5 h-14">
             <img src="/favicon.png" alt="Icon" width="32" height="32" />

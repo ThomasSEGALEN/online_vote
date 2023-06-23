@@ -23,12 +23,17 @@ class SessionPrestoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'unique:sessions'],
+            'description' => ['nullable', 'string'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
             'users' => ['required', 'array'],
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
             'documents' => ['nullable', 'array', 'max_size:8192'],
             'documents.*' => ['file'],
-            'amount' => ['required', 'integer', 'min:1']
+            'amount' => ['required', 'integer', 'min:1'],
+            'label_sets' => ['nullable', 'array'],
+            'label_sets.*' => ['integer']
         ];
     }
 }

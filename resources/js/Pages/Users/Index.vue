@@ -4,6 +4,7 @@ import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
 import { throttle } from "lodash";
+import { User } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import DeleteIcon from "@/Components/DeleteIcon.vue";
@@ -100,7 +101,7 @@ const importFile = (event: Event) => {
             </h2>
         </template>
 
-        <div class="p-4 md:p-6">
+        <div class="p-4 lg:p-6">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
                     v-if="can.createUsers"
@@ -138,7 +139,6 @@ const importFile = (event: Event) => {
                 <TextInput
                     id="search"
                     v-model="search"
-                    class="block mb-2"
                     type="text"
                     placeholder="Recherche"
                 />
@@ -257,7 +257,7 @@ const importFile = (event: Event) => {
 
             <Pagination
                 v-if="users.total > users.per_page"
-                class="hidden md:flex"
+                class="hidden lg:flex"
                 :to="users.to"
                 :from="users.from"
                 :total="users.total"
@@ -266,7 +266,7 @@ const importFile = (event: Event) => {
 
             <ResponsivePagination
                 v-if="users.total > users.per_page"
-                class="flex md:hidden"
+                class="flex lg:hidden"
                 :to="users.to"
                 :from="users.from"
                 :total="users.total"

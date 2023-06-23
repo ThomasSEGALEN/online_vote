@@ -7,7 +7,6 @@ use App\Http\Requests\SessionPreupdateRequest;
 use App\Http\Requests\SessionStoreRequest;
 use App\Http\Requests\SessionUpdateRequest;
 use App\Models\Session;
-use App\Models\Status;
 use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,51 +16,6 @@ class SessionController extends Controller
 {
     public function __construct(private SessionService $sessionService)
     {
-    }
-
-    public function home(Request $request)
-    {
-        return inertia('Home', [
-            'sessions' =>
-            Session::when(
-                $request->input('search'),
-                fn ($query, $search) => $query->where('title', 'like', '%' . $search . '%')
-            )
-                ->orderBy('id')
-                ->paginate(20)
-                ->appends($request->only('search'))
-                ->through(
-                    fn ($session) =>
-                    [
-                        'id' => $session->id,
-                        'title' => $session->title,
-                        'description' => $session->description,
-                        'start_date' => $session->start_date,
-                        'end_date' => $session->end_date,
-                        'status_id' => $session->status_id,
-                        'votes' => $session->votes->map(fn ($vote) => [
-                            'id' => $vote->id,
-                            'title' => $vote->title,
-                            'description' => $vote->description,
-                            'start_date' => $vote->start_date,
-                            'end_date' => $vote->end_date,
-                            'status_id' => $vote->status_id,
-                            'type_id' => $vote->type_id,
-                            'users' => $vote->users->map(fn ($user) => [
-                                'id' => $user->id,
-                                'name' => $user->last_name . ' ' . $user->first_name
-                            ]),
-                            'allowed' => !$vote->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
-                        ]),
-                        'allowed' => !$session->users->filter(fn ($user) => $user->id === $request->user()->id)->values()->isEmpty()
-
-                    ]
-                ),
-            'statuses' => Status::orderBy('id')->get()->map(fn ($status) => [
-                'id' => $status->id,
-                'name' => $status->name
-            ])
-        ]);
     }
 
     /**

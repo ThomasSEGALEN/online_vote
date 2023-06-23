@@ -23,6 +23,9 @@ class SessionStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'unique:sessions'],
+            'description' => ['nullable', 'string'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date'],
             'users' => ['required', 'array'],
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
@@ -34,7 +37,11 @@ class SessionStoreRequest extends FormRequest
             'votes.users.*' => ['required', 'array'],
             'votes.users.*.*' => ['integer'],
             'votes.status.*' => ['required', 'integer'],
-            'votes.type.*' => ['required', 'integer']
+            'votes.type.*' => ['required', 'integer'],
+            'label_sets' => ['nullable', 'array'],
+            'label_sets.*' => ['integer'],
+            'votes.label_sets.*' => ['nullable', 'array'],
+            'votes.label_sets.*.*' => ['integer']
         ];
     }
 }

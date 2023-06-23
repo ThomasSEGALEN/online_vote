@@ -34,11 +34,7 @@ class RoleService
     {
         return [
             'roles' =>
-            Role::when(
-                $request->input('search'),
-                fn ($query, $search) =>
-                $query->where('name', 'like', '%' . $search . '%')
-            )
+            Role::where('name', 'like', '%' . $request->input('search') . '%')
                 ->orderBy('id')
                 ->paginate(20)
                 ->appends($request->only('search'))

@@ -30,4 +30,15 @@ class LabelSetService
 
         return $labelSet;
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Models\LabelSet $labelSet
+     * @return void
+     */
+    public function destroy(LabelSet $labelSet)
+    {
+        $labelSet->delete();
+    }
 }
