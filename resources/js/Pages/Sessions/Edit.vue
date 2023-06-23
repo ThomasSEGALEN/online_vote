@@ -596,7 +596,11 @@ const submit = () => {
 
                                             <TextInput
                                                 :id="`voteStartDate-${voteIndex}`"
-                                                v-model="form.start_date"
+                                                v-model="
+                                                    form.votes.start_date[
+                                                        voteIndex
+                                                    ]
+                                                "
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
                                             />
@@ -619,7 +623,11 @@ const submit = () => {
 
                                             <TextInput
                                                 :id="`voteEndDate-${voteIndex}`"
-                                                v-model="form.end_date"
+                                                v-model="
+                                                    form.votes.end_date[
+                                                        voteIndex
+                                                    ]
+                                                "
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
                                             />

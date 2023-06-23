@@ -46,6 +46,7 @@ const props = defineProps({
 });
 
 const formStep = ref<number>(1);
+const formRefresh = ref<boolean>(true);
 const amountInput = ref<HTMLInputElement>();
 const titleInput = ref<HTMLInputElement>();
 const usersInput = ref<HTMLInputElement>();
@@ -116,20 +117,24 @@ const nextStep = () =>
             }
         },
         onSuccess: () => {
-            for (let index = 0; index < form.amount; index++) {
-                form.votes.title.push(`${form.title} - ${index + 1}`);
-                form.votes.description.push(form.description);
-                form.votes.users.push(
-                    users.value
-                        .filter((user) => form.users.includes(user.id))
-                        .map((u) => u.id)
-                );
-                form.votes.start_date.push(form.start_date);
-                form.votes.end_date.push(form.end_date);
-                form.votes.status.push(form.status);
-                form.votes.type.push(1);
-                form.votes.label_sets.push(form.label_sets);
-                form.votes.answers.push([{ name: "", color: "" }]);
+            if (formRefresh.value) {
+                for (let index = 0; index < form.amount; index++) {
+                    form.votes.title.push(`${form.title} - ${index + 1}`);
+                    form.votes.description.push(form.description);
+                    form.votes.users.push(
+                        users.value
+                            .filter((user) => form.users.includes(user.id))
+                            .map((u) => u.id)
+                    );
+                    form.votes.start_date.push(form.start_date);
+                    form.votes.end_date.push(form.end_date);
+                    form.votes.status.push(form.status);
+                    form.votes.type.push(1);
+                    form.votes.label_sets.push(form.label_sets);
+                    form.votes.answers.push([{ name: "", color: "" }]);
+                }
+
+                formRefresh.value = false;
             }
 
             formStep.value++;
@@ -667,7 +672,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <TextInput
                                                 :id="`voteStartDate-${voteIndex}`"
-                                                v-model="form.start_date"
+                                                v-model="
+                                                    form.votes.start_date[
+                                                        voteIndex
+                                                    ]
+                                                "
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
                                             />
@@ -690,7 +699,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <TextInput
                                                 :id="`voteEndDate-${voteIndex}`"
-                                                v-model="form.end_date"
+                                                v-model="
+                                                    form.votes.end_date[
+                                                        voteIndex
+                                                    ]
+                                                "
                                                 type="datetime-local"
                                                 class="mt-1 block w-full"
                                             />
