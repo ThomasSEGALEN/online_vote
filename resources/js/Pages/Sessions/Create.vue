@@ -525,7 +525,7 @@ const submit = () => form.post(route("sessions.store"));
 
                         <div v-show="currentVote === voteIndex">
                             <div
-                                class="flex flex-col lg:flex-row max-w-md justify-between"
+                                class="flex flex-row flex-wrap max-w-md justify-between"
                             >
                                 <div>
                                     <span
@@ -563,7 +563,7 @@ const submit = () => form.post(route("sessions.store"));
                                     />
                                 </div>
 
-                                <div class="mt-4 lg:mt-0">
+                                <div>
                                     <span
                                         class="block font-medium text-md text-gray-700"
                                     >

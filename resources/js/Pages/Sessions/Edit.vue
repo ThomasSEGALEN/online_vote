@@ -454,7 +454,7 @@ const submit = () => {
 
                         <div v-show="currentVote === voteIndex">
                             <div
-                                class="flex flex-col lg:flex-row max-w-md justify-between"
+                                class="flex flex-row flex-wrap max-w-md justify-between"
                             >
                                 <div>
                                     <span
@@ -492,7 +492,7 @@ const submit = () => {
                                     />
                                 </div>
 
-                                <div class="mt-4 lg:mt-0">
+                                <div>
                                     <span
                                         class="block font-medium text-md text-gray-700"
                                     >
