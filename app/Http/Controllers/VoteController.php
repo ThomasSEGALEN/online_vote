@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VoteAnswer;
-use App\Models\VoteResult;
 use App\Services\VoteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
