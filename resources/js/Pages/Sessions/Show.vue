@@ -246,9 +246,22 @@ const chartData = computed(() => {
                         </p>
                     </Transition>
 
-                    <h2 class="text-lg font-bold text-gray-800 break-all">
-                        {{ vote.title }}
-                    </h2>
+                    <div class="flex flex-col md:flex-row justify-between">
+                        <h2 class="text-lg font-bold text-gray-800 break-all">
+                            {{ vote.title }}
+                        </h2>
+
+                        <span
+                            class="block font-medium text-md"
+                            :class="
+                                vote.status_id === 1
+                                    ? 'text-green-600'
+                                    : 'text-red-600'
+                            "
+                        >
+                            {{ vote.status_id === 1 ? "Ouvert" : "Fermé" }}
+                        </span>
+                    </div>
 
                     <div v-if="vote.description">
                         <h2
