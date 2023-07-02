@@ -24,8 +24,8 @@ class SessionPreupdateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string'],
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date'],
+            'start_date' => ['nullable', 'date', 'before:end_date'],
+            'end_date' => ['nullable', 'date', 'after:start_date'],
             'users' => ['required', 'array'],
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
