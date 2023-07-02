@@ -16,15 +16,15 @@ return [
     'accepted' => ':attribute doit être accepté',
     'accepted_if' => ':attribute doit être accepté lorsque :other est :value',
     'active_url' => ":attribute n'est pas une URL valide",
-    'after' => ':attribute doit être une date postérieure à :date',
-    'after_or_equal' => ':attribute doit être une date postérieure ou égale à :date',
+    'after' => ':attribute doit être une date postérieure',
+    'after_or_equal' => ':attribute doit être une date postérieure ou égale',
     'alpha' => ':attribute ne peut contenir que des lettres',
     'alpha_dash' => ':attribute ne doit contenir que des lettres, des chiffres, des tirets et des traits de soulignement',
     'alpha_num' => ':attribute ne doit contenir que des lettres et des chiffres',
     'array' => ':attribute doit être un tableau',
     'ascii' => ":attribute ne doit contenir que des caractères alphanumériques et des symboles d'un seul octet",
-    'before' => ':attribute doit être une date antérieure à :date',
-    'before_or_equal' => ':attribute doit être une date antérieure ou égale à :date',
+    'before' => ':attribute doit être une date antérieure',
+    'before_or_equal' => ':attribute doit être une date antérieure ou égale',
     'between' => [
         'array' => ':attribute doit avoir entre :min et :max éléments',
         'file' => ':attribute doit être entre :min et :max kilobytes',
@@ -128,7 +128,7 @@ return [
     'required_unless' => ':attribute est requis sauf si :other est dans :values',
     'required_with' => ':attribute est requis lorsque :values est présent',
     'required_with_all' => ':attribute est requis lorsque :values sont présents',
-    'required_without' => ":attribute est requis lorsque :values n'est pas présent",
+    'required_without' => 'Champ requis', //":attribute est requis lorsque :values n'est pas présent"
     'required_without_all' => ":attribute est requis lorsqu'aucune des :values n'est présente",
     'same' => ':attribute et :other doivent correspondre',
     'size' => [
@@ -187,11 +187,17 @@ return [
         'users' => 'Les utilisateurs',
         'title' => 'Le titre',
         'description' => 'La description',
+        'start_date' => 'La date de début',
+        'end_date' => 'La date de fin',
         'documents' => 'Les documents',
         'amount' => 'Le montant',
         'votes.title.*' => 'Le titre',
+        'votes.description.*' => 'La description',
+        'votes.start_date.*' => 'La date de début',
+        'votes.end_date.*' => 'La date de fin',
         'votes.users.*' => 'Les utilisateurs',
-        'names.*' => 'Le nom',
+        'votes.answers.*.*.name' => 'La réponse',
+        'names.*' => 'Le nom'
     ],
 
 ];
