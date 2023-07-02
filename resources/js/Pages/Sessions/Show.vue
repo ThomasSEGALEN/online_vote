@@ -206,7 +206,7 @@ const chartData = computed(() => {
                         Documents
                     </h2>
 
-                    <div
+                    <template
                         v-for="document in session.documents"
                         :key="document.name"
                     >
@@ -216,7 +216,7 @@ const chartData = computed(() => {
                         >
                             {{ document.name }}
                         </a>
-                    </div>
+                    </template>
                 </div>
             </div>
 

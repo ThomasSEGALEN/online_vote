@@ -286,7 +286,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
 
                 <div class="mt-6 flex flex-col lg:flex-row justify-between">
                     <div v-if="labelSets.length">
-                        <div
+                        <template
                             v-for="(labelSet, index) in labelSets"
                             :key="index"
                         >
@@ -352,7 +352,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
 
                     <span v-else class="block font-medium text-md text-gray-700"

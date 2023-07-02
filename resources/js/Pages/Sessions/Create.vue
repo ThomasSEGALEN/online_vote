@@ -58,11 +58,6 @@ const { groupedUsers, users } = toRefs(props);
 
 const form = sessionForm({});
 
-const hasError = (index: number): boolean =>
-    form.errors[`votes.title.${index}` as keyof object] ||
-    form.errors[`votes.users.${index}` as keyof object] ||
-    form.errors[`votes.labelSets.${index}` as keyof object];
-
 const getSessionUsers = (): Array<string> => [
     ...new Set(
         groupedUsers.value
@@ -391,9 +386,9 @@ const submit = () => form.post(route("sessions.store"));
                                         :groups="true"
                                         mode="multiple"
                                         :multiple-label="
-                                        (values: string) => values.length > 1 ? 
-                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
-                                    "
+                            (values: string) => values.length > 1 ? 
+                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                            "
                                         label="name"
                                         value-prop="id"
                                         :close-on-select="false"
@@ -514,14 +509,7 @@ const submit = () => form.post(route("sessions.store"));
                                     </template>
                                 </div>
 
-                                <span
-                                    class="block font-medium text-md"
-                                    :class="
-                                        hasError(voteIndex)
-                                            ? 'text-red-600'
-                                            : 'text-gray-700'
-                                    "
-                                >
+                                <span class="block font-medium text-md">
                                     {{ form.title }} :
                                     {{ form.votes.title[voteIndex] }}
                                 </span>
@@ -563,8 +551,8 @@ const submit = () => form.post(route("sessions.store"));
                                     <InputError
                                         class="mt-2"
                                         :message="form.errors[
-                                                    `votes.status.${voteIndex}` as keyof object
-                                                ]"
+                                            `votes.status.${voteIndex}` as keyof object
+                                        ]"
                                     />
                                 </div>
 
@@ -599,8 +587,8 @@ const submit = () => form.post(route("sessions.store"));
                                     <InputError
                                         class="mt-2"
                                         :message="form.errors[
-                                                    `votes.types.${voteIndex}` as keyof object
-                                                ]"
+                                            `votes.types.${voteIndex}` as keyof object
+                                        ]"
                                     />
                                 </div>
                             </div>
@@ -627,11 +615,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.title.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.title.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -653,11 +639,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.description.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.description.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -683,11 +667,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.startDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.start_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
 
@@ -710,11 +692,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.endDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.end_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
                                     </div>
@@ -775,15 +755,20 @@ const submit = () => form.post(route("sessions.store"));
                                                         <MinusIcon />
                                                     </SecondaryButton>
                                                 </div>
+
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="form.errors[
+                                                        `votes.answers.${voteIndex}.${index}.name` as keyof object
+                                                    ]"
+                                                />
                                             </template>
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
+                                                :message="form.errors[
                                                     `votes.answers.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                ]"
                                             />
                                         </div>
                                     </div>
@@ -834,11 +819,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.labelSets.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.label_sets.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -857,9 +840,9 @@ const submit = () => form.post(route("sessions.store"));
                                                 :groups="true"
                                                 mode="multiple"
                                                 :multiple-label="
-                                        (values: string) => values.length > 1 ? 
-                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
-                                    "
+                                                    (values: string) => values.length > 1 ? 
+                                                    `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                                                "
                                                 label="name"
                                                 value-prop="id"
                                                 :close-on-select="false"
@@ -896,11 +879,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.users.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.users.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 

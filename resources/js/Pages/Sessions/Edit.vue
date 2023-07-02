@@ -76,10 +76,6 @@ const form = sessionForm({
     },
 });
 
-const hasError = (index: number): boolean =>
-    form.errors[`votes.title.${index}` as keyof object] ||
-    form.errors[`votes.users.${index}` as keyof object];
-
 const getSessionUsers = (users: Array<User>): Array<string> => [
     ...new Set(
         users
@@ -439,14 +435,7 @@ const submit = () => {
                                     </template>
                                 </div>
 
-                                <span
-                                    class="block font-medium text-md"
-                                    :class="
-                                        hasError(voteIndex)
-                                            ? 'text-red-600'
-                                            : 'text-gray-700'
-                                    "
-                                >
+                                <span class="block font-medium text-md">
                                     {{ vote.title }}
                                 </span>
                             </div>
@@ -487,8 +476,8 @@ const submit = () => {
                                     <InputError
                                         class="mt-2"
                                         :message="form.errors[
-                                                    `votes.status.${voteIndex}` as keyof object
-                                                ]"
+                                            `votes.status.${voteIndex}` as keyof object
+                                        ]"
                                     />
                                 </div>
 
@@ -523,8 +512,8 @@ const submit = () => {
                                     <InputError
                                         class="mt-2"
                                         :message="form.errors[
-                                                    `votes.types.${voteIndex}` as keyof object
-                                                ]"
+                                            `votes.types.${voteIndex}` as keyof object
+                                        ]"
                                     />
                                 </div>
                             </div>
@@ -551,11 +540,9 @@ const submit = () => {
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.title.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.title.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -577,11 +564,9 @@ const submit = () => {
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.description.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.description.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -607,11 +592,9 @@ const submit = () => {
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.startDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.start_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
 
@@ -634,11 +617,9 @@ const submit = () => {
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.endDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.end_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
                                     </div>
@@ -699,15 +680,20 @@ const submit = () => {
                                                         <MinusIcon />
                                                     </SecondaryButton>
                                                 </div>
+
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="form.errors[
+                                                        `votes.answers.${voteIndex}.${index}.name` as keyof object
+                                                    ]"
+                                                />
                                             </template>
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
+                                                :message="form.errors[
                                                     `votes.answers.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                ]"
                                             />
                                         </div>
                                     </div>
@@ -758,11 +744,9 @@ const submit = () => {
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.labelSets.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.label_sets.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -820,11 +804,9 @@ const submit = () => {
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.users.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.users.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
