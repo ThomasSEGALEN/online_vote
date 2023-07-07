@@ -441,7 +441,7 @@ const submit = () => {
                             </div>
                         </button>
 
-                        <div v-show="currentVote === voteIndex">
+                        <div v-if="currentVote === voteIndex">
                             <div
                                 class="flex flex-row flex-wrap max-w-md justify-between"
                             >

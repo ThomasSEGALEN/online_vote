@@ -517,7 +517,7 @@ const submit = () => form.post(route("sessions.store"));
                             </div>
                         </button>
 
-                        <div v-show="currentVote === voteIndex">
+                        <div v-if="currentVote === voteIndex">
                             <div
                                 class="my-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
                             >
