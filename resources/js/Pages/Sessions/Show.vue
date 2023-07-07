@@ -184,7 +184,7 @@ const chartData = computed(() => {
             </div>
         </template>
 
-        <div class="grid grid-cols-1 p-4 lg:p-6">
+        <div class="grid grid-cols-1 p-4 lg:p-6 lg:max-w-screen-xl mx-auto">
             <div
                 v-if="session.description || session.documents.length"
                 class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg mb-4"

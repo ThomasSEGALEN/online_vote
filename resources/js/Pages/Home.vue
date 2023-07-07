@@ -79,7 +79,7 @@ const getDate = (timestamp: Date) => {
             </h2>
         </template>
 
-        <div class="p-4 lg:p-6">
+        <div class="p-4 lg:p-6 lg:max-w-screen-xl mx-auto">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div>
                     <span class="block font-medium text-md text-gray-700">
