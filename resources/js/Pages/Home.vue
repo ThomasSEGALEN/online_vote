@@ -164,9 +164,11 @@ const getDate = (timestamp: Date) => {
                                         </span>
                                     </div>
 
-                                    <div class="flex flex-row justify-between">
+                                    <div
+                                        class="flex flex-col md:flex-row justify-between mt-4"
+                                    >
                                         <p
-                                            class="block font-medium text-md text-gray-700 break-all mt-4"
+                                            class="block font-medium text-md text-gray-700 break-all"
                                         >
                                             {{
                                                 session.description?.length >
@@ -179,7 +181,7 @@ const getDate = (timestamp: Date) => {
                                             }}
                                         </p>
 
-                                        <div>
+                                        <div class="mt-4 md:mt-0">
                                             <span
                                                 class="block font-medium text-sm text-gray-700"
                                             >
