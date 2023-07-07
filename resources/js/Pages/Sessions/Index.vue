@@ -155,7 +155,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
         <Modal :show="confirmingAnswerAction" @close="closeAnswerActionModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-800">
-                    Jeu d'étiquettes
+                    Jeux d'étiquettes
                 </h2>
 
                 <div
@@ -380,7 +380,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
             </form>
         </Modal>
 
-        <div class="p-4 lg:p-6">
+        <div class="p-4 lg:p-6 lg:max-w-screen-xl mx-auto">
             <div class="flex flex-wrap flex-row justify-between">
                 <div
                     v-if="can.createSessions"

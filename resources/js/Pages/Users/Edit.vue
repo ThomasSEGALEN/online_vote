@@ -84,7 +84,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 lg:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-md lg:max-w-screen-xl mx-auto">
             <form @submit.prevent="submit">
                 <div class="mb-4">
                     <span class="block font-medium text-md text-gray-700">
@@ -116,7 +116,7 @@ const submit = () => {
                 <div
                     class="w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
                 >
-                    <div class="flex flex-col w-full max-w-md">
+                    <div class="flex flex-col w-full">
                         <div>
                             <InputLabel for="lastName" value="Nom" />
 
@@ -194,7 +194,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="w-full mt-4 lg:ml-8 lg:mt-0 max-w-md">
+                    <div class="w-full mt-4 lg:ml-8 lg:mt-0">
                         <div>
                             <InputLabel for="role" value="Rôles" />
 
@@ -279,7 +279,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6 flex lg:justify-end">
+                <div class="mt-6 flex justify-end">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,

@@ -101,7 +101,7 @@ const importFile = (event: Event) => {
             </h2>
         </template>
 
-        <div class="p-4 lg:p-6">
+        <div class="p-4 lg:p-6 lg:max-w-screen-xl mx-auto">
             <div class="flex flex-wrap flex-row items-center justify-between">
                 <div
                     v-if="can.createRoles"

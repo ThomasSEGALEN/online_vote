@@ -158,7 +158,7 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 lg:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-md lg:max-w-screen-xl mx-auto">
             <form @submit.prevent="submit">
                 <div v-if="formStep === 1">
                     <div>
@@ -194,7 +194,7 @@ const submit = () => {
                     <div
                         class="mt-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
                     >
-                        <div class="flex flex-col w-full max-w-md">
+                        <div class="flex flex-col w-full">
                             <div>
                                 <InputLabel for="title" value="Titre" />
 
@@ -300,11 +300,11 @@ const submit = () => {
                             </div>
                         </div>
 
-                        <div class="w-full mt-4 lg:mt-0 max-w-md">
+                        <div class="w-full mt-4 lg:mt-0">
                             <div>
                                 <InputLabel for="users" value="Utilisateurs" />
 
-                                <div class="mt-1 max-w-md">
+                                <div class="mt-1">
                                     <Multiselect
                                         id="users"
                                         ref="usersInput"
@@ -703,7 +703,7 @@ const submit = () => {
                                     <div>
                                         <InputLabel
                                             :for="`voteLabelSets-${voteIndex}`"
-                                            value="Jeu d'étiquettes"
+                                            value="Jeux d'étiquettes"
                                         />
 
                                         <div class="mt-1 max-w-md">
@@ -873,7 +873,7 @@ const submit = () => {
                 </div>
 
                 <div
-                    class="flex items-center mt-8 max-w-md lg:max-w-full"
+                    class="mt-6 flex"
                     :class="formStep === 1 ? 'justify-end' : 'justify-between'"
                 >
                     <SecondaryButton v-if="formStep === 1" @click="nextStep">
