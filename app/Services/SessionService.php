@@ -263,9 +263,11 @@ class SessionService
                             'name' => $answer->name,
                             'color' => $answer->color
                         ]),
-                        'results' => VoteResult::selectRaw('vote_results.answer_id, vote_answers.name, vote_answers.color, DATE(created_at) as date, COUNT(*) as count')
-                            ->where('vote_answers.vote_id', $vote->id)
-                            ->join('vote_answers', 'vote_answers.id', 'vote_results.answer_id')
+                        'results' => VoteResult::select('vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
+                            ->selectRaw('DATE(created_at) as date')
+                            ->selectRaw('COUNT(*) as count')
+                            ->join('vote_answers', 'vote_answers.id', '=', 'vote_results.answer_id')
+                            ->where('vote_results.vote_id', $vote->id)
                             ->groupBy('date', 'vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
                             ->orderBy('date')
                             ->orderBy('vote_results.answer_id')

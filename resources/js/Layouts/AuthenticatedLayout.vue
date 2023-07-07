@@ -3,16 +3,16 @@ import Navbar from "@/Components/Navbar.vue";
 </script>
 
 <template>
-    <div class="flex flex-col lg:flex-row">
+    <div class="lg:ml-56">
         <Navbar />
 
-        <main class="flex flex-col flex-1 lg:ml-56">
-            <header v-if="$slots.header">
-                <div class="flex p-4 h-fit border-b">
-                    <slot name="header" />
-                </div>
-            </header>
+        <header v-if="$slots.header">
+            <div class="flex p-4 border-b">
+                <slot name="header" />
+            </div>
+        </header>
 
+        <main>
             <slot />
         </main>
     </div>

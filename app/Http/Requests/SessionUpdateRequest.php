@@ -24,15 +24,18 @@ class SessionUpdateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string'],
-            'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date'],
+            'start_date' => ['nullable', 'date', 'before:end_date'],
+            'end_date' => ['nullable', 'date', 'after:start_date'],
             'users' => ['required', 'array'],
             'users.*' => ['integer'],
             'status' => ['required', 'integer'],
-            'documents' => ['nullable', 'array', 'max_size:8192'],
+            'documents' => ['nullable', 'array', 'max_size:10000'],
             'documents.*' => ['file'],
             'votes' => ['required', 'array'],
             'votes.title.*' => ['required', 'string'],
+            'votes.description.*' => ['nullable', 'string'],
+            'votes.start_date.*' => ['nullable', 'date', 'before:end_date'],
+            'votes.end_date.*' => ['nullable', 'date', 'after:start_date'],
             'votes.users.*' => ['required', 'array'],
             'votes.users.*.*' => ['integer'],
             'votes.status.*' => ['required', 'integer'],
@@ -40,7 +43,10 @@ class SessionUpdateRequest extends FormRequest
             'label_sets' => ['nullable', 'array'],
             'label_sets.*' => ['integer'],
             'votes.label_sets.*' => ['nullable', 'array'],
-            'votes.label_sets.*.*' => ['integer']
+            'votes.label_sets.*.*' => ['integer'],
+            'votes.answers.*' => ['nullable', 'array'],
+            'votes.answers.*.*' => ['array'],
+            'votes.answers.*.*.name' => ['required_without:votes.label_sets.*.*']
         ];
     }
 }

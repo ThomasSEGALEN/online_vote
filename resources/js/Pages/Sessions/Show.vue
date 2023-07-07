@@ -184,7 +184,7 @@ const chartData = computed(() => {
             </div>
         </template>
 
-        <div class="grid grid-cols-1 p-4 lg:p-6">
+        <div class="grid grid-cols-1 p-4 lg:p-6 lg:max-w-screen-xl mx-auto">
             <div
                 v-if="session.description || session.documents.length"
                 class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg mb-4"
@@ -206,7 +206,7 @@ const chartData = computed(() => {
                         Documents
                     </h2>
 
-                    <div
+                    <template
                         v-for="document in session.documents"
                         :key="document.name"
                     >
@@ -216,7 +216,7 @@ const chartData = computed(() => {
                         >
                             {{ document.name }}
                         </a>
-                    </div>
+                    </template>
                 </div>
             </div>
 
@@ -246,9 +246,22 @@ const chartData = computed(() => {
                         </p>
                     </Transition>
 
-                    <h2 class="text-lg font-bold text-gray-800 break-all">
-                        {{ vote.title }}
-                    </h2>
+                    <div class="flex flex-col md:flex-row justify-between">
+                        <h2 class="text-lg font-bold text-gray-800 break-all">
+                            {{ vote.title }}
+                        </h2>
+
+                        <span
+                            class="block font-medium text-md"
+                            :class="
+                                vote.status_id === 1
+                                    ? 'text-green-600'
+                                    : 'text-red-600'
+                            "
+                        >
+                            {{ vote.status_id === 1 ? "Ouvert" : "Fermé" }}
+                        </span>
+                    </div>
 
                     <div v-if="vote.description">
                         <h2

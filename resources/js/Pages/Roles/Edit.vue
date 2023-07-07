@@ -71,10 +71,10 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 lg:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-screen-md mx-auto">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
-                    <div class="flex flex-col w-full max-w-md">
+                    <div class="flex flex-col w-full">
                         <div>
                             <InputLabel for="name" value="Nom" />
 
@@ -107,7 +107,7 @@ const submit = () => {
                             <div
                                 class="flex flex-col overflow-x-auto min-w-full mt-4 mb-6"
                             >
-                                <table class="max-w-md">
+                                <table>
                                     <thead class="bg-white border-b">
                                         <tr class="border-b bg-gray-100">
                                             <th
@@ -272,7 +272,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6 flex lg:justify-end max-w-2xl">
+                <div class="mt-6 flex justify-end">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,
