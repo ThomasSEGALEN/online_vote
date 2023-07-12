@@ -191,8 +191,9 @@ class UserService
      * Remove the specified resource from storage.
      *
      * @param \App\Models\User $user
+     * @return void
      */
-    public function destroy(User $user)
+    public function destroy(User $user): void
     {
         $user->delete();
     }

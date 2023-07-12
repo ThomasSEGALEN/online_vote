@@ -124,8 +124,9 @@ class RoleService
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Role $role
+     * @return void
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): void
     {
         $role->delete();
     }
