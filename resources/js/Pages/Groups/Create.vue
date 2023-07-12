@@ -55,10 +55,10 @@ const submit = () => {
             </div>
         </template>
 
-        <div class="p-4 lg:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-screen-md mx-auto">
             <form @submit.prevent="submit">
                 <div class="w-full flex flex-col">
-                    <div class="flex flex-col w-full max-w-md">
+                    <div class="flex flex-col w-full">
                         <div>
                             <InputLabel for="name" value="Nom" />
 
@@ -84,7 +84,7 @@ const submit = () => {
                         <div>
                             <InputLabel for="users" value="Utilisateurs" />
 
-                            <div class="mt-1 max-w-md">
+                            <div class="mt-1">
                                 <Multiselect
                                     id="users"
                                     v-model="form.users"
@@ -126,7 +126,7 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="mt-6 flex lg:justify-end max-w-md">
+                <div class="mt-6 flex justify-end">
                     <PrimaryButton
                         :class="{
                             'opacity-25': form.processing,

@@ -58,11 +58,6 @@ const { groupedUsers, users } = toRefs(props);
 
 const form = sessionForm({});
 
-const hasError = (index: number): boolean =>
-    form.errors[`votes.title.${index}` as keyof object] ||
-    form.errors[`votes.users.${index}` as keyof object] ||
-    form.errors[`votes.labelSets.${index}` as keyof object];
-
 const getSessionUsers = (): Array<string> => [
     ...new Set(
         groupedUsers.value
@@ -167,69 +162,70 @@ const submit = () => form.post(route("sessions.store"));
             </div>
         </template>
 
-        <div class="p-4 lg:p-6 max-w-5xl">
+        <div class="p-4 lg:p-6 max-w-md lg:max-w-screen-xl mx-auto">
             <form @submit.prevent="submit">
                 <div v-if="formStep === 1">
-                    <div
-                        class="flex flex-col lg:flex-row max-w-md justify-between"
-                    >
-                        <div>
-                            <span
-                                class="block font-medium text-md text-gray-700"
+                    <div class="mt-4 flex flex-col lg:flex-row lg:space-x-8">
+                        <div class="w-full">
+                            <div
+                                class="flex flex-col lg:flex-row lg:justify-between"
                             >
-                                Statut
-                            </span>
+                                <div>
+                                    <span
+                                        class="block font-medium text-md text-gray-700"
+                                    >
+                                        Statut
+                                    </span>
 
-                            <div class="mt-1 space-x-4">
-                                <div
-                                    v-for="status in statuses"
-                                    :key="status.id"
-                                    class="inline-flex items-center space-x-1 ml-0.5"
-                                >
-                                    <RadioInput
-                                        :id="`status-${status.id}`"
-                                        v-model="form.status"
-                                        :value="status.id"
+                                    <div class="mt-1 space-x-4">
+                                        <div
+                                            v-for="status in statuses"
+                                            :key="status.id"
+                                            class="inline-flex items-center space-x-1 ml-0.5"
+                                        >
+                                            <RadioInput
+                                                :id="`status-${status.id}`"
+                                                v-model="form.status"
+                                                :value="status.id"
+                                            />
+
+                                            <InputLabel
+                                                :for="`status-${status.id}`"
+                                                :value="status.name"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.status"
+                                    />
+                                </div>
+
+                                <div class="mt-4 lg:mt-0">
+                                    <InputLabel
+                                        for="amount"
+                                        value="Nombre de votes"
                                     />
 
-                                    <InputLabel
-                                        :for="`status-${status.id}`"
-                                        :value="status.name"
+                                    <NumberInput
+                                        id="amount"
+                                        ref="amountInput"
+                                        v-model.number="form.amount"
+                                        :min="1"
+                                        :max="20"
+                                        class="mt-1 block w-full"
+                                        required
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.amount"
                                     />
                                 </div>
                             </div>
 
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.status"
-                            />
-                        </div>
-
-                        <div class="mt-4 lg:mt-0">
-                            <InputLabel for="amount" value="Nombre de votes" />
-
-                            <NumberInput
-                                id="amount"
-                                ref="amountInput"
-                                v-model.number="form.amount"
-                                :min="1"
-                                :max="20"
-                                class="mt-1 block w-full"
-                                required
-                            />
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.amount"
-                            />
-                        </div>
-                    </div>
-
-                    <div
-                        class="mt-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
-                    >
-                        <div class="flex flex-col w-full max-w-md">
-                            <div>
+                            <div class="mt-4">
                                 <InputLabel for="title" value="Titre" />
 
                                 <TextInput
@@ -267,9 +263,9 @@ const submit = () => form.post(route("sessions.store"));
                             </div>
 
                             <div
-                                class="mt-4 flex flex-col lg:flex-row lg:space-x-7 lg:justify-between"
+                                class="mt-4 flex flex-col lg:flex-row lg:space-x-4"
                             >
-                                <div>
+                                <div class="w-full">
                                     <InputLabel
                                         for="startDate"
                                         value="Date de début"
@@ -288,7 +284,7 @@ const submit = () => form.post(route("sessions.store"));
                                     />
                                 </div>
 
-                                <div class="mt-4 lg:mt-0">
+                                <div class="mt-4 lg:mt-0 w-full">
                                     <InputLabel
                                         for="endDate"
                                         value="Date de fin"
@@ -333,14 +329,14 @@ const submit = () => form.post(route("sessions.store"));
                             </div>
                         </div>
 
-                        <div class="w-full mt-4 lg:mt-0 max-w-md">
+                        <div class="w-full mt-4 lg:mt-0">
                             <div>
                                 <InputLabel
                                     for="labelSets"
-                                    value="Jeu d'étiquettes"
+                                    value="Jeux d'étiquettes"
                                 />
 
-                                <div class="mt-1 max-w-md">
+                                <div class="mt-1">
                                     <Multiselect
                                         id="labelSets"
                                         ref="labelSetsInput"
@@ -383,7 +379,7 @@ const submit = () => form.post(route("sessions.store"));
                             <div class="mt-4">
                                 <InputLabel for="users" value="Utilisateurs" />
 
-                                <div class="mt-1 max-w-md">
+                                <div class="mt-1">
                                     <Multiselect
                                         id="users"
                                         ref="usersInput"
@@ -391,9 +387,9 @@ const submit = () => form.post(route("sessions.store"));
                                         :groups="true"
                                         mode="multiple"
                                         :multiple-label="
-                                        (values: string) => values.length > 1 ? 
-                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
-                                    "
+                            (values: string) => values.length > 1 ? 
+                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                            "
                                         label="name"
                                         value-prop="id"
                                         :close-on-select="false"
@@ -463,7 +459,7 @@ const submit = () => form.post(route("sessions.store"));
                                     </div>
                                 </button>
 
-                                <ul class="mt-1 max-h-36 overflow-y-auto">
+                                <ul class="mt-1 max-h-60 overflow-y-auto">
                                     <li
                                         v-for="(
                                             user, index
@@ -514,102 +510,99 @@ const submit = () => form.post(route("sessions.store"));
                                     </template>
                                 </div>
 
-                                <span
-                                    class="block font-medium text-md"
-                                    :class="
-                                        hasError(voteIndex)
-                                            ? 'text-red-600'
-                                            : 'text-gray-700'
-                                    "
-                                >
+                                <span class="block font-medium text-md">
                                     {{ form.title }} :
                                     {{ form.votes.title[voteIndex] }}
                                 </span>
                             </div>
                         </button>
 
-                        <div v-show="currentVote === voteIndex">
-                            <div
-                                class="flex flex-row flex-wrap max-w-md justify-between"
-                            >
-                                <div>
-                                    <span
-                                        class="block font-medium text-md text-gray-700"
-                                    >
-                                        Statut
-                                    </span>
-
-                                    <div class="mt-1 space-x-4">
-                                        <div
-                                            v-for="status in statuses"
-                                            :key="status.id"
-                                            class="inline-flex items-center space-x-1 ml-0.5"
-                                        >
-                                            <RadioInput
-                                                :id="`status-${status.id}-${voteIndex}`"
-                                                v-model="
-                                                    form.votes.status[voteIndex]
-                                                "
-                                                :value="status.id"
-                                            />
-
-                                            <InputLabel
-                                                :for="`status-${status.id}-${voteIndex}`"
-                                                :value="status.name"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <InputError
-                                        class="mt-2"
-                                        :message="form.errors[
-                                                    `votes.status.${voteIndex}` as keyof object
-                                                ]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <span
-                                        class="block font-medium text-md text-gray-700"
-                                    >
-                                        Scrutin
-                                    </span>
-
-                                    <div class="mt-1 space-x-4">
-                                        <div
-                                            v-for="voteType in voteTypes"
-                                            :key="voteType.id"
-                                            class="inline-flex items-center space-x-1 ml-0.5"
-                                        >
-                                            <RadioInput
-                                                :id="`voteType-${voteType.id}-${voteIndex}`"
-                                                v-model="
-                                                    form.votes.type[voteIndex]
-                                                "
-                                                :value="voteType.id"
-                                            />
-
-                                            <InputLabel
-                                                :for="`voteType-${voteType.id}-${voteIndex}`"
-                                                :value="voteType.name"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <InputError
-                                        class="mt-2"
-                                        :message="form.errors[
-                                                    `votes.types.${voteIndex}` as keyof object
-                                                ]"
-                                    />
-                                </div>
-                            </div>
-
+                        <div v-if="currentVote === voteIndex">
                             <div
                                 class="my-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
                             >
-                                <div class="flex flex-col w-full max-w-md">
-                                    <div>
+                                <div class="flex flex-col w-full">
+                                    <div
+                                        class="flex flex-row flex-wrap justify-between lg:h-20"
+                                    >
+                                        <div>
+                                            <span
+                                                class="block font-medium text-md text-gray-700"
+                                            >
+                                                Statut
+                                            </span>
+
+                                            <div class="mt-1 space-x-4">
+                                                <div
+                                                    v-for="status in statuses"
+                                                    :key="status.id"
+                                                    class="inline-flex items-center space-x-1 ml-0.5"
+                                                >
+                                                    <RadioInput
+                                                        :id="`status-${status.id}-${voteIndex}`"
+                                                        v-model="
+                                                            form.votes.status[
+                                                                voteIndex
+                                                            ]
+                                                        "
+                                                        :value="status.id"
+                                                    />
+
+                                                    <InputLabel
+                                                        :for="`status-${status.id}-${voteIndex}`"
+                                                        :value="status.name"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors[
+                                            `votes.status.${voteIndex}` as keyof object
+                                        ]"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <span
+                                                class="block font-medium text-md text-gray-700"
+                                            >
+                                                Scrutin
+                                            </span>
+
+                                            <div class="mt-1 space-x-4">
+                                                <div
+                                                    v-for="voteType in voteTypes"
+                                                    :key="voteType.id"
+                                                    class="inline-flex items-center space-x-1 ml-0.5"
+                                                >
+                                                    <RadioInput
+                                                        :id="`voteType-${voteType.id}-${voteIndex}`"
+                                                        v-model="
+                                                            form.votes.type[
+                                                                voteIndex
+                                                            ]
+                                                        "
+                                                        :value="voteType.id"
+                                                    />
+
+                                                    <InputLabel
+                                                        :for="`voteType-${voteType.id}-${voteIndex}`"
+                                                        :value="voteType.name"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors[
+                                            `votes.types.${voteIndex}` as keyof object
+                                        ]"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 lg:mt-2">
                                         <InputLabel
                                             :for="`voteTitle-${voteIndex}`"
                                             value="Titre"
@@ -627,11 +620,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.title.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.title.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -653,18 +644,16 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.description.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.description.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
                                     <div
-                                        class="mt-4 flex flex-col lg:flex-row lg:space-x-7"
+                                        class="mt-4 flex flex-col lg:flex-row lg:space-x-4"
                                     >
-                                        <div>
+                                        <div class="w-full">
                                             <InputLabel
                                                 :for="`voteStartDate-${voteIndex}`"
                                                 value="Date de début"
@@ -683,15 +672,13 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.startDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.start_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
 
-                                        <div class="mt-4 lg:mt-0">
+                                        <div class="mt-4 lg:mt-0 w-full">
                                             <InputLabel
                                                 :for="`voteEndDate-${voteIndex}`"
                                                 value="Date de fin"
@@ -710,11 +697,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
-                                                    `votes.endDate.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                :message="form.errors[
+                                                    `votes.end_date.${voteIndex}` as keyof object
+                                                ]"
                                             />
                                         </div>
                                     </div>
@@ -775,28 +760,33 @@ const submit = () => form.post(route("sessions.store"));
                                                         <MinusIcon />
                                                     </SecondaryButton>
                                                 </div>
+
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="form.errors[
+                                                        `votes.answers.${voteIndex}.${index}.name` as keyof object
+                                                    ]"
+                                                />
                                             </template>
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="
-                                                form.errors[
+                                                :message="form.errors[
                                                     `votes.answers.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                                ]"
                                             />
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="w-full mt-4 lg:mt-0 max-w-md">
+                                <div class="w-full mt-4 lg:mt-0">
                                     <div>
                                         <InputLabel
                                             :for="`voteLabelSets-${voteIndex}`"
-                                            value="Jeu d'étiquettes"
+                                            value="Jeux d'étiquettes"
                                         />
 
-                                        <div class="mt-1 max-w-md">
+                                        <div class="mt-1">
                                             <Multiselect
                                                 :id="`voteLabelSets-${voteIndex}`"
                                                 v-model="
@@ -834,11 +824,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.labelSets.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.label_sets.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -848,7 +836,7 @@ const submit = () => form.post(route("sessions.store"));
                                             value="Utilisateurs"
                                         />
 
-                                        <div class="mt-1 max-w-md">
+                                        <div class="mt-1">
                                             <Multiselect
                                                 :id="`voteUsers-${voteIndex}`"
                                                 v-model="
@@ -857,9 +845,9 @@ const submit = () => form.post(route("sessions.store"));
                                                 :groups="true"
                                                 mode="multiple"
                                                 :multiple-label="
-                                        (values: string) => values.length > 1 ? 
-                                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
-                                    "
+                                                    (values: string) => values.length > 1 ? 
+                                                    `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                                                "
                                                 label="name"
                                                 value-prop="id"
                                                 :close-on-select="false"
@@ -896,11 +884,9 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="
-                                                form.errors[
-                                                    `votes.users.${voteIndex}` as keyof object
-                                                ]
-                                            "
+                                            :message="form.errors[
+                                                `votes.users.${voteIndex}` as keyof object
+                                            ]"
                                         />
                                     </div>
 
@@ -964,7 +950,7 @@ const submit = () => form.post(route("sessions.store"));
                 </div>
 
                 <div
-                    class="flex items-center mt-8 max-w-md lg:max-w-full"
+                    class="mt-6 flex"
                     :class="formStep === 1 ? 'justify-end' : 'justify-between'"
                 >
                     <SecondaryButton v-if="formStep === 1" @click="nextStep">
