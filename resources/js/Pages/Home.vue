@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import { throttle } from "lodash";
+import { debounce } from "lodash";
 import { Permission, Session, Status } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -43,13 +43,13 @@ const { permissions } = usePage().props.auth;
 
 watch(
     [status, search],
-    throttle(([statusValue, searchValue]) => {
+    debounce(([statusValue, searchValue]) => {
         router.get(
             route("home"),
             { status: statusValue, search: searchValue },
             { preserveState: true, replace: true }
         );
-    }, 500)
+    }, 300)
 );
 
 const hasAccess = (session: Session): boolean =>
