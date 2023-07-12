@@ -37,7 +37,7 @@ class LabelSetService
      * @param \App\Models\LabelSet $labelSet
      * @return void
      */
-    public function destroy(LabelSet $labelSet)
+    public function destroy(LabelSet $labelSet): void
     {
         $labelSet->delete();
     }

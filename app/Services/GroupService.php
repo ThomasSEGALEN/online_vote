@@ -126,7 +126,7 @@ class GroupService
      * @param \App\Models\Group $group
      * @return void
      */
-    public function destroy(Group $group)
+    public function destroy(Group $group): void
     {
         $group->delete();
     }

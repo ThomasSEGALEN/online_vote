@@ -226,6 +226,7 @@ class SessionService
     /**
      * Display the specified resource.
      *
+     * @param \App\Models\Session $session
      * @return array
      */
     public function show(Session $session): array
@@ -437,8 +438,9 @@ class SessionService
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Session $session
+     * @return void
      */
-    public function destroy(Session $session)
+    public function destroy(Session $session): void
     {
         $session->delete();
     }
