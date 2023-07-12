@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, onUpdated, ref, watch } from "vue";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/vue3";
 import route from "ziggy-js";
-import { throttle } from "lodash";
+import { debounce } from "lodash";
 import { LabelSet, Session, Status } from "@/types/types";
 import AnswerIcon from "@/Components/AnswerIcon.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -89,13 +89,13 @@ onUpdated(() => {
 
 watch(
     search,
-    throttle((value) => {
+    debounce((value) => {
         router.get(
             route("sessions.index"),
             { search: value },
             { preserveState: true, replace: true }
         );
-    }, 500)
+    }, 300)
 );
 
 const confirmAnswerAction = () => (confirmingAnswerAction.value = true);

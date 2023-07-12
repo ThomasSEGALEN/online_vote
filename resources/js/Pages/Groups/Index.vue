@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { Method } from "@inertiajs/core";
 import route from "ziggy-js";
-import { throttle } from "lodash";
+import { debounce } from "lodash";
 import { Group } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DangerButton from "@/Components/DangerButton.vue";
@@ -55,13 +55,13 @@ onMounted(() => {
 
 watch(
     search,
-    throttle((value) => {
+    debounce((value) => {
         router.get(
             route("groups.index"),
             { search: value },
             { preserveState: true, replace: true }
         );
-    }, 500)
+    }, 300)
 );
 
 const confirmGroupDeletion = (id: number) => {
