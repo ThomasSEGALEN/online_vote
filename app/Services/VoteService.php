@@ -32,6 +32,7 @@ class VoteService
                         : null
                 )
                 ->orderBy('status_id')
+                ->orderBy('id', 'desc')
                 ->paginate(10)
                 ->appends($request->only(['status', 'search']))
                 ->through(

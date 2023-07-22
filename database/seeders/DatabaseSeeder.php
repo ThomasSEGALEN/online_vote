@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Session;
 use App\Models\User;
+use App\Models\VoteResult;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
             VoteSeeder::class,
             VoteAnswerSeeder::class,
             LabelSetSeeder::class,
-            AnswerSeeder::class
+            AnswerSeeder::class,
         ]);
 
         User::factory()->count(150)->create();
@@ -64,6 +65,8 @@ class DatabaseSeeder extends Seeder
 
             $session->votes->each(function ($vote) use ($session) {
                 $vote->users()->attach($session->users()->pluck('id')->toArray());
+
+                VoteResult::factory()->count(25)->create();
             });
         });
     }

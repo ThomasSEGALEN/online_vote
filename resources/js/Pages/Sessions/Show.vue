@@ -190,19 +190,19 @@ const chartData = computed(() => {
                 class="flex flex-col justify-evenly space-y-4 bg-white p-6 rounded-lg shadow-lg mb-4"
             >
                 <div v-if="session.description">
-                    <h2 class="text-lg font-semibold text-gray-800 break-all">
+                    <h2 class="text-lg font-semibold text-gray-800">
                         Description
                     </h2>
 
                     <span
-                        class="block font-medium text-sm text-gray-700 break-all"
+                        class="block font-medium text-sm text-gray-700 break-words"
                     >
                         {{ session.description }}
                     </span>
                 </div>
 
                 <div v-if="session.documents.length">
-                    <h2 class="text-lg font-semibold text-gray-800 break-all">
+                    <h2 class="text-lg font-semibold text-gray-800">
                         Documents
                     </h2>
 
@@ -247,7 +247,7 @@ const chartData = computed(() => {
                     </Transition>
 
                     <div class="flex flex-col md:flex-row justify-between">
-                        <h2 class="text-lg font-bold text-gray-800 break-all">
+                        <h2 class="text-lg font-bold text-gray-800">
                             {{ vote.title }}
                         </h2>
 
@@ -264,14 +264,12 @@ const chartData = computed(() => {
                     </div>
 
                     <div v-if="vote.description">
-                        <h2
-                            class="text-lg font-semibold text-gray-800 break-all"
-                        >
+                        <h2 class="text-lg font-semibold text-gray-800">
                             Description
                         </h2>
 
                         <span
-                            class="block font-medium text-sm text-gray-700 break-all"
+                            class="block font-medium text-sm text-gray-700 break-words"
                         >
                             {{ vote.description }}
                         </span>
@@ -282,7 +280,7 @@ const chartData = computed(() => {
                             <div>
                                 <div class="flex flex-col">
                                     <h2
-                                        class="text-lg font-semibold text-gray-800 break-all"
+                                        class="text-lg font-semibold text-gray-800"
                                     >
                                         Choix
                                     </h2>
@@ -373,9 +371,7 @@ const chartData = computed(() => {
 
                         <template v-else>
                             <div>
-                                <h2
-                                    class="text-lg font-semibold text-gray-800 break-all"
-                                >
+                                <h2 class="text-lg font-semibold text-gray-800">
                                     Résultats
                                 </h2>
 
@@ -391,14 +387,12 @@ const chartData = computed(() => {
                 </template>
 
                 <template v-else>
-                    <span class="block text-sm text-red-600 break-all">
+                    <span class="block text-sm text-red-600">
                         Vous n'avez pas accès à ce vote
                     </span>
 
                     <div>
-                        <h2
-                            class="text-lg font-semibold text-gray-800 break-all"
-                        >
+                        <h2 class="text-lg font-semibold text-gray-800">
                             Résultats
                         </h2>
 
