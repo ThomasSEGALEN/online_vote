@@ -68,13 +68,9 @@ class SessionController extends Controller
 
         $session = $this->sessionService->store($request);
 
-        $success = '';
-
-        if ($request->amount > 1) {
-            $success = "La séance $session->title ($request->amount votes) a été créée avec succès";
-        } else {
-            $success = "La séance $session->title ($request->amount vote) a été créée avec succès";
-        }
+        $success = $request->amount > 1
+            ? "La séance $session->title ($request->amount votes) a été créée avec succès"
+            : "La séance $session->title ($request->amount vote) a été créée avec succès";
 
         return to_route('sessions.index')->with('success', $success);
     }

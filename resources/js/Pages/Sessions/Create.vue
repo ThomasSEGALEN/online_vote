@@ -115,6 +115,7 @@ const nextStep = () =>
             if (formRefresh.value) {
                 for (let index = 0; index < form.amount; index++) {
                     form.votes.title.push(`${form.title} - ${index + 1}`);
+                    form.votes.description.push("");
                     form.votes.users.push(
                         users.value
                             .filter((user) => form.users.includes(user.id))
