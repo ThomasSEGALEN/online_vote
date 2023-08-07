@@ -115,7 +115,7 @@ const nextStep = () =>
             if (formRefresh.value) {
                 for (let index = 0; index < form.amount; index++) {
                     form.votes.title.push(`${form.title} - ${index + 1}`);
-                    form.votes.description.push(form.description);
+                    form.votes.description.push("");
                     form.votes.users.push(
                         users.value
                             .filter((user) => form.users.includes(user.id))
@@ -499,7 +499,9 @@ const submit = () => form.post(route("sessions.store"));
                                     : (currentVote = -1)
                             "
                         >
-                            <div class="inline-flex items-center">
+                            <div
+                                class="inline-flex items-center text-left space-x-2"
+                            >
                                 <div class="mr-1">
                                     <template v-if="currentVote === voteIndex">
                                         <CaretUpIcon />
@@ -510,7 +512,7 @@ const submit = () => form.post(route("sessions.store"));
                                     </template>
                                 </div>
 
-                                <span class="block font-medium text-md">
+                                <span class="inline-block font-medium text-md">
                                     {{ form.title }} :
                                     {{ form.votes.title[voteIndex] }}
                                 </span>
@@ -523,7 +525,7 @@ const submit = () => form.post(route("sessions.store"));
                             >
                                 <div class="flex flex-col w-full">
                                     <div
-                                        class="flex flex-row flex-wrap justify-between lg:h-20"
+                                        class="flex flex-col sm:flex-row sm:space-x-8 lg:h-20"
                                     >
                                         <div>
                                             <span

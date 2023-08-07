@@ -15,21 +15,21 @@ class AnswerSeeder extends Seeder
         DB::table('answers')->insert([
             [
                 'name' => 'Pour',
-                'color' => '#0000FF',
+                'color' => '#77DD76',
                 'label_set_id' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'Contre',
-                'color' => '#FF0000',
+                'color' => '#FF6962',
                 'label_set_id' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'Abstention',
-                'color' => '#00FF00',
+                'color' => '#FDFD96',
                 'label_set_id' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

@@ -14,53 +14,78 @@ class VoteAnswerSeeder extends Seeder
     {
         DB::table('vote_answers')->insert([
             [
-                'name' => 'Oui',
-                'color' => '#0000FF',
+                'name' => 'Pour',
+                'color' => '#77DD76',
                 'vote_id' => 1
             ],
             [
-                'name' => 'Non',
-                'color' => '#FF0000',
+                'name' => 'Contre',
+                'color' => '#FF6962',
+                'vote_id' => 1
+            ],
+            [
+                'name' => 'Abstention',
+                'color' => '#FDFD96',
                 'vote_id' => 1
             ],
             [
                 'name' => 'Pour',
-                'color' => '#0000FF',
+                'color' => '#77DD76',
                 'vote_id' => 2
             ],
             [
                 'name' => 'Contre',
-                'color' => '#FF0000',
+                'color' => '#FF6962',
                 'vote_id' => 2
             ],
             [
-                'name' => 'Oui',
-                'color' => '#0000FF',
+                'name' => 'Abstention',
+                'color' => '#FDFD96',
+                'vote_id' => 2
+            ],
+            [
+                'name' => 'Pour',
+                'color' => '#77DD76',
                 'vote_id' => 3
             ],
             [
-                'name' => 'Non',
-                'color' => '#FF0000',
+                'name' => 'Contre',
+                'color' => '#FF6962',
+                'vote_id' => 3
+            ],
+            [
+                'name' => 'Abstention',
+                'color' => '#FDFD96',
                 'vote_id' => 3
             ],
             [
                 'name' => 'Pour',
-                'color' => '#0000FF',
+                'color' => '#77DD76',
                 'vote_id' => 4
             ],
             [
                 'name' => 'Contre',
-                'color' => '#FF0000',
+                'color' => '#FF6962',
                 'vote_id' => 4
             ],
             [
-                'name' => 'Oui',
-                'color' => '#0000FF',
+                'name' => 'Abstention',
+                'color' => '#FDFD96',
+                'vote_id' => 4
+            ],
+            [
+                'name' => 'Pour',
+                'color' => '#77DD76',
                 'vote_id' => 5
             ],
             [
-                'name' => 'Non',
-                'color' => '#FF0000',
+                'name' => 'Contre',
+                'color' => '#FF6962',
+                'vote_id' => 5
+            ],
+            [
+                'name' => 'Abstention',
+                'color' => '#FDFD96',
                 'vote_id' => 5
             ]
         ]);

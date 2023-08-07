@@ -424,7 +424,9 @@ const submit = () => {
                                     : (currentVote = -1)
                             "
                         >
-                            <div class="inline-flex items-center">
+                            <div
+                                class="inline-flex items-center text-left space-x-2"
+                            >
                                 <div class="mr-1">
                                     <template v-if="currentVote === voteIndex">
                                         <CaretUpIcon />
@@ -435,7 +437,7 @@ const submit = () => {
                                     </template>
                                 </div>
 
-                                <span class="block font-medium text-md">
+                                <span class="inline-block font-medium text-md">
                                     {{ vote.title }}
                                 </span>
                             </div>
@@ -443,86 +445,90 @@ const submit = () => {
 
                         <div v-if="currentVote === voteIndex">
                             <div
-                                class="flex flex-row flex-wrap max-w-md justify-between"
+                                class="my-4 w-full flex flex-col lg:flex-row lg:space-x-8"
                             >
-                                <div>
-                                    <span
-                                        class="block font-medium text-md text-gray-700"
+                                <div class="flex flex-col w-full">
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:space-x-8 lg:h-20"
                                     >
-                                        Statut
-                                    </span>
+                                        <div>
+                                            <span
+                                                class="block font-medium text-md text-gray-700"
+                                            >
+                                                Statut
+                                            </span>
 
-                                    <div class="mt-1 space-x-4">
-                                        <div
-                                            v-for="status in statuses"
-                                            :key="status.id"
-                                            class="inline-flex items-center space-x-1 ml-0.5"
-                                        >
-                                            <RadioInput
-                                                :id="`status-${status.id}-${voteIndex}`"
-                                                v-model="
-                                                    form.votes.status[voteIndex]
-                                                "
-                                                :value="status.id"
-                                            />
+                                            <div class="mt-1 space-x-4">
+                                                <div
+                                                    v-for="status in statuses"
+                                                    :key="status.id"
+                                                    class="inline-flex items-center space-x-1 ml-0.5"
+                                                >
+                                                    <RadioInput
+                                                        :id="`status-${status.id}-${voteIndex}`"
+                                                        v-model="
+                                                            form.votes.status[
+                                                                voteIndex
+                                                            ]
+                                                        "
+                                                        :value="status.id"
+                                                    />
 
-                                            <InputLabel
-                                                :for="`status-${status.id}-${voteIndex}`"
-                                                :value="status.name"
-                                            />
-                                        </div>
-                                    </div>
+                                                    <InputLabel
+                                                        :for="`status-${status.id}-${voteIndex}`"
+                                                        :value="status.name"
+                                                    />
+                                                </div>
+                                            </div>
 
-                                    <InputError
-                                        class="mt-2"
-                                        :message="form.errors[
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors[
                                             `votes.status.${voteIndex}` as keyof object
                                         ]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <span
-                                        class="block font-medium text-md text-gray-700"
-                                    >
-                                        Scrutin
-                                    </span>
-
-                                    <div class="mt-1 space-x-4">
-                                        <div
-                                            v-for="voteType in voteTypes"
-                                            :key="voteType.id"
-                                            class="inline-flex items-center space-x-1 ml-0.5"
-                                        >
-                                            <RadioInput
-                                                :id="`voteType-${voteType.id}-${voteIndex}`"
-                                                v-model="
-                                                    form.votes.type[voteIndex]
-                                                "
-                                                :value="voteType.id"
                                             />
+                                        </div>
 
-                                            <InputLabel
-                                                :for="`voteType-${voteType.id}-${voteIndex}`"
-                                                :value="voteType.name"
+                                        <div>
+                                            <span
+                                                class="block font-medium text-md text-gray-700"
+                                            >
+                                                Scrutin
+                                            </span>
+
+                                            <div class="mt-1 space-x-4">
+                                                <div
+                                                    v-for="voteType in voteTypes"
+                                                    :key="voteType.id"
+                                                    class="inline-flex items-center space-x-1 ml-0.5"
+                                                >
+                                                    <RadioInput
+                                                        :id="`voteType-${voteType.id}-${voteIndex}`"
+                                                        v-model="
+                                                            form.votes.type[
+                                                                voteIndex
+                                                            ]
+                                                        "
+                                                        :value="voteType.id"
+                                                    />
+
+                                                    <InputLabel
+                                                        :for="`voteType-${voteType.id}-${voteIndex}`"
+                                                        :value="voteType.name"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors[
+                                            `votes.types.${voteIndex}` as keyof object
+                                        ]"
                                             />
                                         </div>
                                     </div>
 
-                                    <InputError
-                                        class="mt-2"
-                                        :message="form.errors[
-                                            `votes.types.${voteIndex}` as keyof object
-                                        ]"
-                                    />
-                                </div>
-                            </div>
-
-                            <div
-                                class="my-4 w-full flex flex-col lg:flex-row lg:space-x-8 lg:justify-between"
-                            >
-                                <div class="flex flex-col w-full max-w-md">
-                                    <div>
+                                    <div class="mt-4 lg:mt-2">
                                         <InputLabel
                                             :for="`voteTitle-${voteIndex}`"
                                             value="Titre"
@@ -699,14 +705,14 @@ const submit = () => {
                                     </div>
                                 </div>
 
-                                <div class="w-full mt-4 lg:mt-0 max-w-md">
+                                <div class="w-full mt-4 lg:mt-0">
                                     <div>
                                         <InputLabel
                                             :for="`voteLabelSets-${voteIndex}`"
                                             value="Jeux d'étiquettes"
                                         />
 
-                                        <div class="mt-1 max-w-md">
+                                        <div class="mt-1">
                                             <Multiselect
                                                 :id="`voteLabelSets-${voteIndex}`"
                                                 v-model="
@@ -756,7 +762,7 @@ const submit = () => {
                                             value="Utilisateurs"
                                         />
 
-                                        <div class="mt-1 max-w-md">
+                                        <div class="mt-1">
                                             <Multiselect
                                                 :id="`voteUsers-${voteIndex}`"
                                                 v-model="
