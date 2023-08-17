@@ -17,6 +17,7 @@ use App\Models\VoteResult;
 use App\Models\VoteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class SessionService
 {
@@ -175,7 +176,7 @@ class SessionService
                     'session_id' => $session->id
                 ]);
 
-                $file->move(public_path('documents'), $document->path);
+                Storage::disk('public')->put('documents/' . $document->path, file_get_contents($file));
             }
         }
 
@@ -375,7 +376,7 @@ class SessionService
                     'session_id' => $session->id
                 ]);
 
-                $file->move(public_path('documents'), $document->path);
+                Storage::disk('public')->put('documents/' . $document->path, file_get_contents($file));
             }
         }
 
