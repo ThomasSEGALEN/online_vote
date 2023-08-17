@@ -69,7 +69,7 @@ class VoteService
      * @param \Illuminate\Http\Request $request
      * @return \App\Models\VoteAnswer
      */
-    public function vote(Request $request): VoteAnswer
+    public function store(Request $request): VoteAnswer
     {
         VoteResult::create([
             'answer_id' => $request->answer,
