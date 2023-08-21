@@ -13,8 +13,7 @@
 **Projet :** *https://github.com/ThomasSEGALEN/online_vote/projects*  
 **Wiki :** *https://github.com/ThomasSEGALEN/online_vote/wiki*  
 **GitHub :** *https://github.com/ThomasSEGALEN/online_vote*
-
-_(Utilisation d'autres outils de gestion de projet à décider)_
+**Trello :** *https://trello.com/b/dh02LK3O/ivotes*
 
 ## 2. Projet :
 
@@ -28,14 +27,14 @@ La période d'alternance se déroule du 26 septembre 2022 au 15 septembre 2023.
 L'alternant est présent deux semaines sur trois au sein de l'entreprise.
 
 -   26 et 27 septembre 2022 - Présentation du projet
--   28 août au 15 septembre 2023 - Soutenance
+-   26 août 2023 - Soutenance
 
 ## 3. Environnement :
 
 |   _Nom_    | _Version_ |
 | :--------: | :-------: |
-|    PHP     |  ^8.1.11  |
-|  Laravel   |  ^9.52.4  |
+|    PHP     |  ^8.2.0   |
+|  Laravel   |  ^10.13.5 |
 |   VueJS    |  ^3.2.41  |
-| TypeScript |  ^4.9.5   |
+| TypeScript |  ^5.1.3   |
 |    Vite    |  ^4.0.0   |
