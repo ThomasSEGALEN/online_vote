@@ -46,7 +46,7 @@ const props = defineProps({
 });
 
 const formStep = ref<number>(1);
-const formRefresh = ref<boolean>(true);
+const amountRef = ref<number>(0);
 const amountInput = ref<HTMLInputElement>();
 const titleInput = ref<HTMLInputElement>();
 const usersInput = ref<HTMLInputElement>();
@@ -64,9 +64,9 @@ const getSessionUsers = (): Array<string> => [
             .flatMap((group) =>
                 group.options
                     .filter((user) => form.users.includes(user.id))
-                    .map((user) => user.name)
+                    .map((user) => user.name),
             )
-            .sort()
+            .sort(),
     ),
 ];
 
@@ -76,9 +76,9 @@ const getVoteUsers = (index: number): Array<string> => [
             .flatMap((group) =>
                 group.options
                     .filter((user) => form.votes.users[index].includes(user.id))
-                    .map((user) => user.name)
+                    .map((user) => user.name),
             )
-            .sort()
+            .sort(),
     ),
 ];
 
@@ -112,14 +112,18 @@ const nextStep = () =>
             }
         },
         onSuccess: () => {
-            if (formRefresh.value) {
-                for (let index = 0; index < form.amount; index++) {
+            if (form.amount > amountRef.value) {
+                for (
+                    let index = amountRef.value;
+                    index < form.amount;
+                    index++
+                ) {
                     form.votes.title.push(`${form.title} - ${index + 1}`);
                     form.votes.description.push("");
                     form.votes.users.push(
                         users.value
                             .filter((user) => form.users.includes(user.id))
-                            .map((u) => u.id)
+                            .map((u) => u.id),
                     );
                     form.votes.start_date.push(form.start_date);
                     form.votes.end_date.push(form.end_date);
@@ -128,10 +132,22 @@ const nextStep = () =>
                     form.votes.label_sets.push(form.label_sets);
                     form.votes.answers.push([{ name: "", color: "" }]);
                 }
+            } else {
+                const start = amountRef.value - 1;
+                const deleteCount = amountRef.value - form.amount;
 
-                formRefresh.value = false;
+                form.votes.title.splice(start, deleteCount);
+                form.votes.description.splice(start, deleteCount);
+                form.votes.users.splice(start, deleteCount);
+                form.votes.start_date.splice(start, deleteCount);
+                form.votes.end_date.splice(start, deleteCount);
+                form.votes.status.splice(start, deleteCount);
+                form.votes.type.splice(start, deleteCount);
+                form.votes.label_sets.splice(start, deleteCount);
+                form.votes.answers.splice(start, deleteCount);
             }
 
+            amountRef.value = form.amount;
             formStep.value++;
         },
     });
@@ -387,9 +403,11 @@ const submit = () => form.post(route("sessions.store"));
                                         :groups="true"
                                         mode="multiple"
                                         :multiple-label="
-                            (values: string) => values.length > 1 ? 
-                            `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
-                            "
+                                            (values: string) =>
+                                                values.length > 1
+                                                    ? `${values.length} utilisateurs sélectionnés`
+                                                    : `${values.length} utilisateur sélectionné`
+                                        "
                                         label="name"
                                         value-prop="id"
                                         :close-on-select="false"
@@ -559,9 +577,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors[
-                                            `votes.status.${voteIndex}` as keyof object
-                                        ]"
+                                                :message="
+                                                    form.errors[
+                                                        `votes.status.${voteIndex}` as keyof object
+                                                    ]
+                                                "
                                             />
                                         </div>
 
@@ -597,9 +617,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors[
-                                            `votes.types.${voteIndex}` as keyof object
-                                        ]"
+                                                :message="
+                                                    form.errors[
+                                                        `votes.types.${voteIndex}` as keyof object
+                                                    ]
+                                                "
                                             />
                                         </div>
                                     </div>
@@ -622,9 +644,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="form.errors[
-                                                `votes.title.${voteIndex}` as keyof object
-                                            ]"
+                                            :message="
+                                                form.errors[
+                                                    `votes.title.${voteIndex}` as keyof object
+                                                ]
+                                            "
                                         />
                                     </div>
 
@@ -646,9 +670,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="form.errors[
-                                                `votes.description.${voteIndex}` as keyof object
-                                            ]"
+                                            :message="
+                                                form.errors[
+                                                    `votes.description.${voteIndex}` as keyof object
+                                                ]
+                                            "
                                         />
                                     </div>
 
@@ -674,9 +700,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors[
-                                                    `votes.start_date.${voteIndex}` as keyof object
-                                                ]"
+                                                :message="
+                                                    form.errors[
+                                                        `votes.start_date.${voteIndex}` as keyof object
+                                                    ]
+                                                "
                                             />
                                         </div>
 
@@ -699,9 +727,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors[
-                                                    `votes.end_date.${voteIndex}` as keyof object
-                                                ]"
+                                                :message="
+                                                    form.errors[
+                                                        `votes.end_date.${voteIndex}` as keyof object
+                                                    ]
+                                                "
                                             />
                                         </div>
                                     </div>
@@ -755,7 +785,7 @@ const submit = () => form.post(route("sessions.store"));
                                                         @click="
                                                             removeAnswer(
                                                                 voteIndex,
-                                                                index
+                                                                index,
                                                             )
                                                         "
                                                     >
@@ -765,17 +795,21 @@ const submit = () => form.post(route("sessions.store"));
 
                                                 <InputError
                                                     class="mt-2"
-                                                    :message="form.errors[
-                                                        `votes.answers.${voteIndex}.${index}.name` as keyof object
-                                                    ]"
+                                                    :message="
+                                                        form.errors[
+                                                            `votes.answers.${voteIndex}.${index}.name` as keyof object
+                                                        ]
+                                                    "
                                                 />
                                             </template>
 
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors[
-                                                    `votes.answers.${voteIndex}` as keyof object
-                                                ]"
+                                                :message="
+                                                    form.errors[
+                                                        `votes.answers.${voteIndex}` as keyof object
+                                                    ]
+                                                "
                                             />
                                         </div>
                                     </div>
@@ -826,9 +860,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="form.errors[
-                                                `votes.label_sets.${voteIndex}` as keyof object
-                                            ]"
+                                            :message="
+                                                form.errors[
+                                                    `votes.label_sets.${voteIndex}` as keyof object
+                                                ]
+                                            "
                                         />
                                     </div>
 
@@ -847,8 +883,10 @@ const submit = () => form.post(route("sessions.store"));
                                                 :groups="true"
                                                 mode="multiple"
                                                 :multiple-label="
-                                                    (values: string) => values.length > 1 ? 
-                                                    `${values.length} utilisateurs sélectionnés` : `${values.length} utilisateur sélectionné`
+                                                    (values: string) =>
+                                                        values.length > 1
+                                                            ? `${values.length} utilisateurs sélectionnés`
+                                                            : `${values.length} utilisateur sélectionné`
                                                 "
                                                 label="name"
                                                 value-prop="id"
@@ -886,9 +924,11 @@ const submit = () => form.post(route("sessions.store"));
 
                                         <InputError
                                             class="mt-2"
-                                            :message="form.errors[
-                                                `votes.users.${voteIndex}` as keyof object
-                                            ]"
+                                            :message="
+                                                form.errors[
+                                                    `votes.users.${voteIndex}` as keyof object
+                                                ]
+                                            "
                                         />
                                     </div>
 
