@@ -12,7 +12,7 @@
 
 **Projet :** *https://github.com/ThomasSEGALEN/online_vote/projects*  
 **Wiki :** *https://github.com/ThomasSEGALEN/online_vote/wiki*  
-**GitHub :** *https://github.com/ThomasSEGALEN/online_vote*
+**GitHub :** *https://github.com/ThomasSEGALEN/online_vote*  
 **Trello :** *https://trello.com/b/dh02LK3O/ivotes*
 
 ## 2. Projet :
