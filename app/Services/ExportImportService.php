@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Vote;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ExportImportService
 {
@@ -129,5 +132,31 @@ class ExportImportService
         }
 
         return false;
+    }
+
+    /**
+     * Export a resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Barryvdh\DomPDF\PDF
+     */
+    public function exportVotes(Request $request): \Barryvdh\DomPDF\PDF
+    {
+        $voteId = $request->route('vote');
+        $base64Image = $request->query('url');
+        $image = base64_decode(substr($base64Image, strpos($base64Image, ',') + 1));
+
+        Storage::disk('public')->put('charts/vote_' . $voteId . '.png', $image);
+
+        $vote =
+            Vote::select('title', 'description')
+            ->where('id', $voteId)
+            ->first();
+
+        return Pdf::loadView('vote_pdf', [
+            'id' => $voteId,
+            'title' => $vote->title,
+            'description' => $vote->description
+        ]);
     }
 }

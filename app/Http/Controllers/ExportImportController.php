@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Vote;
 use App\Services\ExportImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportImportController extends Controller
@@ -128,5 +130,18 @@ class ExportImportController extends Controller
         }
 
         return to_route('groups.index')->with('success', 'Les groupes ont été importés avec succès');
+    }
+
+    /**
+     * Export a resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return Illuminate\Http\Response
+     */
+    public function exportVotes(Request $request): Response
+    {
+        $title = Vote::select('title')->where('id', $request->route('vote'))->first()->title;
+
+        return ($this->exportImportService->exportVotes($request))->download($title . '.pdf');
     }
 }
