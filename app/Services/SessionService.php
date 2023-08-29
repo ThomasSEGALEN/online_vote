@@ -263,18 +263,21 @@ class SessionService
                         'answers' => $vote->answers->map(fn ($answer) => [
                             'id' => $answer->id,
                             'name' => $answer->name,
-                            'color' => $answer->color
+                            'color' => $answer->color,
+                            'count' => VoteResult::selectRaw('COUNT(*) as count')->where('answer_id', $answer->id)->first()->count,
+                            'users' =>
+                            VoteResult::select('vote_results.user_id', 'users.first_name', 'users.last_name')
+                                ->join('users', 'vote_results.user_id', '=', 'users.id')
+                                ->where('answer_id', $answer->id)
+                                ->get()
+                                ->map(
+                                    fn ($result) =>
+                                    [
+                                        'id' => $result->user_id,
+                                        'name' => $result->first_name . ' ' . $result->last_name,
+                                    ]
+                                )
                         ]),
-                        'results' => VoteResult::select('vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
-                            ->selectRaw('DATE(created_at) as date')
-                            ->selectRaw('COUNT(*) as count')
-                            ->join('vote_answers', 'vote_answers.id', '=', 'vote_results.answer_id')
-                            ->where('vote_results.vote_id', $vote->id)
-                            ->groupBy('date', 'vote_results.answer_id', 'vote_answers.name', 'vote_answers.color')
-                            ->orderBy('date')
-                            ->orderBy('vote_results.answer_id')
-                            ->get(),
-                        'voted' => !$vote->results->filter(fn ($result) => $result->user_id === auth()->user()->id)->isEmpty(),
                         'allowed' => !$vote->users->filter(fn ($user) => $user->id === auth()->user()->id)->isEmpty()
                     ]
                 ),

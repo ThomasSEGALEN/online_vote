@@ -62,7 +62,7 @@ export interface Vote {
     description: string;
     start_date: Date;
     end_date: Date;
-    users: Array<number>;
+    users: Array<User>;
     answers: Array<VoteAnswer>;
     results: Array<VoteResult>;
     label_sets: Array<LabelSet>;
@@ -85,6 +85,8 @@ export interface VoteAnswer {
     color: string;
     vote_id?: number;
     label_set_id?: number;
+    count?: number;
+    users?: Array<User>;
 }
 
 export interface VoteResult {

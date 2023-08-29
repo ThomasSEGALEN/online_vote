@@ -16,77 +16,92 @@ class VoteAnswerSeeder extends Seeder
             [
                 'name' => 'Pour',
                 'color' => '#77DD76',
-                'vote_id' => 1
+                'vote_id' => 1,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Contre',
                 'color' => '#FF6962',
-                'vote_id' => 1
+                'vote_id' => 1,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Abstention',
                 'color' => '#FDFD96',
-                'vote_id' => 1
+                'vote_id' => 1,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Pour',
                 'color' => '#77DD76',
-                'vote_id' => 2
+                'vote_id' => 2,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Contre',
                 'color' => '#FF6962',
-                'vote_id' => 2
+                'vote_id' => 2,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Abstention',
                 'color' => '#FDFD96',
-                'vote_id' => 2
+                'vote_id' => 2,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Pour',
                 'color' => '#77DD76',
-                'vote_id' => 3
+                'vote_id' => 3,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Contre',
                 'color' => '#FF6962',
-                'vote_id' => 3
+                'vote_id' => 3,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Abstention',
                 'color' => '#FDFD96',
-                'vote_id' => 3
+                'vote_id' => 3,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Pour',
                 'color' => '#77DD76',
-                'vote_id' => 4
+                'vote_id' => 4,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Contre',
                 'color' => '#FF6962',
-                'vote_id' => 4
+                'vote_id' => 4,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Abstention',
                 'color' => '#FDFD96',
-                'vote_id' => 4
+                'vote_id' => 4,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Pour',
                 'color' => '#77DD76',
-                'vote_id' => 5
+                'vote_id' => 5,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Contre',
                 'color' => '#FF6962',
-                'vote_id' => 5
+                'vote_id' => 5,
+                'label_set_id' => 1,
             ],
             [
                 'name' => 'Abstention',
                 'color' => '#FDFD96',
-                'vote_id' => 5
+                'vote_id' => 5,
+                'label_set_id' => 1,
             ]
         ]);
     }

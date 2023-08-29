@@ -12,7 +12,7 @@ import {
     Tooltip,
 } from "chart.js";
 import { Bar } from "vue-chartjs";
-import { Permission, User, Vote, VoteAnswer, VoteResult } from "@/types/types";
+import { Permission, User, Vote, VoteAnswer } from "@/types/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import BackIcon from "@/Components/BackIcon.vue";
 import RadioInput from "@/Components/RadioInput.vue";
@@ -30,7 +30,7 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
 );
 
 const props = defineProps({
@@ -43,6 +43,12 @@ const props = defineProps({
     users: {
         type: Array<User>,
         default: () => [],
+    },
+    can: {
+        type: Object,
+        default: () => {
+            return {};
+        },
     },
 });
 
@@ -85,7 +91,7 @@ onUpdated(() => {
 
 const hasAccess = (vote: Vote): boolean =>
     permissions.some(
-        (permission: Permission) => permission.name === "viewSessions"
+        (permission: Permission) => permission.name === "viewSessions",
     ) || vote.allowed;
 
 const isExpired = (vote: Vote): boolean => {
@@ -96,12 +102,12 @@ const isExpired = (vote: Vote): boolean => {
         vote.start_date || vote.end_date ? start <= now && end >= now : true;
     const voteOpen = vote.status_id === 1 ? true : false;
 
-    return voteInProgress && voteOpen && !vote.voted;
+    return voteInProgress && voteOpen;
 };
 
 const filterAnswer = (vote: Vote, index: number) =>
     vote.answers.filter(
-        (answer: VoteAnswer) => answer.id === form.answers[index]
+        (answer: VoteAnswer) => answer.id === form.answers[index],
     )[0].name;
 
 const confirmVote = () => (confirmingVote.value = true);
@@ -133,49 +139,18 @@ const chartOptions = {
 
 const chartData = computed(() => {
     const answers = session.value.votes.data.flatMap(
-        (vote: Vote) => vote.answers
+        (vote: Vote) => vote.answers,
     );
-    const results = session.value.votes.data.flatMap(
-        (vote: Vote) => vote.results
-    );
-    const labelsData = [
-        ...new Set(
-            results.map((result: VoteResult) =>
-                new Date(result.date).toLocaleDateString()
-            )
-        ),
-    ];
-    const names = [
-        ...new Set(answers.map((answer: VoteAnswer) => answer.name)),
-    ];
-    const dates = [
-        ...new Set(results.map((result: VoteResult) => result.date)),
-    ];
-    let data: Array<Array<number>> = Array.from(Array(names.length), () => []);
-
-    for (let index = 0; index < names.length; index++) {
-        for (let i = 0; i < dates.length; i++) {
-            const count = results
-                .filter(
-                    (result: VoteResult) =>
-                        result.name === names[index] && result.date === dates[i]
-                )
-                .map((result: VoteResult) => result.count)[0];
-
-            data[index].push(count ?? 0);
-        }
-    }
-    const datasetsData = answers.map((answer: VoteAnswer, index: number) => {
-        return {
-            label: answer.name,
-            backgroundColor: answer.color,
-            data: data[index],
-        };
-    });
 
     return {
-        labels: labelsData,
-        datasets: datasetsData,
+        labels: [""],
+        datasets: answers.map((answer: VoteAnswer) => {
+            return {
+                label: answer.name,
+                backgroundColor: answer.color,
+                data: [answer.count],
+            };
+        }),
     };
 });
 </script>
@@ -283,7 +258,7 @@ const chartData = computed(() => {
                         </span>
                     </div>
 
-                    <div>
+                    <div v-if="can.viewSessions">
                         <a
                             class="inline-flex px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:ring-offset-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-150 ease-in-out"
                             :href="
@@ -378,7 +353,7 @@ const chartData = computed(() => {
                                             @click="
                                                 submit(
                                                     vote.id,
-                                                    form.answers[voteIndex]
+                                                    form.answers[voteIndex],
                                                 )
                                             "
                                         >
