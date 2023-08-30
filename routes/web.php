@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sessions/prestore', [SessionController::class, 'prestore'])->name('sessions.prestore');
     Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
-    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
+    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->middleware('session.closed')->name('sessions.edit');
     Route::put('/sessions/preupdate/{session}', [SessionController::class, 'preupdate'])->name('sessions.preupdate');
     Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
