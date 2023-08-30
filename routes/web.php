@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
     Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->middleware('session.closed')->name('sessions.edit');
     Route::put('/sessions/preupdate/{session}', [SessionController::class, 'preupdate'])->name('sessions.preupdate');
-    Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
+    Route::put('/sessions/{session}', [SessionController::class, 'update'])->middleware('session.closed')->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
 
     Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
