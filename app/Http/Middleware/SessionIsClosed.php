@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\VoteType;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckUserHasVoted
+class SessionIsClosed
 {
     /**
      * Handle an incoming request.
@@ -15,7 +16,9 @@ class CheckUserHasVoted
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->results->contains('vote_id', $request->vote)) return back()->with('error', 'Vous avez déjà voté');
+        if ($request->session->status_id === VoteType::SECRET) {
+            return back()->with('error', 'La séance ' . $request->session->title . ' est définitivement fermée');
+        }
 
         return $next($request);
     }

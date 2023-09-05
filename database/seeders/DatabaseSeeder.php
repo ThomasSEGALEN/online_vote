@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             SessionSeeder::class,
             VoteTypeSeeder::class,
             VoteSeeder::class,
-            VoteAnswerSeeder::class,
             LabelSetSeeder::class,
+            VoteAnswerSeeder::class,
             AnswerSeeder::class,
         ]);
 
@@ -65,8 +65,6 @@ class DatabaseSeeder extends Seeder
 
             $session->votes->each(function ($vote) use ($session) {
                 $vote->users()->attach($session->users()->pluck('id')->toArray());
-
-                VoteResult::factory()->count(25)->create();
             });
         });
     }

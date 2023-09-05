@@ -70,9 +70,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sessions/prestore', [SessionController::class, 'prestore'])->name('sessions.prestore');
     Route::post('/sessions/store', [SessionController::class, 'store'])->name('sessions.store');
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
-    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->name('sessions.edit');
+    Route::get('/sessions/{session}/edit', [SessionController::class, 'edit'])->middleware('session.closed')->name('sessions.edit');
     Route::put('/sessions/preupdate/{session}', [SessionController::class, 'preupdate'])->name('sessions.preupdate');
-    Route::put('/sessions/{session}', [SessionController::class, 'update'])->name('sessions.update');
+    Route::put('/sessions/{session}', [SessionController::class, 'update'])->middleware('session.closed')->name('sessions.update');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
 
     Route::get('/documents/{document}', [DocumentController::class, 'download'])->name('documents.download');
@@ -81,7 +81,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/label-sets/{labelSet}', [LabelSetController::class, 'update'])->name('labelSets.update');
     Route::delete('/label-sets/{labelSet}', [LabelSetController::class, 'destroy'])->name('labelSets.destroy');
 
-    Route::post('/votes', [VoteController::class, 'vote'])->middleware('check.vote')->name('votes.vote');
+    Route::post('/votes/store', [VoteController::class, 'store'])->name('votes.store');
+    Route::get('/votes/{vote}/export', [ExportImportController::class, 'exportVotes'])->name('votes.export');
 });
 
 require __DIR__ . '/auth.php';

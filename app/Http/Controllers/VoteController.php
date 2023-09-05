@@ -30,9 +30,9 @@ class VoteController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function vote(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $answer = $this->voteService->vote($request);
+        $answer = $this->voteService->store($request);
 
         return back()->with('success', "Vous avez voté ($answer->name)");
     }

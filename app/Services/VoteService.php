@@ -6,6 +6,7 @@ use App\Models\Session;
 use App\Models\Status;
 use App\Models\VoteAnswer;
 use App\Models\VoteResult;
+use App\Models\VoteType;
 use Illuminate\Http\Request;
 
 class VoteService
@@ -69,13 +70,18 @@ class VoteService
      * @param \Illuminate\Http\Request $request
      * @return \App\Models\VoteAnswer
      */
-    public function vote(Request $request): VoteAnswer
+    public function store(Request $request): VoteAnswer
     {
+        if (VoteResult::where('user_id', $request->user()->id)->first()) {
+            VoteResult::where('user_id', $request->user()->id)->delete();
+        }
+
         VoteResult::create([
             'answer_id' => $request->answer,
             'user_id' => $request->user()->id,
             'vote_id' => $request->vote
         ]);
+
 
         $answer = VoteAnswer::where('id', $request->answer)->first();
 
