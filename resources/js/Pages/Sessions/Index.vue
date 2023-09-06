@@ -93,9 +93,9 @@ watch(
         router.get(
             route("sessions.index"),
             { search: value },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
-    }, 300)
+    }, 300),
 );
 
 const confirmAnswerAction = () => (confirmingAnswerAction.value = true);
@@ -121,7 +121,7 @@ const createAnswer = () =>
     });
 const deleteAnswer = () => {
     form.labelSets.map((id: number) =>
-        form.delete(route("labelSets.destroy", id))
+        form.delete(route("labelSets.destroy", id)),
     );
     form.reset();
     closeAnswerDeletionModal();
@@ -252,7 +252,9 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
 
                     <InputError
                         class="mt-2"
-                        :message="form.errors[`colors.${index}` as keyof object]"
+                        :message="
+                            form.errors[`colors.${index}` as keyof object]
+                        "
                     />
                 </div>
 
@@ -516,7 +518,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
                                 {{
                                     statuses.find(
                                         (status: Status) =>
-                                            status.id === session.status_id
+                                            status.id === session.status_id,
                                     )!.name
                                 }}
                             </td>
@@ -563,7 +565,7 @@ const closeModal = () => (confirmingSessionDeletion.value = false);
             <Modal :show="confirmingSessionDeletion" @close="closeModal">
                 <div class="p-6">
                     <h2 class="text-lg font-medium text-gray-800">
-                        Êtes-vous sûr de vouloir supprimer cet utilisateur ?
+                        Êtes-vous sûr de vouloir supprimer cette séance ?
                     </h2>
 
                     <div class="mt-6 flex justify-end">
