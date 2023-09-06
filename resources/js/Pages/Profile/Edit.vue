@@ -23,10 +23,10 @@ defineProps({
             </h2>
         </template>
 
-        <div class="p-4 lg:p-6">
-            <UpdatePasswordForm class="max-w-xl mb-12" />
+        <div class="p-4 lg:p-6 lg:max-w-screen-md mx-auto">
+            <UpdatePasswordForm class="mb-12" />
 
-            <DeleteUserForm class="max-w-xl" />
+            <DeleteUserForm />
         </div>
     </AuthenticatedLayout>
 </template>
