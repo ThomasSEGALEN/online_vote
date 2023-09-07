@@ -2,11 +2,12 @@
 
 ## Table des matières :
 
-1. [Ressources](README.md#1-ressources-)
+1. [Ressources](README.md#1-ressources-)  
 2. [Projet](README.md#2-projet-)  
    a. [Contexte](README.md#a-contexte-)  
-   b. [Dates](README.md#b-dates-)
-3. [Environnement](README.md#3-environnement-)
+   b. [Dates](README.md#b-dates-)  
+3. [Environnement](README.md#3-environnement-)  
+4. [Utilisation](README.md#4-utilisation-)
 
 ## 1. Ressources :
 
@@ -38,3 +39,20 @@ L'alternant est présent deux semaines sur trois au sein de l'entreprise.
 |   VueJS    |  ^3.2.41  |
 | TypeScript |  ^5.1.3   |
 |    Vite    |  ^4.0.0   |
+
+## 4. Utilisation :
+
+Installation du projet :  
+`git clone https://github.com/ThomasSEGALEN/online_vote.git`  
+Installation des dépendances :  
+`npm install`  
+`composer install`  
+Migration de la base de données :  
+`php artisan migrate`  
+Remplissage de la base de données :  
+`php artisan db:seed`  
+Lancement du projet dans un environnement de développement :  
+`npm run dev`  
+`php artisan serve`  
+Lancement du projet dans un environnement de production :  
+`npm run build` (dossier de production dans */public/build*)
