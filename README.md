@@ -43,7 +43,7 @@ L'alternant est présent deux semaines sur trois au sein de l'entreprise.
 ## 4. Utilisation :
 
 Installation du projet :  
-`git clone https://github.com/ThomasSEGALEN/online_vote.git`  
+`git clone https://github.com/ThomasSEGALEN/online_vote.git` (Ajouter le fichier *.env* en modifiant si nécessaire la configuration du *.env.example*)  
 Installation des dépendances :  
 `npm install`  
 `composer install`  
@@ -55,4 +55,4 @@ Lancement du projet dans un environnement de développement :
 `npm run dev`  
 `php artisan serve`  
 Lancement du projet dans un environnement de production :  
-`npm run build` (dossier de production dans */public/build*)
+`npm run build` (Dossier de production disponible dans */public/build*)
